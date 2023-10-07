@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import 'dotenv/config';
+import "dotenv/config";
 import doctorRoutes from "./routes/doctor.js";
 import patientRoutes from "./routes/patient.js";
 
@@ -12,9 +12,9 @@ app.use(cors());
 const port = process.env.PORT || 8000;
 const MONGO_URI = process.env.MONGO_URI;
 
-mongoose.set('strictQuery', false);
+mongoose.set("strictQuery", false);
 mongoose
-  .connect(MONGO_URI)
+  .connect("mongodb://localhost:27017/employee")
   .then(() => {
     console.log("MongoDB is now connected!");
     // Starting server
@@ -23,7 +23,6 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
-
 
 // routes
 app.use("/doctor", doctorRoutes);
