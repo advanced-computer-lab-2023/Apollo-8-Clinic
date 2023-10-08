@@ -28,4 +28,5 @@ mongoose
 // routes
 app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);
-app.use("/admin",adminRoutes);
+app.use("/admin", adminRoutes);
+app.use("/appointment", appointmentRoutes);
