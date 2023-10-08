@@ -7,4 +7,10 @@ const router = express.Router();
 router.post("/", controllers.createDoctor);
 router.get("/getDoctors", controllers.getDoctors);
 router.get("/getDoctorById", controllers.getDoctorById);
+
+//view appointments 
+import appointmentContoller from "../controllers/appointmentContoller.js";
+router.get("/appointmentWithFilter",appointmentContoller.getAppointmentWithFilter);
+
+
 export default router;

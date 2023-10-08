@@ -17,6 +17,10 @@ router.post("/AddFamilyMember",FamilyMemberController.addNewFamilyMember);
 import HealthPackageController from '../controllers/healthPackageController.js';
 router.get('/healthPackage',HealthPackageController.getAllHealthPackages);
 
+//view appointments
+import appointmentContoller from "../controllers/appointmentContoller.js";
+router.get("/appointmentWithFilter",appointmentContoller.getAppointmentWithFilter);
+
 // if your route is : router.post("/something", controllers.something)
 // then test it by sending post request to this route: http://localhost:8000/patient/something
 

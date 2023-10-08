@@ -17,6 +17,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    enum:["Booked","Free"],
     required: true,
   },
 });
