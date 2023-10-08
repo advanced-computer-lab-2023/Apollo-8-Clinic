@@ -15,6 +15,16 @@ const prescriptionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  medicine: [
+    {
+      name: { type: String, required: true },
+      dose: { type:String, required: true }
+    }
+  ],
+  date: {
+    type: Date,
+    required: true,
+  }
 });
 
 const PrescriptionModel = mongoose.model("Prescription", prescriptionSchema);

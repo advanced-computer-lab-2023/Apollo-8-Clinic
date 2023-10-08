@@ -5,7 +5,6 @@ import 'dotenv/config';
 import doctorRoutes from "./routes/doctor.js";
 import patientRoutes from "./routes/patient.js";
 import adminRoutes from "./routes/admin.js";
-import appointmentRoutes from "./routes/appointment.js";
 
 const app = express();
 app.use(express.json());
@@ -29,5 +28,5 @@ mongoose
 // routes
 app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);
-app.use("/admin",adminRoutes);
-app.use("/appointment",appointmentRoutes);
+app.use("/admin", adminRoutes);
+app.use("/appointment", appointmentRoutes);
