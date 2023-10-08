@@ -1,5 +1,6 @@
 import express from "express";
 import controllers from "../controllers/doctor.js";
+import patient from "../controllers/patient.js";
 
 const router = express.Router();
 
@@ -7,6 +8,9 @@ const router = express.Router();
 router.post("/", controllers.createDoctor);
 router.get("/getDoctors", controllers.getDoctors);
 router.get("/getDoctorById", controllers.getDoctorById);
+router.get("/viewPatients", patient.getMyPatients);
+router.get("/viewPatientsByName", patient.getPatientByName);
+router.get("/futureAppointmentPatients", patient.upcomingApp);
 
 //view appointments 
 import appointmentContoller from "../controllers/appointmentContoller.js";
@@ -14,3 +18,5 @@ router.get("/appointmentWithFilter",appointmentContoller.getAppointmentWithFilte
 
 
 export default router;
+
+
