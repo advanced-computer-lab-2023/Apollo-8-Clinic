@@ -21,6 +21,14 @@ router.get('/healthPackage',HealthPackageController.getAllHealthPackages);
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.get("/appointmentWithFilter",appointmentContoller.getAppointmentWithFilter);
 
+//sss
+router.get("/allDoctors", doctor.getAllDoctors);
+router.get("/docInfo", doctor.getDocInfo);
+//router.get("/docSearch", doctor.getDocByNameOrEdu);
+router.get("/searchDocNameASpec", doctor.getDoctorByNameASpec);
+router.get("/searchDocNameOrSpec", doctor.getDoctorByNameOrSpec);
+router.get("/searchDocSpecASlots", doctor.getDoctorAvailableAndS);
+//sss
 // if your route is : router.post("/something", controllers.something)
 // then test it by sending post request to this route: http://localhost:8000/patient/something
 
