@@ -1,7 +1,5 @@
-import PatientModel from "../models/patient.js";
-import UserModel from "../models/user.js";
-import bcrypt from "bcrypt";
-const saltRounds = 10;
+import PatientModel from '../models/patient.js';
+import UserModel from '../models/user.js';
 
 const createPatient = async (req, res) => {
   const {
@@ -55,7 +53,16 @@ const createPatient = async (req, res) => {
     res.status(400).json("Username already exist");
   }
 };
+const getPatients = async (req, res) => {
+  try {
+    const patients = await PatientModel.find();
+    console.log(patients);
+    res.status(200).json(patients);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
 
 export default {
-  createPatient,
-};
+  createPatient, getPatients
+}

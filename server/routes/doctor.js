@@ -5,5 +5,6 @@ const router = express.Router();
 
 // to test this send a post request to this route: http://localhost:8000/doctor
 router.post("/", controllers.createDoctor);
-
+router.get("/getDoctors", controllers.getDoctors);
+router.get("/getDoctorById", controllers.getDoctorById);
 export default router;
