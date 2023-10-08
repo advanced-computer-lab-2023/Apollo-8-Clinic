@@ -17,14 +17,14 @@ const createPatient = async (req, res) => {
     adresses,
     status,
   } = req.body;
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  // const salt = await bcrypt.genSalt(saltRounds);
+  // const hashedPassword = await bcrypt.hash(password, salt);
 
   const existingUser = await UserModel.findOne({ username });
   if (!existingUser) {
-    try {
+     try {
       const user = new UserModel({ username, password, type });
-      user.password = hashedPassword;
+      // user.password = hashedPassword;
       console.log(user.password);
       console.log(req.body);
 

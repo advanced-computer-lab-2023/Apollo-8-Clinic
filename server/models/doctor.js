@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+import bcrypt from 'bcrypt';
+const saltRounds=10;
 const doctorSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,

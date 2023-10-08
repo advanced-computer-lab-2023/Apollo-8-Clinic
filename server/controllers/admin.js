@@ -44,7 +44,7 @@ const addAdministrator=async(req,res) => {
          const newAdmin = new UserModel({
             username,
             password,
-            type:'admin'
+            type:'Admin'
          });
     await newAdmin.save();
     console.log(newAdmin);
