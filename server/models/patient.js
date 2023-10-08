@@ -53,6 +53,15 @@ const patientSchema = new mongoose.Schema(
       required: true,
       default: "Pending",
     },
+    health_records: {
+      records: [
+        {
+          decription: {type:String},
+          image_url: { type: String},
+          date:{type:Date}
+        }
+      ]
+    }
   },
   { timestamps: true }
 );
