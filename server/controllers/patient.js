@@ -1,6 +1,8 @@
 import PatientModel from '../models/patient.js';
 import UserModel from '../models/user.js';
 import bcrypt from "bcrypt";
+import AppointmentModel from '../models/appointment.js';
+
 const saltRounds = 10;
 
 const createPatient = async (req, res) => {
@@ -64,7 +66,159 @@ const getPatients = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 };
+const getMyPatients = async (req, res) => {
+  //retrieve patients that have an appointmen wth this dr from the database
+  const{doctorId}=req.body;
+  console.log(req.body);
+  const myPatients= [];
+  try{
+     const drAppointments = await AppointmentModel.find({doctorId: doctorId});
+     const patients=[]
+     for(const appointment1 of drAppointments){
+      
+      let arrayOfPatient = await PatientModel.find({_id: appointment1.patientId});
+      let patient=arrayOfPatient[0];
 
+      if(patients.length === 0)
+         patients.push(patient);
+      else
+      {
+        let found= false;
+        for(let i=0;i<patients.length ;i++){
+         if((patients[i]._id).equals(patient._id)){
+           found= true;
+           break;
+          }
+        }
+       if(!found){
+         patients.push(patient);
+        }
+     }
+      
+     }
+     console.log(patients);
+      // res.status(200).json(patients);
+      const rows = patients.map((object) => {
+        return { 
+          name: object.name,
+          email: object.email,
+          birthDate: object.birthDate,
+          gender: object.gender,
+          phone: object.phone,
+          emergencyName: object.emergencyName,
+          emergencyNo: object.emergencyNo,
+          emergencyRel: object.emergencyRel
+        };
+      });
+           console.log(rows);
+     res.status(200).json(rows)
+  }catch(error){
+     res.status(400).json({error:error.message})
+  }
+ };
+const getPatientByName= async (req,res) =>{
+  const{doctorId,patientName}=req.body;
+  console.log(req.body);
+    try{
+
+      const drAppointments = await AppointmentModel.find({doctorId: doctorId});
+      const patients=[]
+      for(const appointment1 of drAppointments){
+       
+       let arrayOfPatient = await PatientModel.find({_id: appointment1.patientId});
+       let patient=arrayOfPatient[0];
+ 
+       if(patients.length === 0)
+          patients.push(patient);
+       else
+       {
+         let found= false;
+         for(let i=0;i<patients.length ;i++){
+          if((patients[i]._id).equals(patient._id)){
+            found= true;
+            break;
+           }
+         }
+        if(!found){
+          patients.push(patient);
+         }
+      }
+       
+      }
+       const patientsOfReqName = patients.filter(object => object.name.toLowerCase() === patientName.toLowerCase());
+       const patientsReqDetails = patientsOfReqName.map((object) => {
+        return { 
+          name: object.name,
+          email: object.email,
+          birthDate: object.birthDate,
+          gender: object.gender,
+          phone: object.phone,
+          emergencyName: object.emergencyName,
+          emergencyNo: object.emergencyNo,
+          emergencyRel: object.emergencyRel
+        };
+      });
+       console.log(patientsReqDetails);
+       res.status(200).json(patientsReqDetails)
+    }catch(error){
+       res.status(400).json({error:error.message})
+    }
+ };
+const upcomingApp = async (req, res) => {
+  //retrieve patients that have an appointmen wth this dr from the database
+  const{doctorId}=req.body;
+  console.log(req.body);
+  const myPatients= [];
+  try{
+     const drAppointments = await AppointmentModel.find({doctorId: doctorId}&&{status: "Upcoming"});
+     const patients=[]
+     console.log(drAppointments);
+     for(const appointment1 of drAppointments){
+      
+      let arrayOfPatient = await PatientModel.find({_id: appointment1.patientId});
+      let patient=arrayOfPatient[0];
+
+      if(patients.length === 0)
+         patients.push(patient);
+      else
+      {
+        let found= false;
+        for(let i=0;i<patients.length ;i++){
+         if((patients[i]._id).equals(patient._id)){
+           found= true;
+           break;
+          }
+        }
+       if(!found){
+         patients.push(patient);
+        }
+     }
+      
+     }
+     console.log(patients);
+      // res.status(200).json(patients);
+      const rows = patients.map((object) => {
+        return { 
+          name: object.name,
+          email: object.email,
+          birthDate: object.birthDate,
+          gender: object.gender,
+          phone: object.phone,
+          emergencyName: object.emergencyName,
+          emergencyNo: object.emergencyNo,
+          emergencyRel: object.emergencyRel
+        };
+      });
+           console.log(rows);
+     res.status(200).json(rows)
+  }catch(error){
+     res.status(400).json({error:error.message})
+  }
+ };
 export default {
-  createPatient, getPatients
+  createPatient, 
+  getPatients,
+  getMyPatients,
+  getPatientByName,
+  upcomingApp
 }
