@@ -1,5 +1,7 @@
 import PatientModel from '../models/patient.js';
 import UserModel from '../models/user.js';
+import bcrypt from "bcrypt";
+const saltRounds = 10;
 
 const createPatient = async (req, res) => {
   const {
