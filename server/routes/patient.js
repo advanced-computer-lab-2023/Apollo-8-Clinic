@@ -5,21 +5,14 @@ const router = express.Router();
 
 // DELETE THESE COMMENTS AFTER YOU READ THEM :)
 // to test this send a post request to this route: http://localhost:8000/patient
-router.post("/createPatient", controllers.createPatient);
-router.get("/getPatients", controllers.getPatients);
+router.post("/crePat", controllers.createPatient);
 
-//get or add family members
-import FamilyMemberController from "../controllers/FamilyMemberController.js";
-router.get("/Family",FamilyMemberController.getAllFamMembers);
-router.post("/AddFamilyMember",FamilyMemberController.addNewFamilyMember);
+router.post("/getPerscriptions",controllers.getPrescriptions)
 
-//view all the health packages 
-import HealthPackageController from '../controllers/healthPackageController.js';
-router.get('/healthPackage',HealthPackageController.getAllHealthPackages);
+router.post("/filterPerscriptions",controllers.filterPres)
 
-//view appointments
-import appointmentContoller from "../controllers/appointmentContoller.js";
-router.get("/appointmentWithFilter",appointmentContoller.getAppointmentWithFilter);
+
+router.post("/getPerscription",controllers.getPres)
 
 // if your route is : router.post("/something", controllers.something)
 // then test it by sending post request to this route: http://localhost:8000/patient/something

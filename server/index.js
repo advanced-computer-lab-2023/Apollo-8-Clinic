@@ -4,13 +4,16 @@ import cors from "cors";
 import 'dotenv/config';
 import doctorRoutes from "./routes/doctor.js";
 import patientRoutes from "./routes/patient.js";
-import adminRoutes from "./routes/admin.js";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-const port = process.env.PORT || 8000;
-const MONGO_URI = process.env.MONGO_URI;
+
+const port =  8000;
+const MONGO_URI = process.env.MONGO;
+
+app.use(doctorRoutes);
+app.use(patientRoutes);
 
 mongoose.set('strictQuery', false);
 mongoose
@@ -25,7 +28,5 @@ mongoose
   .catch((err) => console.log(err));
 
 
-// routes
-app.use("/doctor", doctorRoutes);
-app.use("/patient", patientRoutes);
-app.use("/admin",adminRoutes);
+
+
