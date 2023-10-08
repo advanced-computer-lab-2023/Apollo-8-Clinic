@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function PatientSignup() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [username, setUsername] = useState();
@@ -218,4 +218,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default PatientSignup;

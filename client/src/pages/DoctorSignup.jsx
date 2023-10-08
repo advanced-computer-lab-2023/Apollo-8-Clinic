@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Signup() {
+function DoctorSignup() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [username, setUsername] = useState();
@@ -170,4 +170,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default DoctorSignup;
