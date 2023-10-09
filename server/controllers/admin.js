@@ -64,10 +64,10 @@ const removeUser = async (req, res) => {
         if(!user){
             res.status(404).json({message:"The User is not found"});
         }
-        if(user.type=='doctor'){
+        if(user.type==='Doctor'){
             await DoctorModel.deleteOne({user:user._id});
         }
-        else if(user.type=='patient'){
+        else if(user.type==='Patient'){
           await PatientModel.deleteOne({user:user._id});
       }
         await UserModel.deleteOne({username});
