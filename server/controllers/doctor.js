@@ -257,7 +257,7 @@ const getDocInfo= async (req,res) =>{
 //sss
 
    
-=======
+//=======
 //handled in front end if somthing is not filledreturn previous thing
 const updateDoctor = async (req, res) =>{
   try{
@@ -310,7 +310,7 @@ export default {
   getDoctorByNameASpec,
   getDoctorByNameOrSpec,
   getDoctorAvailableAndS,
-  getDocInfo
+  getDocInfo,
    //sss 
   createDoctor,
   updateDoctor,
