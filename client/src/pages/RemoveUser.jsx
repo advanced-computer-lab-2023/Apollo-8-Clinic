@@ -9,16 +9,18 @@ import { useEffect } from "react";
 function RemoveUser() {
  
   const [users, setUsers] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios
       .get('http://localhost:8000/admin/getUsers')
       .then((response) => {
         console.log('Response:', response.data);
         setUsers(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching users:', error);
+        setLoading(false);
       });
   }, []); 
  
@@ -38,20 +40,27 @@ function RemoveUser() {
   
 
   return (
-   <div className="w-100 vh-100 d-flex justify-content-center align-items-center">
-    <div className="w-50">
-    <div className="bg-white p-3 rounded w-30">
-        <h2>  Users List</h2>
-    <table className="table">
-        <thead>
+   <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+    <div className="card m-3 col-12" style={{ width: "80%" }}>
+    <div className="card-header">
+          <h2>Remove User</h2>
+        </div>
+        <div className="card-body">
+        {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <table className="table table-striped">
+         <thead className="table-dark">
             <tr>
                 <th>
-                    Username
+                    username
                 </th>
                 <th>
-                    Type
+                    type
                 </th>
+                <th></th>
             </tr>
+            
         </thead>
         <tbody>
         {users.length > 0 ? (
@@ -60,7 +69,7 @@ function RemoveUser() {
         <td>{user.username}</td>
         <td>{user.type}</td>
         <td> 
-          <button onClick={() => handleDeleteUser(user.username)}>
+          <button  className="btn btn-success"onClick={() => handleDeleteUser(user.username)}>
             Delete
           </button>
         </td>
@@ -72,8 +81,10 @@ function RemoveUser() {
     </tr>
   )}
             
+        
         </tbody>
-    </table>
+            </table>
+     )}
    </div>
    </div>
    </div>

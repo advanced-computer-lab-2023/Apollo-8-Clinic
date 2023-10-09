@@ -27,7 +27,7 @@ function AddAdmin() {
       .catch((err) => console.log(err));
   };
   return (
-    <div className="d-flex justify-content-center align-itelms-center bg-secondary vh-100">
+    <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
       <div className="bg-white p-3 rounded w-25">
         <h2>add Administrator</h2>
         <form action="" onSubmit={handleSubmit}>
@@ -57,7 +57,7 @@ function AddAdmin() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-success w-100 rounded-0">
+          <button type="submit" className="btn btn-success w-100">
             Add
           </button>
         </form>
