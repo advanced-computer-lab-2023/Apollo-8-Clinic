@@ -40,14 +40,16 @@ function RemoveUser() {
   return (
    <div className="w-100 vh-100 d-flex justify-content-center align-items-center">
     <div className="w-50">
+    <div className="bg-white p-3 rounded w-30">
+        <h2>  Users List</h2>
     <table className="table">
         <thead>
             <tr>
                 <th>
-                    username
+                    Username
                 </th>
                 <th>
-                    type
+                    Type
                 </th>
             </tr>
         </thead>
@@ -72,6 +74,7 @@ function RemoveUser() {
             
         </tbody>
     </table>
+   </div>
    </div>
    </div>
   );

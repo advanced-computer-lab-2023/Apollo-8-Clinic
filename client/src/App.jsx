@@ -5,7 +5,8 @@ import PatientSignup from "./pages/PatientSignup";
 import Home from "./pages/Home";
 import AddAdmin from "./pages/AddAdmin";
 import RemoveUser from "./pages/RemoveUser"
-
+import PendingDoctors from "./pages/PendingDoctors"
+import DoctorDetails from "./pages/DoctorDetails"
 function App() {
 
 
@@ -16,7 +17,9 @@ function App() {
         <Route path="/registerPatient" element={<PatientSignup />} />
         <Route path="/home" element={<Home />} />
         <Route path="/addAdministrator" element={<AddAdmin/>}/>
-        <Route path="/RemoveUser" element={<RemoveUser/>}/>
+        <Route path="/removeUser" element={<RemoveUser/>}/>
+        <Route path="/pendingDoctors" element={<PendingDoctors/>}/>
+        <Route path="/doctors/:id" element={<DoctorDetails />} />
       </Routes>
     </div>
   );

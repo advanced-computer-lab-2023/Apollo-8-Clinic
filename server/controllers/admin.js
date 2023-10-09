@@ -3,6 +3,7 @@ import UserModel from '../models/user.js';
 import DoctorModel from '../models/doctor.js';
 import mongoose from 'mongoose';
 import PatientModel from '../models/patient.js';
+
 const createUser = async (req, res) => {
   const {
     username,

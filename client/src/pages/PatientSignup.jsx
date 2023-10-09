@@ -25,7 +25,7 @@ function PatientSignup() {
     console.log(name);
     console.log(email);
     axios
-      .post("http://localhost:8000/patient/createPatient", {
+      .post("http://localhost:8000/patient", {
         name,
         username,
         email,

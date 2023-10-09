@@ -1,6 +1,6 @@
 import DoctorModel from '../models/doctor.js';
 import UserModel from '../models/user.js';
-
+import mongoose from 'mongoose';
 const createDoctor = async (req, res) => {
   const {
     username,
@@ -55,21 +55,53 @@ const getDoctors = async (req, res) => {
   }
 };
 
+
 const getDoctorById = async (req, res) => {
-  const { user } = req.body;
   try {
-    const doctor = await DoctorModel.findOne({ user });
+    const doctor = await DoctorModel.findById(
+      new mongoose.Types.ObjectId(req.params.id)
+    );
+    if (!doctor) return res.status(404).send("Doctor not found");
+    res.status(200).send(doctor);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+const acceptDoctor = async (req, res) => {
+  try {
+    const doctor = await DoctorModel.findByIdAndUpdate(
+      req.params.id,
+      { status: 'Accepted' },
+      { new: true }
+    );
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
     }
     res.status(200).json(doctor);
   } catch (error) {
-    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};const rejectDoctor = async (req, res) => {
+  try {
+    const doctor = await DoctorModel.findByIdAndUpdate(
+      req.params.id,
+      { status: 'Rejected' },
+      { new: true }
+    );
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+    res.status(200).json(doctor);
+  } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-
 export default {
-  createDoctor, getDoctorById, getDoctors
+  createDoctor,
+   getDoctorById,
+   getDoctors,
+   acceptDoctor,
+   rejectDoctor
+
 }

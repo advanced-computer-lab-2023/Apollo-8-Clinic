@@ -1,6 +1,6 @@
 import PatientModel from '../models/patient.js';
 import UserModel from '../models/user.js';
-
+import mongoose from 'mongoose';
 const createPatient = async (req, res) => {
   const {
     username,

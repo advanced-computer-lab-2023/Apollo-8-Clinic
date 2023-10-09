@@ -5,8 +5,8 @@ const router = express.Router();
 
 // DELETE THESE COMMENTS AFTER YOU READ THEM :)
 // to test this send a post request to this route: http://localhost:8000/patient
-router.post("/createPatient", controllers.createPatient);
-router.get("/getPatients", controllers.getPatients);
+router.post("/", controllers.createPatient);
+router.get("/", controllers.getPatients);
 
 // if your route is : router.post("/something", controllers.something)
 // then test it by sending post request to this route: http://localhost:8000/patient/something
