@@ -5,6 +5,7 @@ import 'dotenv/config';
 import doctorRoutes from "./routes/doctor.js";
 import patientRoutes from "./routes/patient.js";
 import adminRoutes from "./routes/admin.js";
+import appointmentRoutes from './routes/appointment.js';
 
 const app = express();
 app.use(express.json());
