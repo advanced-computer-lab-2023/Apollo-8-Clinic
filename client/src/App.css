@@ -40,3 +40,26 @@
 .read-the-docs {
   color: #888;
 }
+
+.search-box {
+  padding: 10px;
+  line-height: 30px;
+  margin: 30px auto;
+}
+
+
+.table table-striped{
+  border: 1px;
+  background-color: aqua;
+  width: 100%;
+}
+
+tr:hover {
+  background-color: #e0e0e0;
+}
+
+.title{
+  color: green;
+  font-family:'Courier New', Courier, monospace; font-weight: bolder;
+}
+
