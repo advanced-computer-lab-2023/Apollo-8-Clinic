@@ -10,6 +10,10 @@ import DoctorInfo from "./pages/DoctorInfo";
 import SearchDoctor from "./pages/SearchDoctor";
 import MyPatientsList from "./pages/MyPatientsList";
 import UpcomingAppointments from "./pages/UpcomingAppointments";
+import AddAdmin from "./pages/AddAdmin";
+import RemoveUser from "./pages/RemoveUser";
+import PendingDoctors from "./pages/PendingDoctors";
+import DoctorDetails from "./pages/DoctorDetails";
 function App() {
   return (
     <div>
@@ -24,6 +28,10 @@ function App() {
         <Route path="/search" element={<SearchDoctor />} />
         <Route path="/viewMyPatients" element={<MyPatientsList />} />
         <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
+        <Route path="/addAdministrator" element={<AddAdmin />} />
+        <Route path="/removeUser" element={<RemoveUser />} />
+        <Route path="/pendingDoctors" element={<PendingDoctors />} />
+        <Route path="/doctors/:id" element={<DoctorDetails />} />
       </Routes>
     </div>
   );

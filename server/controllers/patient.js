@@ -5,7 +5,7 @@ import DocModel from '../models/doctor.js';
 import AppointmentModel from '../models/appointment.js';
 import bcrypt from "bcrypt";
 const saltRounds = 10;
-
+import mongoose from 'mongoose';
 const createPatient = async (req, res) => {
   const {
     username,
@@ -22,14 +22,14 @@ const createPatient = async (req, res) => {
     adresses,
     status,
   } = req.body;
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  // const salt = await bcrypt.genSalt(saltRounds);
+  // const hashedPassword = await bcrypt.hash(password, salt);
 
   const existingUser = await UserModel.findOne({ username });
   if (!existingUser) {
     try {
       const user = new UserModel({ username, password, type });
-      user.password = hashedPassword;
+      // user.password = hashedPassword;
       console.log(user.password);
       console.log(req.body);
 
@@ -146,30 +146,30 @@ const getPatientByName = async (req, res) => {
 
     }
     const patientsOfReqName = patients.filter(object => object.name.toLowerCase() === patientName.toLowerCase());
-    if(patientsOfReqName.length === 0){
+    if (patientsOfReqName.length === 0) {
       console.log("no patients with this name!");
       res.status(200).json("no patients with this name!")
     }
-    else{
+    else {
       const patientsReqDetails = patientsOfReqName.map((object) => {
-      return {
-        name: object.name,
-        email: object.email,
-        birthDate: object.birthDate,
-        gender: object.gender,
-        phone: object.phone,
-        emergencyName: object.emergencyName,
-        emergencyNo: object.emergencyNo,
-        emergencyRel: object.emergencyRel
-      };
-    });
-    console.log(patientsReqDetails);
-    res.status(200).json(patientsReqDetails)
-  } 
-    }catch (error) {
+        return {
+          name: object.name,
+          email: object.email,
+          birthDate: object.birthDate,
+          gender: object.gender,
+          phone: object.phone,
+          emergencyName: object.emergencyName,
+          emergencyNo: object.emergencyNo,
+          emergencyRel: object.emergencyRel
+        };
+      });
+      console.log(patientsReqDetails);
+      res.status(200).json(patientsReqDetails)
+    }
+  } catch (error) {
     res.status(400).json({ error: error.message })
   }
-    
+
 };
 const upcomingApp = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
@@ -179,7 +179,7 @@ const upcomingApp = async (req, res) => {
   console.log(doctorId);
   const myPatients = [];
   try {
-    const drAppointments = await AppointmentModel.find({ doctorId: doctorId } );
+    const drAppointments = await AppointmentModel.find({ doctorId: doctorId });
     const patients = []
     console.log(drAppointments);
     for (const appointment1 of drAppointments) {
