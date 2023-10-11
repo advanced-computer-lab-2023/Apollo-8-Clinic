@@ -8,7 +8,8 @@ import EditDoctor from "./pages/EditDoctor";
 import AllDoctors from "./pages/AllDoctors";
 import DoctorInfo from "./pages/DoctorInfo";
 import SearchDoctor from "./pages/SearchDoctor";
-
+import MyPatientsList from "./pages/MyPatientsList";
+import UpcomingAppointments from "./pages/UpcomingAppointments";
 function App() {
   return (
     <div>
@@ -21,6 +22,8 @@ function App() {
         <Route path="/patient/allDoctors" element={<AllDoctors />} />
         <Route path="/doctorInfo" element={<DoctorInfo />} />
         <Route path="/search" element={<SearchDoctor />} />
+        <Route path="/viewMyPatients" element={<MyPatientsList />} />
+        <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
       </Routes>
     </div>
   );
