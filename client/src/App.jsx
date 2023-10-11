@@ -20,6 +20,7 @@ import DoctorDetails from "./pages/DoctorDetails";
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
 import AppPatient from "./pages/patientFamApp";
+import PrescriptionsDetails from "./pages/PrescriptionDetails";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/registerDoctor" element={<DoctorSignup />} />
         <Route path="/registerPatient" element={<PatientSignup />} />
         <Route path="/prescriptionsList" element={<PrescriptionsList />} />
+        <Route path="/prescriptions/:id" element={<PrescriptionsDetails />} />
         <Route path="/editDoctor" element={<EditDoctor />} />
         <Route path="/home" element={<Home />} />
         <Route path="/patient/allDoctors" element={<AllDoctors />} />
