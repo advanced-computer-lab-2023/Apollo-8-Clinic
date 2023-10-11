@@ -32,7 +32,7 @@ function PatientSignup() {
         password,
         birthDate,
         gender,
-        type: "Patient",
+        type:"Patient",
         phone,
         emergencyName,
         emergencyNo,

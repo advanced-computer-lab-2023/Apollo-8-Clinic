@@ -3,6 +3,7 @@ import UserModel from '../models/user.js';
 import DoctorModel from '../models/doctor.js';
 import mongoose from 'mongoose';
 import PatientModel from '../models/patient.js';
+
 const createUser = async (req, res) => {
   const {
     username,
@@ -44,7 +45,7 @@ const addAdministrator=async(req,res) => {
          const newAdmin = new UserModel({
             username,
             password,
-            type:'admin'
+            type:'Admin'
          });
     await newAdmin.save();
     console.log(newAdmin);
@@ -64,10 +65,10 @@ const removeUser = async (req, res) => {
         if(!user){
             res.status(404).json({message:"The User is not found"});
         }
-        if(user.type=='doctor'){
+        if(user.type==='Doctor'){
             await DoctorModel.deleteOne({user:user._id});
         }
-        else if(user.type=='patient'){
+        else if(user.type==='Patient'){
           await PatientModel.deleteOne({user:user._id});
       }
         await UserModel.deleteOne({username});
