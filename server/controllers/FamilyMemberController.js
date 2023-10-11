@@ -12,7 +12,7 @@ const getAllFamMembers = async (req, res) => {
     }
   };
 
- // Controller function to add a New fam member  (addNew)
+ // add a New fam member  (addNew)
 const addNewFamilyMember = async (req, res) => {
     try {
       const {name,nationalID,age,gender,relation}= req.body;

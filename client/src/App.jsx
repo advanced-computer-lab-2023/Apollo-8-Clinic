@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Routes, Route } from "react-router-dom";
+//import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Routes, Route, Switch } from "react-router-dom";
+import React from "react";
 import DoctorSignup from "./pages/DoctorSignup";
 import PatientSignup from "./pages/PatientSignup";
 import Home from "./pages/Home";
@@ -13,8 +15,14 @@ import UpcomingAppointments from "./pages/UpcomingAppointments";
 import AddAdmin from "./pages/AddAdmin";
 import RemoveUser from "./pages/RemoveUser";
 import PendingDoctors from "./pages/PendingDoctors";
-import DoctorDetails from "./pages/DoctorDetails"; import View from "./pages/ViewHealthRecords";
+import DoctorDetails from "./pages/DoctorDetails";
+import View from "./pages/ViewHealthRecords";
 
+//check it
+import MainDoctor from "./pages/DoctorAppointments";
+import App1 from "./pages/adminHealthP";
+import AppPatient from "./pages/patientFamApp";
+import PrescriptionsDetails from "./pages/PrescriptionDetails";
 
 function App() {
   return (
@@ -23,6 +31,7 @@ function App() {
         <Route path="/registerDoctor" element={<DoctorSignup />} />
         <Route path="/registerPatient" element={<PatientSignup />} />
         <Route path="/prescriptionsList" element={<PrescriptionsList />} />
+        <Route path="/prescriptions/:id" element={<PrescriptionsDetails />} />
         <Route path="/editDoctor" element={<EditDoctor />} />
         <Route path="/home" element={<Home />} />
         <Route path="/patient/allDoctors" element={<AllDoctors />} />
@@ -34,8 +43,17 @@ function App() {
         <Route path="/removeUser" element={<RemoveUser />} />
         <Route path="/pendingDoctors" element={<PendingDoctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
-        <Route path="/viewHealth" element={<View />} />
+        <Route path="/doctorAppointments">
+          <MainDoctor />
+        </Route>
+        <Route path="/patientFamilyAppointments">
+          <AppPatient />
+        </Route>
+        <Route path="/adminHealthPackage">
+          <App1 />
+        </Route>
 
+        <Route path="/viewHealth" element={<View />} />
       </Routes>
     </div>
   );
