@@ -36,6 +36,16 @@ const doctorSchema = new mongoose.Schema({
     required: true,
     default: "Pending",
   },
+  //sss
+  speciality: {
+    type: String,
+    required: true,
+  },
+  availableSlots: {
+    type: Date,
+    default: "1700/1/1 12:12:12",
+  },
+  //sss
 });
 
 const DoctorModel = mongoose.model("Doctor", doctorSchema);
