@@ -226,7 +226,8 @@ const upcomingApp = async (req, res) => {
 
 const getPrescriptions = async (req, res) => {
   try {
-    const patientID = req.body.patientId;
+    console.log(req.query)
+    const patientID = req.query.patientId;
     const arr = await PresModel.find({ patientId: patientID }).populate('doctorId');
     console.log(arr);
     res.status(200).json(arr);
@@ -269,7 +270,7 @@ const filterPres = async (req, res) => {
 
 const getPres = async (req, res) => {
   try {
-    const presID = req.body.perscriptionsID
+    const presID = req.params.id
     const perscription = await PresModel.findById(presID)
     res.status(200).json(perscription);
   } catch {

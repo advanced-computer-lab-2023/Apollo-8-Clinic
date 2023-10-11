@@ -14,6 +14,7 @@ import AddAdmin from "./pages/AddAdmin";
 import RemoveUser from "./pages/RemoveUser";
 import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
+import PrescriptionsDetails from "./pages/PrescriptionDetails";
 function App() {
   return (
     <div>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/registerDoctor" element={<DoctorSignup />} />
         <Route path="/registerPatient" element={<PatientSignup />} />
         <Route path="/prescriptionsList" element={<PrescriptionsList />} />
+        <Route path="/prescriptions/:id" element={<PrescriptionsDetails />} />
         <Route path="/editDoctor" element={<EditDoctor />} />
         <Route path="/home" element={<Home />} />
         <Route path="/patient/allDoctors" element={<AllDoctors />} />
