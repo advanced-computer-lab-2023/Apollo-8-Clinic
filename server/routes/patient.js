@@ -8,9 +8,9 @@ const router = express.Router();
 // to test this send a post request to this route: http://localhost:8000/patient
 router.post("/", controllers.createPatient);
 router.get("/", controllers.getPatients);
-router.post("/getPerscriptions", controllers.getPrescriptions)
+router.get("/getPerscriptions", controllers.getPrescriptions)
 router.post("/filterPerscriptions", controllers.filterPres)
-router.post("/getPerscription", controllers.getPres)
+router.get("/getPerscription/:id", controllers.getPres)
 
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
