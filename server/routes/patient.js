@@ -23,7 +23,7 @@ router.get('/healthPackage', HealthPackageController.getAllHealthPackages);
 
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
-router.get("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
+router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
 
 //sss
 router.get("/allDoctors", doctor.getAllDoctors);
