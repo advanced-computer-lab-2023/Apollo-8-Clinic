@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Sidebar from "./SidebarDoctor";
 
 function DoctorInfo() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
-  const {id} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     const apiUrl = "http://localhost:8000/patient/docInfo" + id;
@@ -22,6 +23,8 @@ function DoctorInfo() {
 
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>Doctor Details</h2>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "./SidebarDoctor";
 // lessa me7taga azabat 7ewar el id haaaaaaaaa3333333
 function MyPatientsList() {
   const [data, setData] = useState();
@@ -10,21 +11,21 @@ function MyPatientsList() {
   const [search, setSearch] = useState('');
 
 
-//   const { id, setId } = useState();
+  //   const { id, setId } = useState();
 
   useEffect(() => {
     // const id="651fd81f02ac1ed6c024c967";
     axios
-      .get( "http://localhost:8000/doctor/viewPatients"+"/?id=651fd81f02ac1ed6c024c967")
+      .get("http://localhost:8000/doctor/viewPatients" + "/?id=651c3ddfc5dc08d239127a83")
       .then((response) => {
         setData(response.data);
         setLoading(false);
-        console.log("henaaaa"+response);
+        console.log("henaaaa" + response);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
         setLoading(false);
-        console.log("henaaaa22222222222"+response);
+        console.log("henaaaa22222222222" + response);
 
       });
   }, []);
@@ -32,7 +33,7 @@ function MyPatientsList() {
     // Navigate to another route and pass the ID as a prop
     navigate(`/viewUpcomingApp`);
   }
-  function handleSearch(search){
+  function handleSearch(search) {
     setData(data
       .filter((item) => {
         return search.toLowerCase() === ''
@@ -40,24 +41,26 @@ function MyPatientsList() {
           : item.name.toLowerCase().includes(search);
       })
     );
-    
+
   }
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>Your patients' list</h2>
           <button
-                        className="btn btn-success"
-                        onClick={() => handleFilter()}
-                      >
-                        filter to future appointments
-                      </button>
+            className="btn btn-success"
+            onClick={() => handleFilter()}
+          >
+            filter to future appointments
+          </button>
         </div>
         <div className="card-body">
           {loading ? (
             <p>Loading...</p>
-            
+
           ) : (
             <table className="table table-striped">
               <thead className="table-dark">
@@ -76,12 +79,12 @@ function MyPatientsList() {
                       className="form-control rounded-0"
                       onChange={(e) => setSearch(e.target.value)}
                     />
-                  
+
                   </th>
                 </tr>
               </thead>
               <tbody>
-              {data
+                {data
                   .filter((item) => {
                     return search.toLowerCase() === ''
                       ? item
