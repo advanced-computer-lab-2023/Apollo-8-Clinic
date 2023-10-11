@@ -1,7 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-//import { Routes, Route } from "react-router-dom";
-import { BrowserRouter as Routes, Route, Switch } from "react-router-dom";
-import React from "react";
+import { Routes, Route } from "react-router-dom";
 import DoctorSignup from "./pages/DoctorSignup";
 import PatientSignup from "./pages/PatientSignup";
 import Home from "./pages/Home";
@@ -43,16 +41,9 @@ function App() {
         <Route path="/removeUser" element={<RemoveUser />} />
         <Route path="/pendingDoctors" element={<PendingDoctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
-        <Route path="/doctorAppointments">
-          <MainDoctor />
-        </Route>
-        <Route path="/patientFamilyAppointments">
-          <AppPatient />
-        </Route>
-        <Route path="/adminHealthPackage">
-          <App1 />
-        </Route>
-
+        <Route path="/doctorAppointments" element={<MainDoctor />} />
+        <Route path="/patientFamilyAppointments" element={<AppPatient />} />
+        <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth" element={<View />} />
       </Routes>
     </div>
