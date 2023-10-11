@@ -15,7 +15,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.set('strictQuery', false);
 mongoose
-  .connect("mongodb://localhost:27017/employee")
+  .connect(MONGO_URI)
   .then(() => {
     console.log("MongoDB is now connected!");
     // Starting server
