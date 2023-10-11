@@ -6,7 +6,7 @@ function FamilyMembers() {
   const [familyMembers, setFamilyMembers] = useState([]);
 
   useEffect(() => {
-      axios.get('http://localhost:8000/patient/Family')
+      axios.post('http://localhost:8000/patient/Family')
           .then(response => {
               setFamilyMembers(response.data);
           })
