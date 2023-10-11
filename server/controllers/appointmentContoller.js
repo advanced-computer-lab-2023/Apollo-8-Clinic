@@ -32,14 +32,14 @@ const createAppointment = async (req, res) => {
 
 const getAppointmentWithFilter = async (req, res) => {
     try {
-        const { status, startDate, endDate } = req.query; // Destructure status and dates from query parameters
+        const {startDate, endDate, status } = req.body; // Destructure status and dates from query parameters
         let query = {};
 
         if (status) {
             query.status = status;
         }
 
-        if (startDate && endDate) {
+        if (startDate && endDate ) {
             let start = new Date(startDate);
             let end = new Date(endDate);
 

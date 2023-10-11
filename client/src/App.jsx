@@ -14,6 +14,8 @@ import AddAdmin from "./pages/AddAdmin";
 import RemoveUser from "./pages/RemoveUser";
 import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
+
+
 function App() {
   return (
     <div>

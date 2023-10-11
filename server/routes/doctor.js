@@ -17,6 +17,6 @@ router.post("/UpdateDoctor", controllers.updateDoctor);
 router.post("/getHealthRecord", controllers.getHealthRecord);
 //view appointments 
 import appointmentContoller from "../controllers/appointmentContoller.js";
-router.get("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
+router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
 
 export default router;
