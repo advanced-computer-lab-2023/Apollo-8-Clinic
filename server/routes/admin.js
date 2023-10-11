@@ -9,4 +9,12 @@ router.get("/getUsers", controllers.getUsers);
 router.post("/addAdministrator", controllers.addAdministrator);
 router.delete("/removeUser", controllers.removeUser);
 
+
+//health packages (view,add,update,delete)
+import HealthPackageController from '../controllers/healthPackageController.js';
+router.get('/healthPackage',HealthPackageController.getAllHealthPackages);
+router.post('/healthPackage', HealthPackageController.createHealthPackage);
+router.put('/healthPackage/:id', HealthPackageController.updateHealthPackage);
+router.delete('/healthPackage/:id', HealthPackageController.deleteHealthPackage);
+
 export default router;
