@@ -83,7 +83,11 @@ const getDoctorById = async (req, res) => {
     } catch (error) {
       res.status(400).send(error.message);
     }
-  };
+  }
+  catch (error) {
+    res.status(400).send(error.message);
+  }
+}
   const acceptDoctor = async (req, res) => {
     try {
       const doctor = await DoctorModel.findByIdAndUpdate(
