@@ -26,7 +26,7 @@ function DoctorSignup() {
         name,
         username,
         email,
-        type: "Doctor",
+        type:"Doctor",
         password,
         birthDate,
         hospital,
