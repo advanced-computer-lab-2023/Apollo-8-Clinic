@@ -32,12 +32,8 @@ const createAppointment = async (req, res) => {
 
 const getAppointmentWithFilter = async (req, res) => {
     try {
-        const { status, startDate, endDate } = req.query; // Destructure status and dates from query parameters
+        const { startDate, endDate , status } = req.query; // Destructure status and dates from query parameters
         let query = {};
-
-        if (status) {
-            query.status = status;
-        }
 
         if (startDate && endDate) {
             let start = new Date(startDate);
@@ -56,6 +52,9 @@ const getAppointmentWithFilter = async (req, res) => {
                 return res.status(400).json({ error: "Please enter a valid date range" });
             }
             }
+            if (status) {
+              query.status = status;
+          }    
         const appointment = await appointments.find(query);
         res.status(200).json(appointment);
     } catch (error) {
