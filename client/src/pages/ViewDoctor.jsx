@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-function DoctorInfo() {
+function ViewDoctor() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
@@ -26,7 +26,7 @@ function DoctorInfo() {
 
   const handleBack = () => {
     // Use the navigate function to go to the specified route
-    navigate("/filter");
+    navigate("/allDoctors");
 
     
   };
@@ -63,4 +63,4 @@ function DoctorInfo() {
   );
 }
 
-export default DoctorInfo;
+export default ViewDoctor;

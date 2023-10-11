@@ -20,18 +20,26 @@ function FilterDoctors() {
         setLoading(false);
       });
   }, []);
+  function handleView(id) {
+    // Navigate to another route and pass the ID as a prop
+    console.log(id);
+    navigate(`/doctorInfo/${id}`);
+    console.log(id);
+  }
   function handleFilter(){
     // const response= await axios.get("http://localhost:8000/patient/allDoctors");
         console.log(searchTime);
 
     const filteredDoctors = data.filter((doctor) =>{
-      return searchTime === "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() === ''
+      console.log(doctor.speciality.toLowerCase() === searchSpec);
+      return searchTime.getTime() === "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() === ''
         ? doctor:
-        searchTime !== "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() !== ''
-        ? doctor.speciality.toLowerCase() === searchSpec && doctor.availableSlots === searchTime:
-        searchTime !== "1990-03-03T10:12:12.000+00:00"?
-        doctor.speciality.toLowerCase() === searchSpec:
-        doctor.availableSlots === searchTime;
+        searchTime.getTime() !== "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() !== ''
+        ? doctor.speciality.toLowerCase() === searchSpec && doctor.availableSlots === searchTime.getTime():
+        searchSpec.toLowerCase() !== ''? 
+        doctor.speciality.toLowerCase() === searchSpec:       
+        doctor.availableSlots === searchTime.getTime();
+        
     }
   );
   setData(filteredDoctors);
@@ -55,7 +63,7 @@ function FilterDoctors() {
                 <th>Session Price</th>
                 <th><input
                       type="text"
-                      placeholder="search with a name"
+                      placeholder="filter by available slots"
                       autoComplete="off"
                       name="time"
                       className="form-control rounded-0"
@@ -63,7 +71,7 @@ function FilterDoctors() {
                     /></th>
                 <th><input
                       type="text"
-                      placeholder="search with a spciality"
+                      placeholder="filter by a spciality"
                       autoComplete="off"
                       name="spec"
                       className="form-control rounded-0"

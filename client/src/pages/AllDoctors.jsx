@@ -22,6 +22,12 @@ function AllDoctors() {
         setLoading(false);
       });
   }, []);
+  function handleView(id) {
+    // Navigate to another route and pass the ID as a prop
+    console.log(id);
+    navigate(`/doctors/${id}`);
+    console.log(id);
+  }
   function handleFilter(){
     navigate("/filter");
   };
@@ -43,7 +49,7 @@ function AllDoctors() {
                 <th>Session Price</th>
                 <th><input
                       type="text"
-                      placeholder="search with a name"
+                      placeholder="search by a name"
                       autoComplete="off"
                       name="name"
                       className="form-control rounded-0"
@@ -51,7 +57,7 @@ function AllDoctors() {
                     /></th>
                 <th><input
                       type="text"
-                      placeholder="search with a spciality"
+                      placeholder="search by a spciality"
                       autoComplete="off"
                       name="spec"
                       className="form-control rounded-0"
