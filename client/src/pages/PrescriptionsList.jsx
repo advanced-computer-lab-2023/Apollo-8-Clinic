@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import Sidebar from "./SidebarPatient";
+
 function PrescriptionsList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);

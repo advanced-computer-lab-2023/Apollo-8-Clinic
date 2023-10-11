@@ -1,31 +1,34 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Sidebar from "./SidebarDoctor";
 // lessa me7taga azabat 7ewar el id haaaaaaaaa3333333
 function UpcomingAppointments() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
-//   const { id, setId } = useState();
+  //   const { id, setId } = useState();
 
   useEffect(() => {
     // const id="651fd81f02ac1ed6c024c967";
     axios
-      .get( "http://localhost:8000/doctor/futureAppointmentPatients"+"/?id=651fd81f02ac1ed6c024c967")
+      .get("http://localhost:8000/doctor/futureAppointmentPatients" + "/?id=651c3ddfc5dc08d239127a83")
       .then((response) => {
         setData(response.data);
         setLoading(false);
-        console.log("henaaaa"+response);
+        console.log("henaaaa" + response);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
         setLoading(false);
-        console.log("henaaaa22222222222"+response);
+        console.log("henaaaa22222222222" + response);
 
       });
   }, []);
 
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>Patients you have an upcoming appointment with</h2>
