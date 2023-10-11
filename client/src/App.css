@@ -39,7 +39,7 @@
 
 .read-the-docs {
   color: #888;
-}
+} */
 
 .search-box {
   padding: 10px;
@@ -47,8 +47,7 @@
   margin: 30px auto;
 }
 
-
-.table table-striped{
+.table table-striped {
   border: 1px;
   background-color: aqua;
   width: 100%;
@@ -58,11 +57,11 @@ tr:hover {
   background-color: #e0e0e0;
 }
 
-.title{
+.title {
   color: green;
-  font-family:'Courier New', Courier, monospace; font-weight: bolder;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bolder;
 }
-
 
 .sidebar {
   width: 250px;
@@ -74,7 +73,6 @@ tr:hover {
 .sidebar ul {
   list-style: none;
   padding: 0;
-
 }
 
 .sidebar li {
@@ -86,12 +84,12 @@ tr:hover {
   color: white;
 }
 
-.sidebar a:hover{
-  color:rgb(225, 198, 152);
+.sidebar a:hover {
+  color: rgb(225, 198, 152);
   font-size: larger;
-  font-weight:bolder;
+  font-weight: bolder;
 }
 
-.abc{
+.abc {
   color: aqua;
 }
