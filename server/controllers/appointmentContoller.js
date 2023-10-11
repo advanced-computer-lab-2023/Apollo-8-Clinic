@@ -26,31 +26,41 @@ const createAppointment = async (req, res) => {
   }
 
 };
+
+
+//test it using http://localhost:8000/doctor/appointmentWithFilter?startDate=2002-1-1&endDate=2003-1-1
+
 const getAppointmentWithFilter = async (req, res) => {
-  try {
-    const { status, date } = req.query; // Destructure status and date from query parameters
-    let query = {};
+    try {
+        const { status, startDate, endDate } = req.query; // Destructure status and dates from query parameters
+        let query = {};
 
-    if (status) {
-      query.status = status;
+        if (status) {
+            query.status = status;
+        }
+
+        if (startDate && endDate) {
+            let start = new Date(startDate);
+            let end = new Date(endDate);
+
+            if (start.toDateString() === end.toDateString()) {
+                end.setDate(end.getDate() + 1);
+            }
+
+            if (end > start) {
+                query.date = {
+                    $gte: start,
+                    $lt: end
+                };
+            } else {
+                return res.status(400).json({ error: "Please enter a valid date range" });
+            }
+            }
+        const appointment = await appointments.find(query);
+        res.status(200).json(appointment);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-
-    if (date) {
-      let start = new Date(date);
-      let end = new Date(start);
-      end.setDate(end.getDate() + 1);
-
-      query.date = {
-        $gte: start,
-        $lt: end
-      };
-    }
-
-    const appointment = await appointments.find(query);
-    res.status(200).json(appointment);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
 };
 
 
