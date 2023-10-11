@@ -1,5 +1,6 @@
 import express from "express";
 import controllers from "../controllers/patient.js";
+import doctor from "../controllers/doctor.js";
 
 const router = express.Router();
 
@@ -7,22 +8,22 @@ const router = express.Router();
 // to test this send a post request to this route: http://localhost:8000/patient
 router.post("/createPatient", controllers.createPatient);
 router.get("/getPatients", controllers.getPatients);
-router.post("/getPerscriptions",controllers.getPrescriptions)
-router.post("/filterPerscriptions",controllers.filterPres)
-router.post("/getPerscription",controllers.getPres)
+router.post("/getPerscriptions", controllers.getPrescriptions)
+router.post("/filterPerscriptions", controllers.filterPres)
+router.post("/getPerscription", controllers.getPres)
 
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
-router.get("/Family",FamilyMemberController.getAllFamMembers);
-router.post("/AddFamilyMember",FamilyMemberController.addNewFamilyMember);
+router.get("/Family", FamilyMemberController.getAllFamMembers);
+router.post("/AddFamilyMember", FamilyMemberController.addNewFamilyMember);
 
 //view all the health packages 
 import HealthPackageController from '../controllers/healthPackageController.js';
-router.get('/healthPackage',HealthPackageController.getAllHealthPackages);
+router.get('/healthPackage', HealthPackageController.getAllHealthPackages);
 
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
-router.get("/appointmentWithFilter",appointmentContoller.getAppointmentWithFilter);
+router.get("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
 
 //sss
 router.get("/allDoctors", doctor.getAllDoctors);
