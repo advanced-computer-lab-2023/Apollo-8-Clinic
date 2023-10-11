@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Sidebar from "./SidebarAdmin";
 
 function PendingDoctors() {
   const [data, setData] = useState([]);
@@ -52,6 +53,8 @@ function PendingDoctors() {
 
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>Doctors</h2>

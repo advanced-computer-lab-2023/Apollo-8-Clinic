@@ -5,11 +5,12 @@ import axios from "axios";
 // import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
+import Sidebar from "./SidebarAdmin";
 
 function AddAdmin() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  
+
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -27,8 +28,9 @@ function AddAdmin() {
       .catch((err) => console.log(err));
   };
   return (
-    <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-      <div className="bg-white p-3 rounded w-25">
+    <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+      <div className="card m-3 col-12" style={{ width: "80%" }}>
         <h2>add Administrator</h2>
         <form action="" onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -44,7 +46,7 @@ function AddAdmin() {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-         
+
           <div className="mb-3">
             <label htmlFor="email">
               <strong>Password</strong>
@@ -61,7 +63,7 @@ function AddAdmin() {
             Add
           </button>
         </form>
-        </div>
+      </div>
     </div>
   );
 }

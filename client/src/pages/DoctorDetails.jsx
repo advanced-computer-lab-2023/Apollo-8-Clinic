@@ -27,9 +27,11 @@ function DoctorDetails() {
     // Use the navigate function to go to the specified route
     navigate("/pendingDoctors");
   };
- 
+
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>Doctor Details</h2>
