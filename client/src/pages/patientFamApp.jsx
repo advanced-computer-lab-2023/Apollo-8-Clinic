@@ -120,7 +120,7 @@ const RightSidebar = ({ showForm,showHello}) => (
   </div>
 );
 
-const App = () => {
+const AppPatient = () => {
   const [content, setContent] = useState('Click a button to change content');
   const [showHello, setShowHello] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -194,4 +194,4 @@ const searchApp = (event) => {
 //for the patient
 //ReactDOM.render(<App />, document.getElementById('root'));
 
-export default App ;
+export default AppPatient ;
