@@ -4,6 +4,9 @@ import DoctorSignup from "./pages/DoctorSignup";
 import PatientSignup from "./pages/PatientSignup";
 import Home from "./pages/Home";
 import AllDoctors from "./pages/AllDoctors";
+import DoctorInfo from "./pages/DoctorInfo";
+import SearchComponent from "./pages/SearchComponent";
+import SearchDoctor from "./pages/SearchDoctor";
 
 function App() {
   return (
@@ -13,6 +16,8 @@ function App() {
         <Route path="/registerPatient" element={<PatientSignup />} />
         <Route path="/home" element={<Home />} />
         <Route path="/patient/allDoctors" element={<AllDoctors />} />
+        <Route path="/doctorInfo" element={<DoctorInfo />} />
+        <Route path="/search" element={<SearchDoctor />} />
       </Routes>
     </div>
   );

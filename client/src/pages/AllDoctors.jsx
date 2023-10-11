@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-//import { useParams } from "react-router-dom";
 
 function AllDoctors() {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
- // const { id } = useParams();
 
   useEffect(() => {
     const apiUrl = "http://localhost:8000/patient/allDoctors";
@@ -23,23 +21,39 @@ function AllDoctors() {
 
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
-      <div className="card m-3 col-12" style={{ width: "80%" }}>
-        <div className="card-header">
-          <h2>All Doctors Details</h2>
-        </div>
-        <div className="card-body">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <ul>
-              <li>name: {data.name}</li>
-              <li>speciality: {data.speciality}</li>
-              <li>hourlyRate: {data.hourlyRate}</li>
-            </ul>
-          )}
-        </div>
+    <div className="card m-3 col-12" style={{ width: "80%" }}>
+      <div className="card-header">
+        <h2>All Doctors Details</h2>
+      </div>
+      <div className="card-body">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <table className="table table-striped">
+            <thead className="table-dark">
+              <tr>
+                <th>Name</th>
+                <th>speciality</th>
+                <th>Session Price</th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.name}</td>
+                  <td>{item.speciality}</td>
+                  <td>{item.hourlyRate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
+  </div>
   );
 }
 
