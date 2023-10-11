@@ -7,7 +7,7 @@ import PrescriptionsList from "./pages/PrescriptionsList";
 import EditDoctor from "./pages/EditDoctor";
 import AllDoctors from "./pages/AllDoctors";
 import DoctorInfo from "./pages/DoctorInfo";
-import SearchDoctor from "./pages/SearchDoctor";
+import FilterDoctor from "./pages/FilterDoctor";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/patient/allDoctors" element={<AllDoctors />} />
         <Route path="/doctorInfo" element={<DoctorInfo />} />
-        <Route path="/search" element={<SearchDoctor />} />
+        <Route path="/filter" element={<FilterDoctor />} />
       </Routes>
     </div>
   );

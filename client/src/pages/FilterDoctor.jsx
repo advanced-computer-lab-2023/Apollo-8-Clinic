@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-function AllDoctors() {
+function FilterDoctors() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchName, setSearchName] = useState('');
+  const [searchTime, setSearchTime] = useState(new Date("1990-03-03T10:12:12.000+00:00"));
   const [searchSpec, setSearchSpec] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     const apiUrl = "http://localhost:8000/patient/allDoctors";
@@ -23,7 +21,21 @@ function AllDoctors() {
       });
   }, []);
   function handleFilter(){
-    navigate("/filter");
+    // const response= await axios.get("http://localhost:8000/patient/allDoctors");
+        console.log(searchTime);
+
+    const filteredDoctors = data.filter((doctor) =>{
+      return searchTime === "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() === ''
+        ? doctor:
+        searchTime !== "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() !== ''
+        ? doctor.speciality.toLowerCase() === searchSpec && doctor.availableSlots === searchTime:
+        searchTime !== "1990-03-03T10:12:12.000+00:00"?
+        doctor.speciality.toLowerCase() === searchSpec:
+        doctor.availableSlots === searchTime;
+    }
+  );
+  setData(filteredDoctors);
+  
   };
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
@@ -45,9 +57,9 @@ function AllDoctors() {
                       type="text"
                       placeholder="search with a name"
                       autoComplete="off"
-                      name="name"
+                      name="time"
                       className="form-control rounded-0"
-                      onChange={(e) => setSearchName(e.target.value)}
+                      onChange={(e) => setSearchTime(e.target.value)}
                     /></th>
                 <th><input
                       type="text"
@@ -61,21 +73,12 @@ function AllDoctors() {
                         className="btn btn-success"
                         onClick={() => handleFilter()}
                       >
-                        or filter with speciality and available slots
-                      </button></th>              </tr>
+                        apply filter on speciality and available slots
+                      </button></th>
+                      </tr>
             </thead>
             <tbody>
-            {data
-                  .filter((item) => {
-                    return searchName.toLowerCase() === '' && searchSpec.toLowerCase() === ''
-                      ? item
-                      :searchName.toLowerCase() !== '' && searchSpec.toLowerCase() !== ''
-                      ? item.speciality.toLowerCase().includes(searchSpec) && item.name.toLowerCase().includes(searchName)
-                      :searchName.toLowerCase() === ''
-                      ? item.speciality.toLowerCase().includes(searchSpec)
-                      : item.name.toLowerCase().includes(searchName);
-                  })
-                  .map((item, index) => (
+            {data.map((item, index) => (
                     <tr key={index}>
                       <td>{item.name}</td>
                       <td>{item.speciality}</td>
@@ -99,4 +102,4 @@ function AllDoctors() {
   );
 }
 
-export default AllDoctors;
+export default FilterDoctors;
