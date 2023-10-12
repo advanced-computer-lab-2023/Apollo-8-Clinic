@@ -33,7 +33,6 @@ function ViewDoctor() {
   };
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
-      <Sidebar />
 
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">

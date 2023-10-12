@@ -20,10 +20,10 @@ function Home() {
     navigate("/addAdministrator");
   };
   const handlePatientLogin = () => {
-    navigate("/prescriptionsList");
+    navigate("/allDoctors");
   };
   const handleDoctorLogin = () => {
-    navigate("/viewUpcomingApp");
+    navigate("/editDoctor");
   };
   // const backgroundStyle = {
   //   backgroundImage: 'url("client/src/images/photo.png")',
