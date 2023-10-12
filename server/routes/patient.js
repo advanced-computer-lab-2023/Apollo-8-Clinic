@@ -29,7 +29,7 @@ router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFil
 router.get("/allDoctors", doctor.getAllDoctors);
 router.get("/docInfo/:id", doctor.getDoctorById);
 router.get("/docSearch", doctor.searchByNameOrSpec);
-router.get("/docFilter", doctor.filterBySpecOrAv);
+router.post("/docFilter", doctor.filterBySpecOrAv);
 // router.get("/searchDocNameASpec", doctor.getDoctorByNameASpec);
 // router.get("/searchDocNameOrSpec", doctor.getDoctorByNameOrSpec);
 // router.get("/searchDocSpecASlots", doctor.getDoctorAvailableAndS);
