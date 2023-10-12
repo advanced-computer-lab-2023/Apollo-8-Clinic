@@ -16,8 +16,17 @@ function Home() {
   const handlePatientSignup = () => {
     navigate("/registerPatient");
   };
+  const handleAdminLogin = () => {
+    navigate("/addAdministrator");
+  };
+  const handlePatientLogin = () => {
+    navigate("/prescriptionsList");
+  };
+  const handleDoctorLogin = () => {
+    navigate("/viewUpcomingApp");
+  };
   const backgroundStyle = {
-    backgroundImage: 'url("client/src/images/photo.png")', 
+    backgroundImage: 'url("client/src/images/photo.png")',
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -25,25 +34,25 @@ function Home() {
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light" style={backgroundStyle}>
       <div className="card m-3 col-12" style={{ width: "80%" }}>
-      <div className="card-body text-center">
-        <body>
-         <div><button className="btn btn-success m-3 btn-lg"
-          onClick={handleDoctorSignup} >DoctorSignup</button></div>
-         <div><button className="btn btn-success m-3 btn-lg"
-          onClick={handlePatientSignup}>PatientSignup</button></div>
-         <div><button className="btn btn-success m-3 btn-lg"
-         >AdminLogin</button></div>
-         <div><button className="btn btn-success m-3 btn-lg"
-          >DoctorLogin</button></div>
-         <div><button className="btn btn-success m-3 btn-lg"
-          >PatientLogin</button></div>
-         
+        <div className="card-body text-center">
+          <body>
+            <div><button className="btn btn-success m-3 btn-lg"
+              onClick={handleDoctorSignup} >DoctorSignup</button></div>
+            <div><button className="btn btn-success m-3 btn-lg"
+              onClick={handlePatientSignup}>PatientSignup</button></div>
+            <div><button className="btn btn-success m-3 btn-lg" onClick={handleAdminLogin}
+            >AdminLogin</button></div>
+            <div><button className="btn btn-success m-3 btn-lg" onClick={handlePatientLogin}
+            >DoctorLogin</button></div>
+            <div><button className="btn btn-success m-3 btn-lg" onClick={handleDoctorLogin}
+            >PatientLogin</button></div>
 
-</body>
-</div>
-</div>
-</div>
-       );
+
+          </body>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 

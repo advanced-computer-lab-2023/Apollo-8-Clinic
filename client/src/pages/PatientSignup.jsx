@@ -32,7 +32,7 @@ function PatientSignup() {
         password,
         birthDate,
         gender,
-        type:"Patient",
+        type: "Patient",
         phone,
         emergencyName,
         emergencyNo,
@@ -41,7 +41,7 @@ function PatientSignup() {
       })
       .then((result) => {
         console.log(result);
-        navigate("/login");
+        navigate("/");
       })
       .catch((err) => console.log(err));
   };
@@ -201,18 +201,10 @@ function PatientSignup() {
               onChange={(e) => setAdresses(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-success w-100 rounded-0">
+          <button style={{ marginBottom: "40px", marginTop: "30px" }} type="submit" className="btn btn-success w-100 rounded-0">
             Register
           </button>
         </form>
-
-        <p> Already Have an Account</p>
-        <Link
-          to="/login"
-          className="btn btn-default border w-100 bg-light rounded-0 text-decoration"
-        >
-          Login
-        </Link>
       </div>
     </div>
   );
