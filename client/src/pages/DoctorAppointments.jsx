@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Sidebar from '../components/SidebarPatient';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -55,7 +56,7 @@ const Header = () => (
 
 
 //<button style={{width: '100%', height:40}} onClick={() => {changeContent(<Buttons />);setShowForm(false);}}>Health Packages</button>
-const Sidebar = ({ changeContent, showForm, setShowForm, showHello, setShowHello }) => (
+const Sidebar1 = ({ changeContent, showForm, setShowForm, showHello, setShowHello }) => (
   <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
     <div id="welcomeTitle" style={{ border: '1px solid black', height: 80, fontSize: 25, borderRadius: 10, textAlign: 'center' }}>Welcome Doctor</div>
     <button style={{ width: '100%', height: 40 }} onClick={() => { changeContent(<Appointments />); setShowHello(true); }}>Appointments</button>
@@ -106,24 +107,27 @@ const MainDoctor = () => {
   return (
     <>
       <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+
         <Sidebar />
 
-        <div className="card m-3 col-12" style={{ width: "80%" }}></div>
-        <Header />
-        <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
-          <Sidebar changeContent={setContent} showHello={showHello} setShowHello={setShowHello} />
-          <MainContent content={content} />
-          <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
-            {showHello && (
-              <form>
-                <h2>Appointments</h2>
-                <label>Start Date:<input type="text" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
-                <label >End Date:<input type="text" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
-                <label >Status:<input type="text" value={status} onChange={e => setStatus(e.target.value)} /></label>
-                <button type="button" onClick={searchApp}>Apply Filter</button>
-              </form>
-            )}
+        <div className="card m-3 col-12" style={{ width: "80%" }}>
+          <Header />
 
+          <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
+            <Sidebar1 changeContent={setContent} showHello={showHello} setShowHello={setShowHello} />
+            <MainContent content={content} />
+            <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
+              {showHello && (
+                <form>
+                  <h2>Appointments</h2>
+                  <label>Start Date:<input type="text" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
+                  <label >End Date:<input type="text" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
+                  <label >Status:<input type="text" value={status} onChange={e => setStatus(e.target.value)} /></label>
+                  <button type="button" onClick={searchApp}>Apply Filter</button>
+                </form>
+              )}
+
+            </div>
           </div>
         </div>
       </div>
