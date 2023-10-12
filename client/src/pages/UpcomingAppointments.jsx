@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import Sidebar from "./SidebarDoctor";
+import Sidebar from "../components/SidebarDoctor";
 // lessa me7taga azabat 7ewar el id haaaaaaaaa3333333
 function UpcomingAppointments() {
   const [data, setData] = useState();
@@ -11,7 +11,10 @@ function UpcomingAppointments() {
   useEffect(() => {
     // const id="651fd81f02ac1ed6c024c967";
     axios
-      .get("http://localhost:8000/doctor/futureAppointmentPatients" + "/?id=651c3ddfc5dc08d239127a83")
+      .get(
+        "http://localhost:8000/doctor/futureAppointmentPatients" +
+          "/?id=651c3ddfc5dc08d239127a83"
+      )
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -21,7 +24,6 @@ function UpcomingAppointments() {
         console.error("Error fetching data:", error);
         setLoading(false);
         console.log("henaaaa22222222222" + response);
-
       });
   }, []);
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Sidebar from "./SidebarAdmin";
+import Sidebar from "../components/SidebarAdmin";
 
 function PendingDoctors() {
   const [data, setData] = useState([]);
@@ -28,7 +28,9 @@ function PendingDoctors() {
   }
   const handleAccept = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:8000/doctor/accept/${id}`);
+      const response = await axios.put(
+        `http://localhost:8000/doctor/accept/${id}`
+      );
       setData((prevData) =>
         prevData.map((item) =>
           item._id === id ? { ...item, status: response.data.status } : item
@@ -40,7 +42,9 @@ function PendingDoctors() {
   };
   const handleReject = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:8000/doctor/reject/${id}`);
+      const response = await axios.put(
+        `http://localhost:8000/doctor/reject/${id}`
+      );
       setData((prevData) =>
         prevData.map((item) =>
           item._id === id ? { ...item, status: response.data.status } : item

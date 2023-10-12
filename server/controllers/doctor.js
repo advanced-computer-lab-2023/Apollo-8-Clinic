@@ -5,7 +5,7 @@ import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
 const saltRounds = 10;
-import mongoose from 'mongoose';
+
 const createDoctor = async (req, res) => {
   const {
     username,

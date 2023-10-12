@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./SidebarAdmin";
+import Sidebar from "../components/SidebarAdmin";
 function AllDoctors() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);

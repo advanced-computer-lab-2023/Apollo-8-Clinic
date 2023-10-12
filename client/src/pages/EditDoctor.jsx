@@ -1,14 +1,26 @@
 import { useRef } from "react";
-import Sidebar from "./SidebarDoctor";
+import Sidebar from "../components/SidebarDoctor";
+import axios from "axios";
 
 function EditDoctor() {
   const email = useRef(null);
   const rate = useRef(null);
   const hospital = useRef(null);
-  const ID = useRef(null);
 
-  function onClick() {
+  function onClick(e) {
     // func(email.current.value,rate.current.value,hospital.current.value,ID.current.value)
+    e.preventDefault();
+    axios
+      .post("http://localhost:8000/doctor/UpdateDoctor", {
+        email: email.current.value,
+        hourlyRate: rate.current.value,
+        hospital: hospital.current.value,
+        doctorID: "6526653e47c45e179aa6886b",
+      })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -56,16 +68,6 @@ function EditDoctor() {
             />
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Doctor ID</label>
-            <input
-              ref={ID}
-              type="text"
-              className="form-control"
-              placeholder="Only for authurization "
-            />
-          </div>
-
           <button type="button" onClick={onClick} className="btn btn-primary">
             Submit
           </button>
@@ -76,7 +78,6 @@ function EditDoctor() {
         </div>
       </div>
     </div>
-
   );
 }
 

@@ -5,7 +5,7 @@ import axios from "axios";
 // import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
-import Sidebar from "./SidebarAdmin";
+import Sidebar from "../components/SidebarAdmin";
 
 function AddAdmin() {
   const [username, setUsername] = useState();

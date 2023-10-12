@@ -5,40 +5,45 @@ import { useState } from "react";
 import axios from "axios";
 //import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import Sidebar from "./SidebarAdmin";
+import Sidebar from "../components/SidebarAdmin";
 
 function RemoveUser() {
-
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     axios
-      .get('http://localhost:8000/admin/getUsers')
+      .get("http://localhost:8000/admin/getUsers")
       .then((response) => {
-        console.log('Response:', response.data);
+        console.log("Response:", response.data);
         setUsers(response.data);
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching users:', error);
+        console.error("Error fetching users:", error);
         setLoading(false);
       });
   }, []);
 
   const handleDeleteUser = async (username) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/admin/removeUser`, {
-        data: { username },
-      });
-      if (response.data && response.data.message === 'The User removed successfully') {
-        setUsers((prevUsers) => prevUsers.filter((user) => user.username !== username));
+      const response = await axios.delete(
+        `http://localhost:8000/admin/removeUser`,
+        {
+          data: { username },
+        }
+      );
+      if (
+        response.data &&
+        response.data.message === "The User removed successfully"
+      ) {
+        setUsers((prevUsers) =>
+          prevUsers.filter((user) => user.username !== username)
+        );
       }
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error("Error deleting user:", error);
     }
   };
-
-
 
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
@@ -55,15 +60,10 @@ function RemoveUser() {
             <table className="table table-striped">
               <thead className="table-dark">
                 <tr>
-                  <th>
-                    username
-                  </th>
-                  <th>
-                    type
-                  </th>
+                  <th>username</th>
+                  <th>type</th>
                   <th></th>
                 </tr>
-
               </thead>
               <tbody>
                 {users.length > 0 ? (
@@ -72,7 +72,10 @@ function RemoveUser() {
                       <td>{user.username}</td>
                       <td>{user.type}</td>
                       <td>
-                        <button className="btn btn-success" onClick={() => handleDeleteUser(user.username)}>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleDeleteUser(user.username)}
+                        >
                           Delete
                         </button>
                       </td>
@@ -83,8 +86,6 @@ function RemoveUser() {
                     <td colSpan="3">No users found</td>
                   </tr>
                 )}
-
-
               </tbody>
             </table>
           )}
