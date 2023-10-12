@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/SidebarAdmin";
+import Sidebar from "../components/SidebarPatient";
 function AllDoctors() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +33,8 @@ function AllDoctors() {
   }
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>All Doctors Details</h2>
@@ -85,11 +87,11 @@ function AllDoctors() {
                       ? item
                       : searchName.toLowerCase() !== "" &&
                         searchSpec.toLowerCase() !== ""
-                      ? item.speciality.toLowerCase().includes(searchSpec) &&
+                        ? item.speciality.toLowerCase().includes(searchSpec) &&
                         item.name.toLowerCase().includes(searchName)
-                      : searchName.toLowerCase() === ""
-                      ? item.speciality.toLowerCase().includes(searchSpec)
-                      : item.name.toLowerCase().includes(searchName);
+                        : searchName.toLowerCase() === ""
+                          ? item.speciality.toLowerCase().includes(searchSpec)
+                          : item.name.toLowerCase().includes(searchName);
                   })
                   .map((item, index) => (
                     <tr key={index}>

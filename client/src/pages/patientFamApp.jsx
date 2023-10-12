@@ -6,74 +6,75 @@ function FamilyMembers() {
   const [familyMembers, setFamilyMembers] = useState([]);
 
   useEffect(() => {
-      axios.get('http://localhost:8000/patient/Family')
-          .then(response => {
-              setFamilyMembers(response.data);
-          })
-          .catch(error => {
-              console.error('There was an error!', error);
-          });
+    axios.get('http://localhost:8000/patient/Family')
+      .then(response => {
+        setFamilyMembers(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
   }, []);
 
   return (
-      <div style={{overflow: 'auto' ,height:440 }}>
+    <div style={{ overflow: 'auto', height: 440 }}>
 
-          {familyMembers.map(member => (
-              <div key={member.id} style={{border: '1px solid black' , borderRadius:5 }}>
-              <p><strong>Name:</strong> {member.name}</p>
-              <p><strong>National ID:</strong> {member.nationalID}</p>
-              <p><strong>Age:</strong> {member.age}</p>
-              <p><strong>Gender:</strong> {member.gender}</p>
-              <p><strong>Relation:</strong> {member.relation}</p>
-          </div>
-          ))}
-      </div>
+      {familyMembers.map(member => (
+        <div key={member.id} style={{ border: '1px solid black', borderRadius: 5 }}>
+          <p><strong>Name:</strong> {member.name}</p>
+          <p><strong>National ID:</strong> {member.nationalID}</p>
+          <p><strong>Age:</strong> {member.age}</p>
+          <p><strong>Gender:</strong> {member.gender}</p>
+          <p><strong>Relation:</strong> {member.relation}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
 
-const Appointments = ()=>{
+const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-      axios.get('http://localhost:8000/patient/appointmentWithFilter')
-          .then(response => {
-            setAppointments(response.data);
-          })
-          .catch(error => {
-              console.error('There was an error!', error);
-          });
+    axios.get('http://localhost:8000/patient/appointmentWithFilter')
+      .then(response => {
+        setAppointments(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
   }, []);
 
   return (
-      <div style={{overflow: 'auto' ,height:440 }}>
 
-          {appointments.map(member => (
-              <div key={member.id} style={{border: '1px solid black' , borderRadius:5 }}>
-              <p><strong>Doctor ID:</strong> {member.doctorId}</p>
-              <p><strong>patient ID:</strong> {member.patientId}</p>
-              <p><strong>Date:</strong> {member.date}</p>
-              <p><strong>status:</strong> {member.status}</p>
-          </div>
-          ))}
-      </div>
+    <div style={{ overflow: 'auto', height: 440 }}>
+
+      {appointments.map(member => (
+        <div key={member.id} style={{ border: '1px solid black', borderRadius: 5 }}>
+          <p><strong>Doctor ID:</strong> {member.doctorId}</p>
+          <p><strong>patient ID:</strong> {member.patientId}</p>
+          <p><strong>Date:</strong> {member.date}</p>
+          <p><strong>status:</strong> {member.status}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
-const AppointmentFilterPage =({appointments})=>{
+const AppointmentFilterPage = ({ appointments }) => {
   console.log(appointments);
   return (
-    <div style={{overflow: 'auto' ,height:440 }}>
-        {appointments.map(member => (
-            <div key={member.id} style={{border: '1px solid black' , borderRadius:5 }}>
-            <p><strong>Doctor ID:</strong> {member.doctorId}</p>
-            <p><strong>patient ID:</strong> {member.patientId}</p>
-            <p><strong>Date:</strong> {member.date}</p>
-            <p><strong>status:</strong> {member.status}</p>
+    <div style={{ overflow: 'auto', height: 440 }}>
+      {appointments.map(member => (
+        <div key={member.id} style={{ border: '1px solid black', borderRadius: 5 }}>
+          <p><strong>Doctor ID:</strong> {member.doctorId}</p>
+          <p><strong>patient ID:</strong> {member.patientId}</p>
+          <p><strong>Date:</strong> {member.date}</p>
+          <p><strong>status:</strong> {member.status}</p>
         </div>
-        ))}
+      ))}
     </div>
-);
+  );
 }
 
 
@@ -93,11 +94,11 @@ const Buttons = () => (
 
 
 //<button style={{width: '100%', height:40}} onClick={() => {changeContent(<Buttons />);setShowForm(false);}}>Health Packages</button>
-const Sidebar = ({ changeContent, showForm, setShowForm, showHello, setShowHello  }) => (
+const Sidebar = ({ changeContent, showForm, setShowForm, showHello, setShowHello }) => (
   <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
-    <div id="welcomeTitle" style={{border: '1px solid black', height:80, fontSize:25 , borderRadius:10 , textAlign:'center'}}>Welcome Patient</div>
-    <button style={{width: '100%', height:40}} onClick={() => {changeContent(<FamilyMembers />); setShowForm(true); setShowHello(false);}}>Family Members </button>
-    <button style={{width: '100%', height:40}} onClick={() => {changeContent(<Appointments />); setShowForm(false); setShowHello(true);}}>Appointments</button>
+    <div id="welcomeTitle" style={{ border: '1px solid black', height: 80, fontSize: 25, borderRadius: 10, textAlign: 'center' }}>Welcome Patient</div>
+    <button style={{ width: '100%', height: 40 }} onClick={() => { changeContent(<FamilyMembers />); setShowForm(true); setShowHello(false); }}>Family Members </button>
+    <button style={{ width: '100%', height: 40 }} onClick={() => { changeContent(<Appointments />); setShowForm(false); setShowHello(true); }}>Appointments</button>
   </div>
 );
 
@@ -114,9 +115,9 @@ const Footer = () => (
 );
 
 
-const RightSidebar = ({ showForm,showHello}) => (
+const RightSidebar = ({ showForm, showHello }) => (
   <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
- 
+
   </div>
 );
 
@@ -138,60 +139,68 @@ const AppPatient = () => {
     axios.post('http://localhost:8000/patient/AddFamilyMember', familyMember)
       .then(res => console.log(res.data));
   };
-//search appointments
-const [startDate, setStartDate] = useState('');
-const [endDate, setEndDate] = useState('');
-const [status, setStatus] = useState('');
+  //search appointments
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [status, setStatus] = useState('');
 
-const searchApp = (event) => {
-  event.preventDefault();
-    axios.post('http://localhost:8000/doctor/appointmentWithFilter',{startDate,endDate,status})
-    .then(response => {
-      console.log(response.data);
-      setContent(<AppointmentFilterPage appointments={response.data}/>); // Set the content to MainContent with the appointments data
-    })
-    .catch(error => {
-      console.error('There was an error!', error);
-    });
+  const searchApp = (event) => {
+    event.preventDefault();
+    axios.post('http://localhost:8000/doctor/appointmentWithFilter', { startDate, endDate, status })
+      .then(response => {
+        console.log(response.data);
+        setContent(<AppointmentFilterPage appointments={response.data} />); // Set the content to MainContent with the appointments data
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
     console.log(content);
-};
+  };
 
   return (
     <>
-      <Header />
-      <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
-        <Sidebar changeContent={setContent} showForm={showForm} setShowForm={setShowForm} showHello={showHello} setShowHello={setShowHello} />
-        <MainContent content={content} />
-        <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
-          {showForm && (
-            <form style={{display: 'flex' ,flexDirection: 'column'}} onSubmit={handleSubmit}>
-              <h2>Family Member</h2>
-              <label style={{ display: 'block' }}>Name:<input type="text" value={name} onChange={e => setName(e.target.value)} /></label>
-              <label style={{ display: 'block' }}>National ID:<input type="text" style={{width:"12"}} value={nationalID} onChange={e => setNationalID(e.target.value)} /></label>
-              <label style={{ display: 'block' }}>Age:<input type="text" value={age} onChange={e => setAge(e.target.value)} /></label>
-              <label style={{ display: 'block' }}>Gender:<input type="text" value={gender} onChange={e => setGender(e.target.value)} /></label>
-              <label style={{ display: 'block' }}>Relation:<input type="text" value={relation} onChange={e => setRelation(e.target.value)} /></label>
-              <button style={{ display: 'block' }} type="submit">Submit</button>
-            </form>
-          )}
-              
-      {showHello  && (
-      <form>
-        <h2>Appointments</h2>
-        <label>Start Date:<input type="text" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
-        <label >End Date:<input type="text" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
-        <label >Status:<input type="text" value={status} onChange={e => setStatus(e.target.value)} /></label>
-        <button type="button" onClick={searchApp}>Apply Filter</button>
-      </form>
-    )}
 
+      <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+        <Sidebar />
+
+        <div className="card m-3 col-12" style={{ width: "80%" }}></div>
+
+        <Header />
+        <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
+          <Sidebar changeContent={setContent} showForm={showForm} setShowForm={setShowForm} showHello={showHello} setShowHello={setShowHello} />
+          <MainContent content={content} />
+          <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
+            {showForm && (
+              <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
+                <h2>Family Member</h2>
+                <label style={{ display: 'block' }}>Name:<input type="text" value={name} onChange={e => setName(e.target.value)} /></label>
+                <label style={{ display: 'block' }}>National ID:<input type="text" style={{ width: "12" }} value={nationalID} onChange={e => setNationalID(e.target.value)} /></label>
+                <label style={{ display: 'block' }}>Age:<input type="text" value={age} onChange={e => setAge(e.target.value)} /></label>
+                <label style={{ display: 'block' }}>Gender:<input type="text" value={gender} onChange={e => setGender(e.target.value)} /></label>
+                <label style={{ display: 'block' }}>Relation:<input type="text" value={relation} onChange={e => setRelation(e.target.value)} /></label>
+                <button style={{ display: 'block' }} type="submit">Submit</button>
+              </form>
+            )}
+
+            {showHello && (
+              <form>
+                <h2>Appointments</h2>
+                <label>Start Date:<input type="text" value={startDate} onChange={e => setStartDate(e.target.value)} /></label>
+                <label >End Date:<input type="text" value={endDate} onChange={e => setEndDate(e.target.value)} /></label>
+                <label >Status:<input type="text" value={status} onChange={e => setStatus(e.target.value)} /></label>
+                <button type="button" onClick={searchApp}>Apply Filter</button>
+              </form>
+            )}
+
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
+
     </>
   );
 };
 //for the patient
 //ReactDOM.render(<App />, document.getElementById('root'));
 
-export default AppPatient ;
+export default AppPatient;
