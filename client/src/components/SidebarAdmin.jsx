@@ -6,6 +6,9 @@ function Sidebar() {
       <ul>
         <h2 style={{ fontWeight: "bolder" }}>Admin Page</h2>
         <li style={{ margin: "20px" }}>
+          <a href="/">Home</a>
+        </li>
+        <li style={{ margin: "20px" }}>
           <a href="/addAdministrator">Add admin</a>
         </li>
         <li style={{ margin: "20px" }}>
@@ -13,6 +16,9 @@ function Sidebar() {
         </li>
         <li style={{ margin: "20px" }}>
           <a href="/removeUser">Remove User</a>
+        </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/adminHealthPackage">Health Packages</a>
         </li>
       </ul>
     </div>
