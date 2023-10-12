@@ -52,6 +52,7 @@ const createDoctor = async (req, res) => {
       console.log(doctor);
       res.status(200).json(doctor);
     } catch (error) {
+      console.log(error)
       res.status(400).json({ error: error.message });
     }
   } else {

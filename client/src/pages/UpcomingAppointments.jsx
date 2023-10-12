@@ -13,7 +13,7 @@ function UpcomingAppointments() {
     axios
       .get(
         "http://localhost:8000/doctor/futureAppointmentPatients" +
-          "/?id=651c3ddfc5dc08d239127a83"
+        "/?id=651c3ddfc5dc08d239127a83"
       )
       .then((response) => {
         setData(response.data);

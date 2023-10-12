@@ -6,7 +6,7 @@ function Sidebar() {
       <ul>
         <h2 style={{ fontWeight: "bolder" }}>Patient Page</h2>
         <li style={{ margin: "20px" }}>
-          <a href="/patient/allDoctors">List of Doctors</a>
+          <a href="/allDoctors">List of Doctors</a>
         </li>
         <li style={{ margin: "20px" }}>
           <a href="/prescriptionsList">List of Prescriptions</a>
