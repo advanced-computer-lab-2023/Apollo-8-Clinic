@@ -77,15 +77,6 @@ const getDoctorById = async (req, res) => {
     );
     if (!doctor) return res.status(404).send("Doctor not found");
     res.status(200).send(doctor);
-    try {
-      const doctor = await DoctorModel.findById(
-        new mongoose.Types.ObjectId(req.params.id)
-      );
-      if (!doctor) return res.status(404).send("Doctor not found");
-      res.status(200).send(doctor);
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -105,7 +96,8 @@ const acceptDoctor = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}; const rejectDoctor = async (req, res) => {
+};
+const rejectDoctor = async (req, res) => {
   try {
     const doctor = await DoctorModel.findByIdAndUpdate(
       req.params.id,
