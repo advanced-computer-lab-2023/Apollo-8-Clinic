@@ -3,15 +3,12 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 // import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
 import Sidebar from "../components/SidebarAdmin";
 
 function AddAdmin() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-
-  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,7 +20,6 @@ function AddAdmin() {
       })
       .then((result) => {
         console.log(result);
-        navigate("/login");
       })
       .catch((err) => console.log(err));
   };

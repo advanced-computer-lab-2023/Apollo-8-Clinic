@@ -23,42 +23,55 @@ const createDoctor = async (req, res) => {
     availableSlots,
     //sss
   } = req.body;
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hashedPassword = await bcrypt.hash(password, salt);
 
-  const existingUser = await UserModel.findOne({ username });
-  if (!existingUser) {
-    try {
-      const user = new UserModel({ username, password, type });
-      //  user.password = hashedPassword;
-      console.log(user.password);
-      await user.save();
-      console.log(user);
-      const doctor = new DoctorModel({
-        user: user._id,
-        name,
-        email,
-        birthDate,
-        hourlyRate,
-        hospital,
-        eduBackground,
-        status,
-        //sss
-        speciality,
-        availableSlots,
-        //sss
-      });
-      await doctor.save();
-      console.log(doctor);
-      res.status(200).json(doctor);
-    } catch (error) {
-      console.log(error)
-      res.status(400).json({ error: error.message });
+  try {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    // if (!passwordRegex.test(password)) {
+    //   console.log(password)
+    //   return res.status(400).json({ message: 'Password is invalid' });
+    // }
+
+    const existingUser = await UserModel.findOne({ username });
+    if (!existingUser) {
+      try {
+        const user = new UserModel({ username, password, type });
+        user.password = hashedPassword;
+        console.log(user.password);
+        await user.save();
+        console.log(user);
+        const doctor = new DoctorModel({
+          user: user._id,
+          name,
+          email,
+          birthDate,
+          hourlyRate,
+          hospital,
+          eduBackground,
+          status,
+          //sss
+          speciality,
+          availableSlots,
+          //sss
+        });
+        await doctor.save();
+        console.log(doctor);
+        res.status(200).json(doctor);
+      } catch (error) {
+        console.log(error)
+        res.status(400).json({ error: error.message });
+      }
+    } else {
+      res.status(400).json("Username already exist");
     }
-  } else {
-    res.status(400).json("Username already exist");
+  } catch (error) {
+    console.log("error")
+    res.status(400).json({ error: error.message });
   }
 };
+
 const getDoctors = async (req, res) => {
   try {
     const user = await DoctorModel.find();
@@ -68,7 +81,6 @@ const getDoctors = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 };
-
 
 const getDoctorById = async (req, res) => {
 
