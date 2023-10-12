@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Sidebar from '../components/SidebarAdmin';
 
 
 const Header = () => (
@@ -125,7 +126,7 @@ const ADD = () => {
 
 
 
-const Sidebar = ({ changeContent, setRightSideBar }) => (
+const Sidebar1 = ({ changeContent, setRightSideBar }) => (
   <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
     <div id="welcomeTitle" style={{ border: '1px solid black', height: 80, fontSize: 25, borderRadius: 10, textAlign: 'center' }}>Welcome Admin</div>
     <button style={{ width: '100%', height: 40 }} onClick={() => { changeContent(<HealthPackage />); setRightSideBar(<ADD />) }}>Health Packages</button>
@@ -158,17 +159,23 @@ const App1 = () => {
   const [RightSideBar, setRightSideBar] = useState('rightside bar');
   return (
     <>
+
       <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+
         <Sidebar />
 
-        <div className="card m-3 col-12" style={{ width: "80%" }}></div>
-        <Header />
-        <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
-          <Sidebar changeContent={setContent} setRightSideBar={setRightSideBar} />
-          <MainContent content={content} />
-          <RightSidebar content={RightSideBar} />
+        <div className="card m-3 col-12" style={{ width: "80%" }}>
+          <Header />
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
+            <Sidebar1 changeContent={setContent} setRightSideBar={setRightSideBar} />
+            <MainContent content={content} />
+            <RightSidebar content={RightSideBar} />
+          </div>
         </div>
       </div>
+
+
 
       <Footer />
     </>
