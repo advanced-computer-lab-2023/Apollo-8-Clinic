@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./SidebarDoctor";
 
-function DoctorInfo() {
+function DoctorDetails() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const apiUrl = "http://localhost:8000/patient/docInfo/" + id;
+    const apiUrl = "http://localhost:8000/doctor/" + id;
     axios
       .get(apiUrl)
       .then((response) => {
@@ -26,8 +25,9 @@ function DoctorInfo() {
 
   const handleBack = () => {
     // Use the navigate function to go to the specified route
-    navigate("/filter");
+    navigate("/pendingDoctors");
   };
+
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
       <Sidebar />
@@ -50,6 +50,7 @@ function DoctorInfo() {
               <li>status: {data.status}</li>
             </ul>
           )}
+
         </div>
         <button
           className="btn btn-success position-absolute bottom-0 end-0 m-3 btn-lg"
@@ -62,4 +63,4 @@ function DoctorInfo() {
   );
 }
 
-export default DoctorInfo;
+export default DoctorDetails;

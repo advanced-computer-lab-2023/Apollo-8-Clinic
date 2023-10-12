@@ -6,11 +6,11 @@ const router = express.Router();
 
 // DELETE THESE COMMENTS AFTER YOU READ THEM :)
 // to test this send a post request to this route: http://localhost:8000/patient
-router.post("/createPatient", controllers.createPatient);
-router.get("/getPatients", controllers.getPatients);
-router.post("/getPerscriptions", controllers.getPrescriptions)
+router.post("/", controllers.createPatient);
+router.get("/", controllers.getPatients);
+router.get("/getPerscriptions", controllers.getPrescriptions)
 router.post("/filterPerscriptions", controllers.filterPres)
-router.post("/getPerscription", controllers.getPres)
+router.get("/getPerscription/:id", controllers.getPres)
 
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
@@ -23,13 +23,13 @@ router.get('/healthPackage', HealthPackageController.getAllHealthPackages);
 
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
-router.get("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
+router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
 
 //sss
 router.get("/allDoctors", doctor.getAllDoctors);
 router.get("/docInfo/:id", doctor.getDoctorById);
 router.get("/docSearch", doctor.searchByNameOrSpec);
-router.get("/docFilter",doctor.filterBySpecOrAv);
+router.get("/docFilter", doctor.filterBySpecOrAv);
 // router.get("/searchDocNameASpec", doctor.getDoctorByNameASpec);
 // router.get("/searchDocNameOrSpec", doctor.getDoctorByNameOrSpec);
 // router.get("/searchDocSpecASlots", doctor.getDoctorAvailableAndS);

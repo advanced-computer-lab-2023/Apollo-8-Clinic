@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import Sidebar from "./SidebarAdmin";
 function AllDoctors() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchName, setSearchName] = useState('');
-  const [searchSpec, setSearchSpec] = useState('');
+  const [searchName, setSearchName] = useState("");
+  const [searchSpec, setSearchSpec] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,56 +28,66 @@ function AllDoctors() {
     navigate(`/doctors/${id}`);
     console.log(id);
   }
-  function handleFilter(){
+  function handleFilter() {
     navigate("/filter");
-  };
+  }
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
-    <div className="card m-3 col-12" style={{ width: "80%" }}>
-      <div className="card-header">
-        <h2>All Doctors Details</h2>
-      </div>
-      <div className="card-body">
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <table className="table table-striped">
-            <thead className="table-dark">
-              <tr>
-                <th>Name</th>
-                <th>speciality</th>
-                <th>Session Price</th>
-                <th><input
+      <div className="card m-3 col-12" style={{ width: "80%" }}>
+        <div className="card-header">
+          <h2>All Doctors Details</h2>
+        </div>
+        <div className="card-body">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <table className="table table-striped">
+              <thead className="table-dark">
+                <tr>
+                  <th>Name</th>
+                  <th>speciality</th>
+                  <th>Session Price</th>
+                  <th>
+                    <input
                       type="text"
                       placeholder="search by a name"
                       autoComplete="off"
                       name="name"
                       className="form-control rounded-0"
                       onChange={(e) => setSearchName(e.target.value)}
-                    /></th>
-                <th><input
+                    />
+                  </th>
+                  <th>
+                    <input
                       type="text"
                       placeholder="search by a spciality"
                       autoComplete="off"
                       name="spec"
                       className="form-control rounded-0"
                       onChange={(e) => setSearchSpec(e.target.value)}
-                    /></th>
-                <th><button
-                        className="btn btn-success"
-                        onClick={() => handleFilter()}
-                      >
-                        or filter with speciality and available slots
-                      </button></th>              </tr>
-            </thead>
-            <tbody>
-            {data
+                    />
+                  </th>
+                  <th>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => handleFilter()}
+                    >
+                      or filter with speciality and available slots
+                    </button>
+                  </th>{" "}
+                </tr>
+              </thead>
+              <tbody>
+                {data
                   .filter((item) => {
-                    return searchName.toLowerCase() === '' && searchSpec.toLowerCase() === ''
+                    return searchName.toLowerCase() === "" &&
+                      searchSpec.toLowerCase() === ""
                       ? item
-                      :searchName.toLowerCase() !== '' && searchSpec.toLowerCase() !== ''
-                      ? item.speciality.toLowerCase().includes(searchSpec) && item.name.toLowerCase().includes(searchName)
-                      :searchName.toLowerCase() === ''
+                      : searchName.toLowerCase() !== "" &&
+                        searchSpec.toLowerCase() !== ""
+                      ? item.speciality.toLowerCase().includes(searchSpec) &&
+                        item.name.toLowerCase().includes(searchName)
+                      : searchName.toLowerCase() === ""
                       ? item.speciality.toLowerCase().includes(searchSpec)
                       : item.name.toLowerCase().includes(searchName);
                   })
@@ -88,20 +98,22 @@ function AllDoctors() {
                       <td>{item.hourlyRate}</td>
                       <td></td>
                       <td></td>
-                      <td><button
-                        className="btn btn-success"
-                        onClick={() => handleView(item._id)}
-                      >
-                        view
-                      </button></td>
+                      <td>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleView(item._id)}
+                        >
+                          view
+                        </button>
+                      </td>
                     </tr>
                   ))}
-            </tbody>
-          </table>
-        )}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
-  </div>
   );
 }
 

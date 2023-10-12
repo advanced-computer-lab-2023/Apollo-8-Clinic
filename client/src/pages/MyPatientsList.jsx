@@ -7,25 +7,26 @@ function MyPatientsList() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [name, setName] = useState();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
-
-//   const { id, setId } = useState();
+  //   const { id, setId } = useState();
 
   useEffect(() => {
     // const id="651fd81f02ac1ed6c024c967";
     axios
-      .get( "http://localhost:8000/doctor/viewPatients"+"/?id=651fd81f02ac1ed6c024c967")
+      .get(
+        "http://localhost:8000/doctor/viewPatients" +
+          "/?id=651fd81f02ac1ed6c024c967"
+      )
       .then((response) => {
         setData(response.data);
         setLoading(false);
-        console.log("henaaaa"+response);
+        console.log("henaaaa" + response);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
         setLoading(false);
-        console.log("henaaaa22222222222"+response);
-
+        console.log("henaaaa22222222222" + response);
       });
   }, []);
   function handleFilter() {
@@ -38,17 +39,13 @@ function MyPatientsList() {
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>Your patients' list</h2>
-          <button
-                        className="btn btn-success"
-                        onClick={() => handleFilter()}
-                      >
-                        filter to future appointments
-                      </button>
+          <button className="btn btn-success" onClick={() => handleFilter()}>
+            filter to future appointments
+          </button>
         </div>
         <div className="card-body">
           {loading ? (
             <p>Loading...</p>
-            
           ) : (
             <table className="table table-striped">
               <thead className="table-dark">
@@ -67,14 +64,13 @@ function MyPatientsList() {
                       className="form-control rounded-0"
                       onChange={(e) => setSearch(e.target.value)}
                     />
-                  
                   </th>
                 </tr>
               </thead>
               <tbody>
-              {data
+                {data
                   .filter((item) => {
-                    return search.toLowerCase() === ''
+                    return search.toLowerCase() === ""
                       ? item
                       : item.name.toLowerCase().includes(search);
                   })
@@ -85,12 +81,14 @@ function MyPatientsList() {
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td><button
-                        className="btn btn-success"
-                        onClick={() => handleView(item._id)}
-                      >
-                        view
-                      </button></td>
+                      <td>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleView(item._id)}
+                        >
+                          view
+                        </button>
+                      </td>
                     </tr>
                   ))}
               </tbody>
