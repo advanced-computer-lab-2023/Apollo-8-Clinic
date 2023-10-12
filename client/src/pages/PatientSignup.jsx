@@ -32,12 +32,13 @@ function PatientSignup() {
         password,
         birthDate,
         gender,
-        type:"Patient",
+        type: "Patient",
         phone,
         emergencyName,
         emergencyNo,
         emergencyRel,
         adresses,
+        status: "Accepted",
       })
       .then((result) => {
         console.log(result);
