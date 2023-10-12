@@ -63,7 +63,7 @@ function Home() {
             <div>
               <button
                 className="btn btn-success m-3 btn-lg"
-                onClick={handlePatientLogin}
+                onClick={handleDoctorLogin}
               >
                 DoctorLogin
               </button>
@@ -71,7 +71,7 @@ function Home() {
             <div>
               <button
                 className="btn btn-success m-3 btn-lg"
-                onClick={handleDoctorLogin}
+                onClick={handlePatientLogin}
               >
                 PatientLogin
               </button>

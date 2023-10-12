@@ -8,7 +8,7 @@ const FamMemberSchema = new mongoose.Schema(
     },
     nationalID: {
       type: String,
-      unique: true ,
+      unique: true,
       required: true,
     },
     age: {
@@ -22,11 +22,11 @@ const FamMemberSchema = new mongoose.Schema(
     },
     relation: {
       type: String,
-      enum :["wife","husband","child"],
+      enum: ["wife", "husband", "child"],
       required: true,
     },
   },
-  
+
 );
 
 const FamilyMemberModel = mongoose.model("FamilyMember", FamMemberSchema);
