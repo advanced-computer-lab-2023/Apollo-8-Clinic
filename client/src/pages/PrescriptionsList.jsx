@@ -86,67 +86,73 @@ function PrescriptionsList() {
 
   return (
     <>
-      <div>
-        <div className="form-check">
-          <input
-            ref={name}
-            className="form-check-input"
-            value="lolos"
-            type="radio"
-            name="flexRadioDefault"
-            id="flexRadioDefault1"
-          />
-          <label className="form-check-label" htmlFor="flexRadioDefault1">
-            Filter By doctor name
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            ref={date}
-            className="form-check-input"
-            type="radio"
-            name="flexRadioDefault"
-            id="flexRadioDefault2"
-            checked
-          />
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
-            Filter by date
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            ref={status}
-            className="form-check-input"
-            type="radio"
-            name="flexRadioDefault"
-            id="flexRadioDefault3"
-            checked
-          />
-          <label className="form-check-label" htmlFor="flexRadioDefault3">
-            Filter by status
-          </label>
+      <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+        <Sidebar />
+
+        <div className="card m-3 col-12" style={{ width: "80%" }}></div>
+        <div>
+          <div className="form-check">
+            <input
+              ref={name}
+              className="form-check-input"
+              value="lolos"
+              type="radio"
+              name="flexRadioDefault"
+              id="flexRadioDefault1"
+            />
+            <label className="form-check-label" htmlFor="flexRadioDefault1">
+              Filter By doctor name
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              ref={date}
+              className="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="flexRadioDefault2"
+              checked
+            />
+            <label className="form-check-label" htmlFor="flexRadioDefault2">
+              Filter by date
+            </label>
+          </div>
+          <div className="form-check">
+            <input
+              ref={status}
+              className="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="flexRadioDefault3"
+              checked
+            />
+            <label className="form-check-label" htmlFor="flexRadioDefault3">
+              Filter by status
+            </label>
+          </div>
+
+          <div className="input-group mb-3" style={{ width: 250 }}>
+            <input
+              type="text"
+              ref={filter}
+              name="patientId"
+              className="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+            />
+            <button
+              onClick={handleClick}
+              type="button"
+              className="btn btn-primary"
+            >
+              filter
+            </button>
+          </div>
         </div>
 
-        <div className="input-group mb-3" style={{ width: 250 }}>
-          <input
-            type="text"
-            ref={filter}
-            name="patientId"
-            className="form-control"
-            aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-default"
-          />
-          <button
-            onClick={handleClick}
-            type="button"
-            className="btn btn-primary"
-          >
-            filter
-          </button>
-        </div>
+        <div className="image">{listo}</div>
       </div>
 
-      <div className="image">{listo}</div>
     </>
   );
 }

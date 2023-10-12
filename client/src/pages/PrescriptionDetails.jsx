@@ -44,16 +44,22 @@ function PrescriptionsDetails() {
   });
 
   return (
-    <div className="image">
-      <div>
-        <figure className="text-center">
-          <blockquote className="blockquote">
-            <p>You have {size} medicines</p>
-          </blockquote>
-        </figure>
+    <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
+      <div className="card m-3 col-12" style={{ width: "80%" }}></div>
+      <div className="image">
+        <div>
+          <figure className="text-center">
+            <blockquote className="blockquote">
+              <p>You have {size} medicines</p>
+            </blockquote>
+          </figure>
+        </div>
+        <div style={{ display: "inline-flex" }}>{listo}</div>
       </div>
-      <div style={{ display: "inline-flex" }}>{listo}</div>
     </div>
+
   );
 }
 
