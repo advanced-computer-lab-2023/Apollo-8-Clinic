@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/SidebarDoctor";
 // lessa me7taga azabat 7ewar el id haaaaaaaaa3333333
 function MyPatientsList() {
   const [data, setData] = useState();
@@ -16,7 +17,7 @@ function MyPatientsList() {
     axios
       .get(
         "http://localhost:8000/doctor/viewPatients" +
-          "/?id=651fd81f02ac1ed6c024c967"
+        "/?id=651fd81f02ac1ed6c024c967"
       )
       .then((response) => {
         setData(response.data);
@@ -36,6 +37,8 @@ function MyPatientsList() {
 
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+      <Sidebar />
+
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>Your patients' list</h2>

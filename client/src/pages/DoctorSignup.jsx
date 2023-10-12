@@ -13,6 +13,8 @@ function DoctorSignup() {
   const [birthDate, setBrithDate] = useState();
   const [hospital, setHospital] = useState();
   const [hourlyRate, setHourlyRate] = useState();
+  const [speciality, setSpec] = useState();
+
   const [eduBackground, setEduBackground] = useState();
 
   const navigate = useNavigate();
@@ -26,16 +28,17 @@ function DoctorSignup() {
         name,
         username,
         email,
-        type:"Doctor",
+        type: "Doctor",
         password,
         birthDate,
         hospital,
+        speciality,
         hourlyRate,
         eduBackground,
       })
       .then((result) => {
         console.log(result);
-        navigate("/login");
+        navigate("/");
       })
       .catch((err) => console.log(err));
   };
@@ -129,6 +132,20 @@ function DoctorSignup() {
 
           <div className="mb-3">
             <label htmlFor="email">
+              <strong> Speciality</strong>
+            </label>
+            <input
+              type="text"
+              placeholder="Enter your speciality"
+              autoComplete="off"
+              name="speciality"
+              className="form-control rounded-0"
+              onChange={(e) => setSpec(e.target.value)}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="email">
               <strong>Hourly Rate</strong>
             </label>
             <input
@@ -153,18 +170,10 @@ function DoctorSignup() {
               onChange={(e) => setEduBackground(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-success w-100 rounded-0">
+          <button style={{ marginTop: "10px" }} type="submit" className="btn btn-success w-100 rounded-0">
             Register
           </button>
         </form>
-
-        <p> Already Have an Account</p>
-        <Link
-          to="/login"
-          className="btn btn-default border w-100 bg-light rounded-0 text-decoration"
-        >
-          Login
-        </Link>
       </div>
     </div>
   );
