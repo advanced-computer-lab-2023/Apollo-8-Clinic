@@ -9,11 +9,11 @@ const createUser = async (req, res) => {
     username,
     password,
     type,
-    
+
   } = req.body;
   console.log(req.body)
   try {
-    const user = new UserModel({username, password, type });
+    const user = new UserModel({ username, password, type });
     await user.save();
     console.log(user);
     res.status(200).json(user);
@@ -23,62 +23,64 @@ const createUser = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
-    try {
-      const user = await UserModel.find();
-      console.log(user);
-      res.status(200).json(user);
-    } catch (error) {
-      res.status(400).json({ error: error.message })
-    }
-  };
+  try {
+    const user = await UserModel.find();
+    console.log(user);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
 
-const addAdministrator=async(req,res) => {
-    const{
-        username,
-        password
-    }= req.body;
-    try{
-         const existingUser=await UserModel.findOne({username});
-         if(existingUser){
-           return res.status(400).json({error:'Username is already taken ,please choose a different username'});
-         }
-         const newAdmin = new UserModel({
-            username,
-            password,
-            type:'Admin'
-         });
+const addAdministrator = async (req, res) => {
+  const {
+    username,
+    password
+  } = req.body;
+  try {
+    const existingUser = await UserModel.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username is already taken ,please choose a different username' });
+    }
+    const newAdmin = new UserModel({
+      username,
+      password,
+      type: 'Admin'
+    });
     await newAdmin.save();
     console.log(newAdmin);
     res.status(200).json(newAdmin);
-    }
-    catch(error){
-        res.status(400).json({error:error.message});
-    }
-    }
-    
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
 const removeUser = async (req, res) => {
-    const{
-        username
-    }= req.body;
-       try {
-        const user = await UserModel.findOne({ username });
-        if(!user){
-            res.status(404).json({message:"The User is not found"});
-        }
-        if(user.type==='Doctor'){
-            await DoctorModel.deleteOne({user:user._id});
-        }
-        else if(user.type==='Patient'){
-          await PatientModel.deleteOne({user:user._id});
-      }
-        await UserModel.deleteOne({username});
-        res.status(200).json({message:"The User removed successfully"});
-    } catch (error) {
-      res.status(404).json({ error: error.message })
+  const {
+    username
+  } = req.body;
+  try {
+    const user = await UserModel.findOne({ username });
+    if (!user) {
+      res.status(404).json({ message: "The User is not found" });
     }
-  };
+    if (user.type === 'Doctor') {
+      await DoctorModel.deleteOne({ user: user._id });
+    }
+    else if (user.type === 'Patient') {
+      await PatientModel.deleteOne({ user: user._id });
+    }
+    await UserModel.deleteOne({ username });
+    res.status(200).json({ message: "The User removed successfully" });
+  } catch (error) {
+    res.status(404).json({ error: error.message })
+  }
+};
 
 export default {
-    createUser,getUsers,
-    addAdministrator,removeUser
-  }
+  createUser,
+  getUsers,
+  addAdministrator,
+  removeUser
+}
