@@ -13,7 +13,8 @@ function PendingDoctors() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setData(response.data);
+        const pendingDoctors = response.data.filter((doctor) => doctor.status === 'Pending');
+        setData(pendingDoctors);
         setLoading(false);
       })
       .catch((error) => {
@@ -24,7 +25,7 @@ function PendingDoctors() {
 
   function handleView(id) {
     // Navigate to another route and pass the ID as a prop
-    navigate(`/doctors/${id}`);
+    navigate(`/PendingDoctorDetailS/${id}`);
   }
   const handleAccept = async (id) => {
     try {
