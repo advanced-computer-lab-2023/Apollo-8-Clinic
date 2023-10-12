@@ -25,13 +25,15 @@ const createDoctor = async (req, res) => {
   } = req.body;
 
   try {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      return res.status(400).json({ message: 'Password is invalid' });
-    }
-
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    // const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    // if (!passwordRegex.test(password)) {
+    //   console.log(password)
+    //   return res.status(400).json({ message: 'Password is invalid' });
+    // }
+
     const existingUser = await UserModel.findOne({ username });
     if (!existingUser) {
       try {
@@ -58,12 +60,14 @@ const createDoctor = async (req, res) => {
         console.log(doctor);
         res.status(200).json(doctor);
       } catch (error) {
+        console.log(error)
         res.status(400).json({ error: error.message });
       }
     } else {
       res.status(400).json("Username already exist");
     }
   } catch (error) {
+    console.log("error")
     res.status(400).json({ error: error.message });
   }
 };

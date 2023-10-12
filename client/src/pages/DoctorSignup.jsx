@@ -35,6 +35,7 @@ function DoctorSignup() {
         speciality,
         hourlyRate,
         eduBackground,
+        status: "Pending",
       })
       .then((result) => {
         console.log(result);
@@ -170,7 +171,11 @@ function DoctorSignup() {
               onChange={(e) => setEduBackground(e.target.value)}
             />
           </div>
-          <button style={{ marginTop: "10px" }} type="submit" className="btn btn-success w-100 rounded-0">
+          <button
+            style={{ marginTop: "10px" }}
+            type="submit"
+            className="btn btn-success w-100 rounded-0"
+          >
             Register
           </button>
         </form>
