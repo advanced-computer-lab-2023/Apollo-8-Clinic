@@ -38,6 +38,7 @@ function PatientSignup() {
         emergencyNo,
         emergencyRel,
         adresses,
+        status: "Accepted",
       })
       .then((result) => {
         console.log(result);
