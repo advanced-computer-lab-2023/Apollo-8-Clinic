@@ -173,10 +173,13 @@ const getPatientByName = async (req, res) => {
 };
 const upcomingApp = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
+  //const doctorId = req.query.id;
+  //const doctorId= "6527a82f2372cb972707a1e4";
   const doctorId = req.query.id;
   // /const doctorId= "651fd81f02ac1ed6c024c967";
   console.log(req.query.id);
   console.log(doctorId);
+
   const myPatients = [];
   try {
     const drAppointments = await AppointmentModel.find({ doctorId: doctorId });
@@ -187,17 +190,17 @@ const upcomingApp = async (req, res) => {
       let arrayOfPatient = await PatientModel.find({ _id: appointment1.patientId });
       let patient = arrayOfPatient[0];
 
-      if (patients.length === 0 && appointment1.status === "Upcoming")
+      if (patients.length === 0 && appointment1.status === "upcoming")
         patients.push(patient);
       else {
         let found = false;
         for (let i = 0; i < patients.length; i++) {
-          if ((patients[i]._id).equals(patient._id) && appointment1.status === "Upcoming") {
+          if ((patients[i]._id).equals(patient._id) && appointment1.status === "upcoming") {
             found = true;
             break;
           }
         }
-        if (!found && appointment1.status === "Upcoming") {
+        if (!found && appointment1.status === "upcoming") {
           patients.push(patient);
         }
       }

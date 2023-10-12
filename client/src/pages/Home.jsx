@@ -20,10 +20,10 @@ function Home() {
     navigate("/addAdministrator");
   };
   const handlePatientLogin = () => {
-    navigate("/prescriptionsList");
+    navigate("/allDoctors");
   };
   const handleDoctorLogin = () => {
-    navigate("/viewUpcomingApp");
+    navigate("/editDoctor");
   };
   const backgroundStyle = {
     backgroundImage: 'url("client/src/images/photo.png")',
@@ -42,9 +42,9 @@ function Home() {
               onClick={handlePatientSignup}>PatientSignup</button></div>
             <div><button className="btn btn-success m-3 btn-lg" onClick={handleAdminLogin}
             >AdminLogin</button></div>
-            <div><button className="btn btn-success m-3 btn-lg" onClick={handlePatientLogin}
-            >DoctorLogin</button></div>
             <div><button className="btn btn-success m-3 btn-lg" onClick={handleDoctorLogin}
+            >DoctorLogin</button></div>
+            <div><button className="btn btn-success m-3 btn-lg" onClick={handlePatientLogin}
             >PatientLogin</button></div>
 
 
