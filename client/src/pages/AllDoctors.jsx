@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./SidebarAdmin";
 function AllDoctors() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchName, setSearchName] = useState("");
+  const [searchSpec, setSearchSpec] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const apiUrl = "http://localhost:8000/patient/allDoctors";
@@ -18,11 +22,17 @@ function AllDoctors() {
         setLoading(false);
       });
   }, []);
-
+  function handleView(id) {
+    // Navigate to another route and pass the ID as a prop
+    console.log(id);
+    navigate(`/doctors/${id}`);
+    console.log(id);
+  }
+  function handleFilter() {
+    navigate("/filter");
+  }
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
-      <Sidebar />
-
       <div className="card m-3 col-12" style={{ width: "80%" }}>
         <div className="card-header">
           <h2>All Doctors Details</h2>
@@ -37,19 +47,67 @@ function AllDoctors() {
                   <th>Name</th>
                   <th>speciality</th>
                   <th>Session Price</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
+                  <th>
+                    <input
+                      type="text"
+                      placeholder="search by a name"
+                      autoComplete="off"
+                      name="name"
+                      className="form-control rounded-0"
+                      onChange={(e) => setSearchName(e.target.value)}
+                    />
+                  </th>
+                  <th>
+                    <input
+                      type="text"
+                      placeholder="search by a spciality"
+                      autoComplete="off"
+                      name="spec"
+                      className="form-control rounded-0"
+                      onChange={(e) => setSearchSpec(e.target.value)}
+                    />
+                  </th>
+                  <th>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => handleFilter()}
+                    >
+                      or filter with speciality and available slots
+                    </button>
+                  </th>{" "}
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.name}</td>
-                    <td>{item.speciality}</td>
-                    <td>{item.hourlyRate}</td>
-                  </tr>
-                ))}
+                {data
+                  .filter((item) => {
+                    return searchName.toLowerCase() === "" &&
+                      searchSpec.toLowerCase() === ""
+                      ? item
+                      : searchName.toLowerCase() !== "" &&
+                        searchSpec.toLowerCase() !== ""
+                      ? item.speciality.toLowerCase().includes(searchSpec) &&
+                        item.name.toLowerCase().includes(searchName)
+                      : searchName.toLowerCase() === ""
+                      ? item.speciality.toLowerCase().includes(searchSpec)
+                      : item.name.toLowerCase().includes(searchName);
+                  })
+                  .map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.name}</td>
+                      <td>{item.speciality}</td>
+                      <td>{item.hourlyRate}</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleView(item._id)}
+                        >
+                          view
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           )}

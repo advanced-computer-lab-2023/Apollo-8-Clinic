@@ -7,7 +7,9 @@ import PrescriptionsList from "./pages/PrescriptionsList";
 import EditDoctor from "./pages/EditDoctor";
 import AllDoctors from "./pages/AllDoctors";
 import DoctorInfo from "./pages/DoctorInfo";
-import SearchDoctor from "./pages/SearchDoctor";
+import ViewDoctor from "./pages/ViewDoctor";
+import FilterDoctor from "./pages/FilterDoctor";
+
 import MyPatientsList from "./pages/MyPatientsList";
 import UpcomingAppointments from "./pages/UpcomingAppointments";
 import AddAdmin from "./pages/AddAdmin";
@@ -32,9 +34,10 @@ function App() {
         <Route path="/prescriptions/:id" element={<PrescriptionsDetails />} />
         <Route path="/editDoctor" element={<EditDoctor />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/patient/allDoctors" element={<AllDoctors />} />
-        <Route path="/doctorInfo" element={<DoctorInfo />} />
-        <Route path="/search" element={<SearchDoctor />} />
+        <Route path="/allDoctors" element={<AllDoctors />} />
+        <Route path="/doctorInfo/:id" element={<DoctorInfo />} />
+        <Route path="/doctors/:id" element={<ViewDoctor />} />
+        <Route path="/filter" element={<FilterDoctor />} />
         <Route path="/viewMyPatients" element={<MyPatientsList />} />
         <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
         <Route path="/addAdministrator" element={<AddAdmin />} />

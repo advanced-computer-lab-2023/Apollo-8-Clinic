@@ -3,6 +3,7 @@ import UserModel from '../models/user.js';
 import AppointmentModel from '../models/appointment.js';
 import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
+import mongoose from 'mongoose';
 const saltRounds = 10;
 import mongoose from 'mongoose';
 const createDoctor = async (req, res) => {
@@ -69,20 +70,13 @@ const getDoctors = async (req, res) => {
 
 
 const getDoctorById = async (req, res) => {
+
   try {
     const doctor = await DoctorModel.findById(
       new mongoose.Types.ObjectId(req.params.id)
     );
+    if (!doctor) return res.status(404).send("Doctor not found");
     res.status(200).send(doctor);
-    try {
-      const doctor = await DoctorModel.findById(
-        new mongoose.Types.ObjectId(req.params.id)
-      );
-      if (!doctor) return res.status(404).send("Doctor not found");
-      res.status(200).send(doctor);
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -102,7 +96,8 @@ const acceptDoctor = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}; const rejectDoctor = async (req, res) => {
+};
+const rejectDoctor = async (req, res) => {
   try {
     const doctor = await DoctorModel.findByIdAndUpdate(
       req.params.id,
@@ -116,23 +111,14 @@ const acceptDoctor = async (req, res) => {
   } catch (error) {
     res.status(400).send(error.message);
   }
-};
+
+}
 
 //sss
 const getAllDoctors = async (req, res) => {
   //console.log(req.body);
   try {
-    const doctor = await DoctorModel.aggregate([
-      {
-        $project: {
-          ['_id']: 0,
-          ['name']: 1,
-          ['speciality']: 1,
-          ['hourlyRate']: 1,
-          //['availableSlots']: 1,
-        },
-      },
-    ]);
+    const doctor = await DoctorModel.find();
     console.log(doctor);
     res.status(200).json(doctor)
   } catch (error) {
