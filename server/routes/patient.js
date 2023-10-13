@@ -17,12 +17,21 @@ import FamilyMemberController from "../controllers/FamilyMemberController.js";
 router.get("/Family", FamilyMemberController.getAllFamMembers);
 router.post("/AddFamilyMember", FamilyMemberController.addNewFamilyMember);
 
+//for patient - family member connection
+// router.get("/Family/:patientID", FamilyMemberController.getAllFamMembers);
+// router.post("/AddFamilyMember/:patientID", FamilyMemberController.addNewFamilyMember);
+
+//apply sessDiscount on dr's session price
+router.post('/getsessDiscount/',controllers.getSessDiscount);
+
+
 //view all the health packages 
-import HealthPackageController from '../controllers/healthPackageController.js';
-router.get('/healthPackage', HealthPackageController.getAllHealthPackages);
+import healthPackageController from "../controllers/healthPackageController.js";
+router.get('/healthPackage', healthPackageController.getAllHealthPackages);
 
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
+import patient from "../controllers/patient.js";
 router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
 
 //sss

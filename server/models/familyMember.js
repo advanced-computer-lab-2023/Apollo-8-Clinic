@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const FamMemberSchema = new mongoose.Schema(
   {
+    // patientID:{
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref:"patient",
+    //   required:true 
+    // },
     name: {
       type: String,
       required: true,
@@ -25,6 +30,14 @@ const FamMemberSchema = new mongoose.Schema(
       enum: ["wife", "husband", "child"],
       required: true,
     },
+    healthPackageSub:{
+      type:String,
+      required:false
+    },
+    // DateOfSubscribtion:{
+    //   type:date,
+    //   required:false
+    // }
   },
 
 );

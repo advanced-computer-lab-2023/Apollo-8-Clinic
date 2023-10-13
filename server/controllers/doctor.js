@@ -82,6 +82,18 @@ const getDoctors = async (req, res) => {
   }
 };
 
+
+const getAcceptedDoctors = async (req, res) => {
+  try {
+    const user = await DoctorModel.find({status:"Accepted"});
+    console.log(user);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
+
 const getDoctorById = async (req, res) => {
 
   try {
@@ -394,6 +406,7 @@ export default {
   //sss 
   createDoctor,
   updateDoctor,
-  getHealthRecord
+  getHealthRecord,
+  getAcceptedDoctors,
 
 }
