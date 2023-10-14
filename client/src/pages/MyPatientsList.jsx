@@ -15,10 +15,7 @@ function MyPatientsList() {
   useEffect(() => {
     // const id="651fd81f02ac1ed6c024c967";
     axios
-      .get(
-        "http://localhost:8000/doctor/viewPatients" +
-        "/?id=651fd81f02ac1ed6c024c967"
-      )
+      .get("http://localhost:8000/doctor/viewPatients/651fd81f02ac1ed6c024c967")
       .then((response) => {
         setData(response.data);
         setLoading(false);

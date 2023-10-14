@@ -83,7 +83,8 @@ const getPatients = async (req, res) => {
 const getMyPatients = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
   // const doctorId= "651fd81f02ac1ed6c024c967";
-  const doctorId = req.query.id;
+  console.log("OFFFFF")
+  const doctorId = req.params.id;
   console.log(req.query.id);
   const myPatients = [];
   try {
@@ -185,10 +186,11 @@ const getPatientByName = async (req, res) => {
 
 };
 const upcomingApp = async (req, res) => {
+  console.log("YARABBBBB")
   //retrieve patients that have an appointmen wth this dr from the database
   //const doctorId = req.query.id;
   //const doctorId= "6527a82f2372cb972707a1e4";
-  const doctorId = req.query.id;
+  const doctorId = req.params.id;
   // /const doctorId= "651fd81f02ac1ed6c024c967";
   console.log(req.query.id);
   console.log(doctorId);

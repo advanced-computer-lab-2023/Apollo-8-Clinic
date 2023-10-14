@@ -25,7 +25,7 @@ function AllDoctors() {
   function handleView(id) {
     // Navigate to another route and pass the ID as a prop
     console.log(id);
-    navigate(`/doctors/${id}`);
+    navigate(`/doctorInfo/${id}`);
     console.log(id);
   }
   function handleFilter() {
@@ -87,11 +87,11 @@ function AllDoctors() {
                       ? item
                       : searchName.toLowerCase() !== "" &&
                         searchSpec.toLowerCase() !== ""
-                        ? item.speciality.toLowerCase().includes(searchSpec) &&
+                      ? item.speciality.toLowerCase().includes(searchSpec) &&
                         item.name.toLowerCase().includes(searchName)
-                        : searchName.toLowerCase() === ""
-                          ? item.speciality.toLowerCase().includes(searchSpec)
-                          : item.name.toLowerCase().includes(searchName);
+                      : searchName.toLowerCase() === ""
+                      ? item.speciality.toLowerCase().includes(searchSpec)
+                      : item.name.toLowerCase().includes(searchName);
                   })
                   .map((item, index) => (
                     <tr key={index}>

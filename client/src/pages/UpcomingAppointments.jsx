@@ -12,8 +12,7 @@ function UpcomingAppointments() {
     // const id="651fd81f02ac1ed6c024c967";
     axios
       .get(
-        "http://localhost:8000/doctor/futureAppointmentPatients" +
-        "/?id=651c3ddfc5dc08d239127a83"
+        "http://localhost:8000/doctor/futureAppointmentPatients/6526653e47c45e179aa6886b"
       )
       .then((response) => {
         setData(response.data);

@@ -10,9 +10,9 @@ router.get("/", controllers.getDoctors);
 router.get("/:id", controllers.getDoctorById);
 router.put("/accept/:id", controllers.acceptDoctor);
 router.put("/reject/:id", controllers.rejectDoctor);
-router.get("/viewPatients", patient.getMyPatients);
+router.get("/viewPatients/:id", patient.getMyPatients);
 router.get("/viewPatientsByName", patient.getPatientByName);
-router.get("/futureAppointmentPatients", patient.upcomingApp);
+router.get("/futureAppointmentPatients/:id", patient.upcomingApp);
 router.post("/UpdateDoctor", controllers.updateDoctor);
 router.post("/getHealthRecord", controllers.getHealthRecord);
 //view appointments 

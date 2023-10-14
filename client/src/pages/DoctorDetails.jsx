@@ -51,7 +51,6 @@ function DoctorDetails() {
               <li>status: {data.status}</li>
             </ul>
           )}
-
         </div>
         <button
           className="btn btn-success position-absolute bottom-0 end-0 m-3 btn-lg"
