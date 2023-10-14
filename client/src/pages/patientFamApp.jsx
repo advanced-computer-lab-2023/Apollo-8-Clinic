@@ -8,7 +8,7 @@ function FamilyMembers() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/patient/Family")
+      .get("http://localhost:8000/patient/Family/" + "6523ba9cd72b2eb0e39cb137")
       .then((response) => {
         setFamilyMembers(response.data);
       })
@@ -50,7 +50,9 @@ const Appointments = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/patient/appointmentWithFilter")
+      .post("http://localhost:8000/patient/appointmentWithFilter", {
+        patientId: "6523ba9cd72b2eb0e39cb137",
+      })
       .then((response) => {
         setAppointments(response.data);
       })
@@ -223,7 +225,11 @@ const AppPatient = () => {
     event.preventDefault();
     const familyMember = { name, nationalID, age, gender, relation };
     axios
-      .post("http://localhost:8000/patient/AddFamilyMember", familyMember)
+      .post(
+        "http://localhost:8000/patient/AddFamilyMember/" +
+          "6523ba9cd72b2eb0e39cb137",
+        familyMember
+      )
       .then((res) => console.log(res.data));
   };
   //search appointments
