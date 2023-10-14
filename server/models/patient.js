@@ -61,7 +61,15 @@ const patientSchema = new mongoose.Schema(
           date: { type: Date }
         }
       ]
-    }
+    },
+    healthPackageSub:{
+      type:String,
+      default:""
+    },
+    // DateOfSubscribtion:{
+    //   type:date,
+    //   required:false
+    // }
   },
   { timestamps: true }
 );

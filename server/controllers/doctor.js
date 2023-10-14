@@ -4,6 +4,7 @@ import AppointmentModel from '../models/appointment.js';
 import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
+import e from 'express';
 const saltRounds = 10;
 
 const createDoctor = async (req, res) => {
@@ -81,6 +82,18 @@ const getDoctors = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 };
+
+
+const getAcceptedDoctors = async (req, res) => {
+  try {
+    const user = await DoctorModel.find({status:"Accepted"});
+    console.log(user);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
 
 const getDoctorById = async (req, res) => {
 
@@ -201,39 +214,30 @@ const searchByNameOrSpec = async (req, res) => {
   }
 }
 const filterBySpecOrAv = async (req, res) => {
-  const body = req.body;
 
   try {
     // Filter by speciality
-    if (body.speciality) {
-      const doctors = await DoctorModel.aggregate([
-        {
-          $project: {
-            name: 1,
-            speciality: 1,
-          },
-        },
-      ]);
-      const filteredArray = doctors.filter(object => object.speciality === body.speciality);
-      res.status(200).json(filteredArray);
-      return;
-    }
-
-    // Filter by available slots
-    if (body.availableSlots) {
-      const doctors = await DoctorModel.aggregate([
-        {
-          $project: {
-            name: 1,
-            availableSlots: 1,
-          },
-        },
-      ]);
-      const filteredArray = doctors.filter(object => (object.availableSlots).includes(body.availableSlots));
-      res.status(200).json(filteredArray);
-      return;
-    }
-
+    console.log(req.body)
+    const {searchTime, searchSpec } = req.body;
+    
+      if (searchTime && searchSpec){
+         const filtered = await DoctorModel.find({speciality:searchSpec,availableSlots:searchTime});
+         res.status(200).json(filtered);
+      }
+      else if (searchSpec){
+        const filtered=await DoctorModel.find({speciality:searchSpec})
+        res.status(200).json(filtered);
+         
+      }
+      else if (searchTime){
+        console.log("soso----"+searchTime)
+         const filtered = await DoctorModel.find({availableSlots:searchTime});
+         res.status(200).json(filtered);
+      }
+      else{
+         const filtered = await DoctorModel.find();
+         res.status(200).json(filtered);
+      }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -394,6 +398,7 @@ export default {
   //sss 
   createDoctor,
   updateDoctor,
-  getHealthRecord
+  getHealthRecord,
+  getAcceptedDoctors,
 
 }

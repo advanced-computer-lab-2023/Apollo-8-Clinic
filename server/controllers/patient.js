@@ -1,6 +1,7 @@
 import PatientModel from '../models/patient.js';
 import UserModel from '../models/user.js';
 import PresModel from '../models/prescription.js';
+import HealthPackageModel from '../models/healthPackage.js';
 import DocModel from '../models/doctor.js';
 import AppointmentModel from '../models/appointment.js';
 import bcrypt from "bcrypt";
@@ -36,7 +37,7 @@ const createPatient = async (req, res) => {
     if (!existingUser) {
       try {
         const user = new UserModel({ username, password, type });
-        user.password = hashedPassword;
+      user.password = hashedPassword;
         console.log(user.password);
         console.log(req.body);
 
@@ -297,6 +298,25 @@ const getPres = async (req, res) => {
 
 }
 
+const getSessDiscount=async (req,res)=>{
+  try{
+  //const patientID = req.params.id;
+  const patientID = req.body.id;
+  const patient = await PatientModel.findById(patientID);
+  const subscribtion = patient.healthPackageSub ;
+  var discount = 0 ;
+  if(subscribtion!==null && subscribtion!=="" && subscribtion!==" ")
+    {
+      const HealthPack = await HealthPackageModel.findOne({"name": subscribtion}) ;
+       discount = HealthPack.sessDiscount ;
+    }
+  res.status(200).send({ "discount": discount });
+} catch(e) {
+  res.status(400).send(e);
+}
+}
+
+
 export default {
   createPatient,
   getPatients,
@@ -305,5 +325,6 @@ export default {
   upcomingApp,
   getPrescriptions,
   filterPres,
-  getPres
+  getPres,
+  getSessDiscount
 }

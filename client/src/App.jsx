@@ -18,11 +18,12 @@ import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
 import View from "./pages/ViewHealthRecords";
 
-//check it
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
 import AppPatient from "./pages/patientFamApp";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
+//apply sessDiscount for patients
+import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route path="/patientFamilyAppointments" element={<AppPatient />} />
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth" element={<View />} />
+        <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount/>}/>
       </Routes>
     </div>
   );

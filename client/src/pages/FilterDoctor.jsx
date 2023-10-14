@@ -5,7 +5,7 @@ import Sidebar from "../components/SidebarPatient";
 function FilterDoctors() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTime, setSearchTime] = useState(new Date("1990-03-03T10:12:12.000+00:00"));
+  const [searchTime, setSearchTime] = useState(null);
   const [searchSpec, setSearchSpec] = useState('');
 
   useEffect(() => {
@@ -28,22 +28,18 @@ function FilterDoctors() {
     console.log(id);
   }
   function handleFilter() {
+
     // const response= await axios.get("http://localhost:8000/patient/allDoctors");
     console.log(searchTime);
-
-    const filteredDoctors = data.filter((doctor) => {
-      console.log(doctor.speciality.toLowerCase() === searchSpec);
-      return searchTime.getTime() === "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() === ''
-        ? doctor :
-        searchTime.getTime() !== "1990-03-03T10:12:12.000+00:00" && searchSpec.toLowerCase() !== ''
-          ? doctor.speciality.toLowerCase() === searchSpec && doctor.availableSlots === searchTime.getTime() :
-          searchSpec.toLowerCase() !== '' ?
-            doctor.speciality.toLowerCase() === searchSpec :
-            doctor.availableSlots === searchTime.getTime();
-
-    }
-    );
-    setData(filteredDoctors);
+    console.log(searchSpec);
+      axios.post('http://localhost:8000/patient/docFilter', { searchTime, searchSpec })
+      .then(response => {
+        console.log(response.data);
+        setData(response.data); // Set the content to MainContent with the appointments data
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
 
   };
   return (
