@@ -57,6 +57,18 @@ const getAppointmentWithFilter = async (req, res) => {
           }    
         const appointment = await appointments.find(query);
         res.status(200).json(appointment);
+//         const appointment = await appointments.find(query).populate('_id');
+//         let appointmentData = [];
+
+//         appointment.forEach(appointment1 => {
+//       // Push each appointment and its associated doctor name to the array
+//       appointmentData.push({
+//         "appointmentID": appointment1._id,
+//         "doctorName": appointment1.name,
+//         "date": appointment1.date,
+//         "status":appointment1.status
+//   });
+// });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
