@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/SidebarDoctor";
-// lessa me7taga azabat 7ewar el id haaaaaaaaa3333333
+
 function MyPatientsList() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
@@ -10,26 +10,26 @@ function MyPatientsList() {
   const [name, setName] = useState();
   const [search, setSearch] = useState("");
 
-  //   const { id, setId } = useState();
-
   useEffect(() => {
-    // const id="651fd81f02ac1ed6c024c967";
     axios
-      .get("http://localhost:8000/doctor/viewPatients/651fd81f02ac1ed6c024c967")
+      .get("http://localhost:8000/doctor/viewPatients/6526653e47c45e179aa6886b")
       .then((response) => {
         setData(response.data);
         setLoading(false);
-        console.log("henaaaa" + response);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
         setLoading(false);
-        console.log("henaaaa22222222222" + response);
       });
   }, []);
   function handleFilter() {
     // Navigate to another route and pass the ID as a prop
     navigate(`/viewUpcomingApp`);
+  }
+
+  function handleView(id) {
+    // Navigate to another route and pass the ID as a prop
+    navigate(`/viewHealth/${id}`);
   }
 
   return (

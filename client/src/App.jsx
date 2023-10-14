@@ -16,7 +16,7 @@ import AddAdmin from "./pages/AddAdmin";
 import RemoveUser from "./pages/RemoveUser";
 import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
-import View from "./pages/ViewHealthRecords";
+import Health from "./pages/ViewHealthRecords";
 
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
@@ -37,7 +37,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/allDoctors" element={<AllDoctors />} />
         <Route path="/doctorInfo/:id" element={<DoctorInfo />} />
-        <Route path="/doctors/:id" element={<ViewDoctor />} />
+        <Route path="/viewDoctor/:id" element={<ViewDoctor />} />
         <Route path="/filter" element={<FilterDoctor />} />
         <Route path="/viewMyPatients" element={<MyPatientsList />} />
         <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
@@ -48,8 +48,8 @@ function App() {
         <Route path="/doctorAppointments" element={<MainDoctor />} />
         <Route path="/patientFamilyAppointments" element={<AppPatient />} />
         <Route path="/adminHealthPackage" element={<App1 />} />
-        <Route path="/viewHealth" element={<View />} />
-        <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount/>}/>
+        <Route path="/viewHealth/:id" element={<Health />} />
+        <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
       </Routes>
     </div>
   );

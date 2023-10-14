@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Sidebar from "../components/SidebarPatient";
 
 function PrescriptionsDetails() {
   const [data, setData] = useState([]);
@@ -47,19 +48,19 @@ function PrescriptionsDetails() {
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
       <Sidebar />
 
-      <div className="card m-3 col-12" style={{ width: "80%" }}></div>
-      <div className="image">
-        <div>
-          <figure className="text-center">
-            <blockquote className="blockquote">
-              <p>You have {size} medicines</p>
-            </blockquote>
-          </figure>
+      <div className="card m-3 col-12" style={{ width: "80%" }}>
+        <div className="image">
+          <div>
+            <figure className="text-center">
+              <blockquote className="blockquote">
+                <p>You have {size} medicines</p>
+              </blockquote>
+            </figure>
+          </div>
+          <div style={{ display: "inline-flex" }}>{listo}</div>
         </div>
-        <div style={{ display: "inline-flex" }}>{listo}</div>
       </div>
     </div>
-
   );
 }
 

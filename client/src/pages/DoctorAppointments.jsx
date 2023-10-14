@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "../components/SidebarPatient";
+import Sidebar from "../components/SidebarDoctor";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -154,6 +154,7 @@ const MainDoctor = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState("");
+  const doctorId = "6526653e47c45e179aa6886b";
 
   const searchApp = (event) => {
     event.preventDefault();
@@ -162,6 +163,7 @@ const MainDoctor = () => {
         startDate,
         endDate,
         status,
+        doctorId,
       })
       .then((response) => {
         console.log(response.data);

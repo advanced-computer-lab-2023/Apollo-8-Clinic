@@ -26,7 +26,7 @@ function DoctorInfo() {
 
   const handleBack = () => {
     // Use the navigate function to go to the specified route
-    navigate("/filter");
+    navigate("/allDoctors");
   };
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
@@ -43,8 +43,6 @@ function DoctorInfo() {
             <ul>
               <li>name: {data.name}</li>
               <li>email: {data.email}</li>
-              <li>birthDate: {data.birthDate}</li>
-              <li>hourlyRate: {data.hourlyRate}</li>
               <li>hospital: {data.hospital}</li>
               <li>eduBackground: {data.eduBackground}</li>
               <li>status: {data.status}</li>

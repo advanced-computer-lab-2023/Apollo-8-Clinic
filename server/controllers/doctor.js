@@ -86,7 +86,7 @@ const getDoctors = async (req, res) => {
 
 const getAcceptedDoctors = async (req, res) => {
   try {
-    const user = await DoctorModel.find({status:"Accepted"});
+    const user = await DoctorModel.find({ status: "Accepted" });
     console.log(user);
     res.status(200).json(user);
   } catch (error) {
@@ -218,123 +218,30 @@ const filterBySpecOrAv = async (req, res) => {
   try {
     // Filter by speciality
     console.log(req.body)
-    const {searchTime, searchSpec } = req.body;
-    
-      if (searchTime && searchSpec){
-         const filtered = await DoctorModel.find({speciality:searchSpec,availableSlots:searchTime});
-         res.status(200).json(filtered);
-      }
-      else if (searchSpec){
-        const filtered=await DoctorModel.find({speciality:searchSpec})
-        res.status(200).json(filtered);
-         
-      }
-      else if (searchTime){
-        console.log("soso----"+searchTime)
-         const filtered = await DoctorModel.find({availableSlots:searchTime});
-         res.status(200).json(filtered);
-      }
-      else{
-         const filtered = await DoctorModel.find();
-         res.status(200).json(filtered);
-      }
+    const { searchTime, searchSpec } = req.body;
+
+    if (searchTime && searchSpec) {
+      const filtered = await DoctorModel.find({ speciality: searchSpec, availableSlots: searchTime });
+      res.status(200).json(filtered);
+    }
+    else if (searchSpec) {
+      const filtered = await DoctorModel.find({ speciality: searchSpec })
+      res.status(200).json(filtered);
+
+    }
+    else if (searchTime) {
+      console.log("soso----" + searchTime)
+      const filtered = await DoctorModel.find({ availableSlots: searchTime });
+      res.status(200).json(filtered);
+    }
+    else {
+      const filtered = await DoctorModel.find();
+      res.status(200).json(filtered);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-// const getDoctorByNameASpec= async (req,res) =>{
-//   const{name} = req.body
-//   const{speciality} = req.body;
-//     try{
-//       const doctor = await DoctorModel.aggregate([
-//         {
-//           $project: {
-//             ['name']: 1,
-//             ['email']: 1,
-//             ['hospital']: 1,
-//             ['speciality']: 1,
-
-
-//           },
-//         },
-//       ]);
-//       const filteredArray1 = doctor.filter(object => object.name === name )//&& object.speciality === speciality
-//       const filteredArray = filteredArray1.filter(object => object.speciality === speciality)
-//       console.log(filteredArray);
-//       res.status(200).json(filteredArray)
-//    }catch(error){
-//       res.status(400).json({error:error.message})
-//    }
-//   }
-// const getDoctorByNameOrSpec= async (req,res) =>{
-//     const{name} = req.body
-//     const{speciality} = req.body;
-//       try{
-//         const doctor = await DoctorModel.aggregate([
-//           {
-//             $project: {
-//               ['name']: 1,
-//               ['email']: 1,
-//               ['hospital']: 1,
-//               ['speciality']: 1,
-
-
-//             },
-//           },
-//         ]);
-//         const filteredArray = doctor.filter(object => object.name === name || object.speciality === speciality)
-//         //const filteredArray = filteredArray1.filter(object => object.speciality === speciality)
-//         console.log(filteredArray);
-//         res.status(200).json(filteredArray)
-//      }catch(error){
-//         res.status(400).json({error:error.message})
-//      }
-//     }
-// const getDoctorAvailableAndS= async (req,res) =>{
-//     const{speciality,
-//     availableSlots} = req.body;
-//       try{
-//         const doctors = await DoctorModel.aggregate([
-//           {$project: {
-//             name: 1,
-//             email: 1,
-//             hospital: 1,
-//             speciality: 1,
-//             availableSlots: 1,
-//           },
-//         },
-//         ]);
-//       const filteredArray1 = doctors.filter(object => object.speciality === speciality )//&& object.speciality === speciality
-//       const filteredArray = filteredArray1.filter(object => (object.availableSlots).getTime() === availableSlots.getTime())
-//       console.log(filteredArray);
-//       res.status(200).json(filteredArray)
-//      }catch(error){
-//         res.status(400).json({error:error.message})
-//      }
-//     }
-// const getDocInfo= async (req,res) =>{
-//   const{name} = req.body;
-//   try{
-//     const doctor = await DoctorModel.aggregate([
-//       {
-//         $project: {
-//           ['name']: 1,
-//           ['speciality']: 1,
-//           ['hospital']: 1,
-//           ['eduBackground']: 1,
-//           ['_id']: 1
-//         },
-//       },
-//     ]);
-//     const filteredArray = doctor.filter(object => object.name === name)
-//     //console.log(filteredArray);
-//     res.status(200).json(filteredArray)
-//  }catch(error){
-//     res.status(400).json({error:error.message})
-//  }
-// }
-//sss
-
 
 //=======
 //handled in front end if somthing is not filledreturn previous thing
@@ -367,10 +274,10 @@ const getHealthRecord = async (req, res) => {
   try {
     const doctorID = req.body.doctorID;
     const patientID = req.body.patientID;
-    const appointment = AppointmentModel.findOne({ doctorId: doctorID, patientId: patientID })
+    const appointment = await AppointmentModel.findOne({ doctorId: doctorID, patientId: patientID })
     if (appointment) {
-      const patient = PatientModel.findById(patientID)
-      res.status(200).json(patient)
+      const Appointment = await AppointmentModel.find({ patientId: patientID }).populate('patientId')
+      res.status(200).json(Appointment)
     }
     else {
       res.status(400).json({ error: "cannot look at that patient" })
@@ -387,15 +294,11 @@ export default {
   getDoctors,
   acceptDoctor,
   rejectDoctor,
-  //sss
+
   getAllDoctors,
   searchByNameOrSpec,
   filterBySpecOrAv,
-  // getDoctorByNameASpec,
-  // getDoctorByNameOrSpec,
-  // getDoctorAvailableAndS,
-  // getDocInfo,
-  //sss 
+
   createDoctor,
   updateDoctor,
   getHealthRecord,

@@ -37,7 +37,7 @@ const createPatient = async (req, res) => {
     if (!existingUser) {
       try {
         const user = new UserModel({ username, password, type });
-      user.password = hashedPassword;
+        user.password = hashedPassword;
         console.log(user.password);
         console.log(req.body);
 
@@ -83,8 +83,6 @@ const getPatients = async (req, res) => {
 };
 const getMyPatients = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
-  // const doctorId= "651fd81f02ac1ed6c024c967";
-  console.log("OFFFFF")
   const doctorId = req.params.id;
   console.log(req.query.id);
   const myPatients = [];
@@ -116,6 +114,7 @@ const getMyPatients = async (req, res) => {
     // res.status(200).json(patients);
     const rows = patients.map((object) => {
       return {
+        _id: object._id,
         name: object.name,
         email: object.email,
         birthDate: object.birthDate,
@@ -189,11 +188,7 @@ const getPatientByName = async (req, res) => {
 const upcomingApp = async (req, res) => {
   console.log("YARABBBBB")
   //retrieve patients that have an appointmen wth this dr from the database
-  //const doctorId = req.query.id;
-  //const doctorId= "6527a82f2372cb972707a1e4";
   const doctorId = req.params.id;
-  // /const doctorId= "651fd81f02ac1ed6c024c967";
-  console.log(req.query.id);
   console.log(doctorId);
 
   const myPatients = [];
@@ -226,6 +221,7 @@ const upcomingApp = async (req, res) => {
     // res.status(200).json(patients);
     const rows = patients.map((object) => {
       return {
+        _id: object._id,
         name: object.name,
         email: object.email,
         birthDate: object.birthDate,
@@ -298,22 +294,21 @@ const getPres = async (req, res) => {
 
 }
 
-const getSessDiscount=async (req,res)=>{
-  try{
-  //const patientID = req.params.id;
-  const patientID = req.body.id;
-  const patient = await PatientModel.findById(patientID);
-  const subscribtion = patient.healthPackageSub ;
-  var discount = 0 ;
-  if(subscribtion!==null && subscribtion!=="" && subscribtion!==" ")
-    {
-      const HealthPack = await HealthPackageModel.findOne({"name": subscribtion}) ;
-       discount = HealthPack.sessDiscount ;
+const getSessDiscount = async (req, res) => {
+  try {
+    //const patientID = req.params.id;
+    const patientID = req.body.id;
+    const patient = await PatientModel.findById(patientID);
+    const subscribtion = patient.healthPackageSub;
+    var discount = 0;
+    if (subscribtion !== null && subscribtion !== "" && subscribtion !== " ") {
+      const HealthPack = await HealthPackageModel.findOne({ "name": subscribtion });
+      discount = HealthPack.sessDiscount;
     }
-  res.status(200).send({ "discount": discount });
-} catch(e) {
-  res.status(400).send(e);
-}
+    res.status(200).send({ "discount": discount });
+  } catch (e) {
+    res.status(400).send(e);
+  }
 }
 
 

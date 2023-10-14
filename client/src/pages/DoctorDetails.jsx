@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/SidebarDoctor";
+import Sidebar from "../components/SidebarAdmin";
 
 function DoctorDetails() {
   const [data, setData] = useState();

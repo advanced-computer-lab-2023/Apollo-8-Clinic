@@ -1,98 +1,139 @@
-/* eslint-disable no-unused-vars */
-// eslint-disable-next-line no-unused-vars
-import React from "react";
-import "../App.css";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Sidebar from "../components/SidebarPatient";
 
-function View() {
-  // const [data, setData] = useState([]);
-  // const [name, setName] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const navigate = useNavigate();
+function Health() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [name, setName] = useState([]);
+  const [email, setEmail] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [birthDate, setDate] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [records, setHealth] = useState([]);
+  const { id } = useParams();
+  const doctorID = "6526653e47c45e179aa6886b";
+  const patientID = "6523ba9cd72b2eb0e39cb137";
 
-  // useEffect(() => {
-  //   const apiUrl = "http://localhost:8000/doctor/getHealthRecord";
-  //   axios
-  //     .get(apiUrl)
-  //     .then((response) => {
-  //       setData(response.data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //       setLoading(false);
-  //     });
-  // }, []);
+  useEffect(() => {
+    console.log("apolo");
+    const apiUrl = "http://localhost:8000/doctor/getHealthRecord";
+    axios
+      .post(apiUrl, {
+        doctorID,
+        patientID,
+      })
+      .then((response) => {
+        if (response.data) {
+          setData(response.data);
+          setName(response.data[0].patientId.name);
+          setEmail(response.data[0].patientId.email);
+          setGender(response.data[0].patientId.gender);
+          setDate(response.data[0].patientId.birthDate);
+          setPhone(response.data[0].patientId.phone);
+          setHealth(response.data[0].patientId.health_records.records);
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
 
-  // function handleView(id) {
-  //   // Navigate to another route and pass the ID as a prop
-  //   navigate(`/doctors/getHealthRecord/${id}`);
-
-
-  return (
-    <div className="App">
-
-
-
-      <div>
-        <h1 class="title">Health Record of My patients</h1>
-        <div>
-
-          <input className="search-box" placeholder="Enter The Patient Name" />
-        </div>
-        <div>
-          <table className="tab" class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Phone Number</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Male</td>
-                <td>019292828</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Helen</td>
-                <td>Female</td>
-                <td>36873673673</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Helen</td>
-                <td>Female</td>
-                <td>36873673673</td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Helen</td>
-                <td>Female</td>
-                <td>36873673673</td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>Helen</td>
-                <td>Female</td>
-                <td>36873673673</td>
-              </tr>
-
-
-            </tbody>
-          </table>
+  const listo = data.map((user, i) => {
+    console.log(user);
+    return (
+      <div
+        key={i}
+        className="card"
+        style={{
+          width: 300,
+          margin: 50,
+          border: "5px solid ",
+          borderColor: "black",
+        }}
+      >
+        <img
+          style={{ height: 200, width: 200 }}
+          src="https://www.managemore.com/images/appointment.jpg"
+          className="card-img-top"
+          alt="no image"
+        />
+        <div className="card-body">
+          <h5 className="card-title">Appointment : {i + 1}</h5>
+          <p className="card-text">status : {user.status}</p>
+          <p className="card-text">date : {user.date}</p>
         </div>
       </div>
+    );
+  });
 
+  const list = records.map((user, i) => {
+    console.log(user);
+    return (
+      <div
+        key={i}
+        className="card"
+        style={{
+          width: 300,
+          margin: 50,
+          border: "5px solid ",
+          borderColor: "black",
+        }}
+      >
+        <img
+          style={{ height: 200, width: 200 }}
+          src="https://img.freepik.com/free-vector/human-bones-realistic-x-ray-shots_1284-29690.jpg"
+          className="card-img-top"
+          alt="no image"
+        />
+        <div className="card-body">
+          <h5 className="card-title">Record : {i + 1}</h5>
+          <p className="card-text">decription : {user.decription}</p>
+          <p className="card-text">date : {user.date}</p>
+        </div>
+      </div>
+    );
+  });
+
+  return (
+    <div className="image">
+      {/*fofaaaaaa
+      
+      */}
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Birth-Date</th>
+            <th scope="col">Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{name}</th>
+            <td>{email}</td>
+            <td>{gender}</td>
+            <td>{birthDate}</td>
+            <td>{phone}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      {/*fofaaaaaa
+      
+      */}
+      <div style={{ display: "inline-flex", flexWrap: "wrap" }}>
+        {listo}
+        {list}
+      </div>
     </div>
-
   );
 }
-export default View;
+
+export default Health;

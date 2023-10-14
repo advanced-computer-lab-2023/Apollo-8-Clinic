@@ -15,7 +15,7 @@ function PrescriptionsList() {
 
   useEffect(() => {
     const apiUrl =
-      "http://localhost:8000/patient/getPerscriptions?patientId=651e8b3bb91d687a2f0eed80";
+      "http://localhost:8000/patient/getPerscriptions?patientId=6523ba9cd72b2eb0e39cb137";
     axios
       .get(apiUrl)
       .then((response) => {
@@ -29,7 +29,7 @@ function PrescriptionsList() {
   }, []);
 
   function handleClick() {
-    let body = { patientId: "651e8b3bb91d687a2f0eed80" };
+    let body = { patientId: "6523ba9cd72b2eb0e39cb137" };
     if (name.current.checked) {
       body = {
         ...body,
@@ -100,7 +100,11 @@ function PrescriptionsList() {
                 name="flexRadioDefault"
                 id="flexRadioDefault1"
               />
-              <label style={{ paddingRight: "80%" }} className="form-check-label" htmlFor="flexRadioDefault1">
+              <label
+                style={{ paddingRight: "80%" }}
+                className="form-check-label"
+                htmlFor="flexRadioDefault1"
+              >
                 Filter By doctor name
               </label>
             </div>
@@ -113,7 +117,11 @@ function PrescriptionsList() {
                 id="flexRadioDefault2"
                 checked
               />
-              <label style={{ paddingRight: "80%" }} className="form-check-label" htmlFor="flexRadioDefault2">
+              <label
+                style={{ paddingRight: "80%" }}
+                className="form-check-label"
+                htmlFor="flexRadioDefault2"
+              >
                 Filter by date
               </label>
             </div>
@@ -126,7 +134,11 @@ function PrescriptionsList() {
                 id="flexRadioDefault3"
                 checked
               />
-              <label style={{ paddingRight: "80%" }} className="form-check-label" htmlFor="flexRadioDefault3">
+              <label
+                style={{ paddingRight: "80%" }}
+                className="form-check-label"
+                htmlFor="flexRadioDefault3"
+              >
                 Filter by status
               </label>
             </div>
@@ -153,7 +165,6 @@ function PrescriptionsList() {
           <div className="image">{listo}</div>
         </div>
       </div>
-
     </>
   );
 }
