@@ -131,6 +131,19 @@ const getMyPatients = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 };
+const getPatientHealthPackage = async (req, res) => {
+  try {
+    const patient = await PatientModel.findById(req.params.id);
+    if (!patient) return res.status(404).send("patient not found");
+    if (patient.healthPackageSub) {
+      const hp = await HealthPackageModel.find({ name: patient.healthPackageSub });
+      return res.status(200).send(hp);
+    }
+    res.status(200).send(null);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+}
 const getPatientByName = async (req, res) => {
   const { doctorId, patientName } = req.body;
   console.log(req.body);
@@ -315,6 +328,7 @@ const getSessDiscount = async (req, res) => {
 export default {
   createPatient,
   getPatients,
+  getPatientHealthPackage,
   getMyPatients,
   getPatientByName,
   upcomingApp,

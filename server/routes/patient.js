@@ -8,6 +8,7 @@ const router = express.Router();
 // to test this send a post request to this route: http://localhost:8000/patient
 router.post("/", controllers.createPatient);
 router.get("/", controllers.getPatients);
+router.get("/getPatientHealthPackage/:id", controllers.getPatientHealthPackage);
 router.get("/getPerscriptions", controllers.getPrescriptions)
 router.post("/filterPerscriptions", controllers.filterPres)
 router.get("/getPerscription/:id", controllers.getPres)
@@ -22,7 +23,7 @@ router.post("/AddFamilyMember", FamilyMemberController.addNewFamilyMember);
 // router.post("/AddFamilyMember/:patientID", FamilyMemberController.addNewFamilyMember);
 
 //apply sessDiscount on dr's session price
-router.post('/getsessDiscount/',controllers.getSessDiscount);
+router.post('/getsessDiscount/', controllers.getSessDiscount);
 
 
 //view all the health packages 

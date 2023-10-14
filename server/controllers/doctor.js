@@ -83,18 +83,6 @@ const getDoctors = async (req, res) => {
   }
 };
 
-
-const getAcceptedDoctors = async (req, res) => {
-  try {
-    const user = await DoctorModel.find({ status: "Accepted" });
-    console.log(user);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message })
-  }
-};
-
-
 const getDoctorById = async (req, res) => {
 
   try {
@@ -144,13 +132,24 @@ const rejectDoctor = async (req, res) => {
 const getAllDoctors = async (req, res) => {
   //console.log(req.body);
   try {
-    const doctor = await DoctorModel.find();
+    const doctor = await DoctorModel.find({ status: "Accepted" });
     console.log(doctor);
     res.status(200).json(doctor)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
 }
+
+const getAcceptedDoctors = async (req, res) => {
+  try {
+    const user = await DoctorModel.find({ status: "Accepted" });
+    console.log(user);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
 const searchByNameOrSpec = async (req, res) => {
   const body = req.body;
   //console.log(req.body);

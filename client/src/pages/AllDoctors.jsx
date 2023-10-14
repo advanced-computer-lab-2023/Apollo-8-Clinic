@@ -7,9 +7,21 @@ function AllDoctors() {
   const [loading, setLoading] = useState(true);
   const [searchName, setSearchName] = useState("");
   const [searchSpec, setSearchSpec] = useState("");
+  const [hp, setHp] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const patientApiUrl =
+      "http://localhost:8000/patient/getPatientHealthPackage/" +
+      "6523ba9cd72b2eb0e39cb137";
+    axios
+      .get(patientApiUrl)
+      .then((response) => {
+        setHp(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
     const apiUrl = "http://localhost:8000/patient/allDoctors";
     axios
       .get(apiUrl)
@@ -31,6 +43,13 @@ function AllDoctors() {
   function handleFilter() {
     navigate("/filter");
   }
+
+  function getSessionPrice(hourlyRate) {
+    if (hp)
+      return hourlyRate + hourlyRate * 0.1 - hourlyRate * hp[0].sessDiscount;
+    else return hourlyRate + hourlyRate * 0.1;
+  }
+
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
       <Sidebar />
@@ -97,7 +116,7 @@ function AllDoctors() {
                     <tr key={index}>
                       <td>{item.name}</td>
                       <td>{item.speciality}</td>
-                      <td>{item.hourlyRate}</td>
+                      <td>{getSessionPrice(item.hourlyRate)}</td>
                       <td></td>
                       <td></td>
                       <td>
