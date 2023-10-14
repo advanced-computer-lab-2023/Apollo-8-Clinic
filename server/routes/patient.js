@@ -14,8 +14,8 @@ router.get("/getPerscription/:id", controllers.getPres)
 
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
-router.get("/Family", FamilyMemberController.getAllFamMembers);
-router.post("/AddFamilyMember", FamilyMemberController.addNewFamilyMember);
+router.get("/Family/:patientID", FamilyMemberController.getAllFamMembers);
+router.post("/AddFamilyMember/:patientID", FamilyMemberController.addNewFamilyMember);
 
 //view all the health packages 
 import HealthPackageController from '../controllers/healthPackageController.js';

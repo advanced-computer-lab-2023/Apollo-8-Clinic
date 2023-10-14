@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const FamMemberSchema = new mongoose.Schema(
   {
+    patientID:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"patient",
+      required:true 
+    },
     name: {
       type: String,
       required: true,
