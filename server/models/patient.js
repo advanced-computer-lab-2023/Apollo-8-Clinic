@@ -51,18 +51,25 @@ const patientSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
-      required: true,
-      default: "Pending",
+      required: true
     },
     health_records: {
       records: [
         {
-          decription: {type:String},
-          image_url: { type: String},
-          date:{type:Date}
+          decription: { type: String },
+          image_url: { type: String },
+          date: { type: Date }
         }
       ]
-    }
+    },
+    healthPackageSub:{
+      type:String,
+      default:""
+    },
+    // DateOfSubscribtion:{
+    //   type:date,
+    //   required:false
+    // }
   },
   { timestamps: true }
 );

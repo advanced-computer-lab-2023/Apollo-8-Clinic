@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Sidebar from '../components/SidebarAdmin';
 
 
 const Header = () => (
@@ -33,23 +34,23 @@ const HealthPackage = () => {
         console.error('There was an error!', error);
       });
   };
-//<button onClick={() => { ; handleUpdate(package1._id)}}>UPDATE</button>
+  //<button onClick={() => { ; handleUpdate(package1._id)}}>UPDATE</button>
   return (
-    <div style={{overflow: 'auto' ,height:440 }}>
+    <div style={{ overflow: 'auto', height: 440 }}>
       {healthPackages.map(package1 => (
-        <div key={package1._id} style={{border: '1px solid black' , borderRadius:5 }}>
+        <div key={package1._id} style={{ border: '1px solid black', borderRadius: 5 }}>
           <p><strong>ID:</strong> {package1._id}</p>
           <p><strong>Name:</strong> {package1.name}</p>
           <p><strong>Price:</strong> {package1.price}</p>
           <p><strong>doctor's session price discount:</strong> {package1.sessDiscount}</p>
           <p><strong>medicin discount:</strong> {package1.medDiscount}</p>
           <p><strong>family subscribtion discount:</strong> {package1.subDiscount}</p>
-          
+
           <button onClick={() => handleDelete(package1._id)}>DELETE</button>
-          
+
         </div>
-        
-      ))}    
+
+      ))}
     </div>
   );
 };
@@ -73,19 +74,19 @@ const ADD = () => {
   const [subDiscount1, setSubDiscount1] = useState('');
 
   const fn = () => {
-    axios.post('http://localhost:8000/admin/healthPackage', {name, price, sessDiscount, medDiscount, subDiscount})
-      .then(res =>{console.log(res.data); setName("");setPrice("");setSessDiscount("");setSubDiscount("");setMedDiscount("");});
+    axios.post('http://localhost:8000/admin/healthPackage', { name, price, sessDiscount, medDiscount, subDiscount })
+      .then(res => { console.log(res.data); setName(""); setPrice(""); setSessDiscount(""); setSubDiscount(""); setMedDiscount(""); });
   };
-  
+
   const updatePackage = () => {
     let updatedData = {};
-  
+
     if (name1) updatedData.name = name1;
     if (price1) updatedData.price = price1;
     if (sessDiscount1) updatedData.sessDiscount = sessDiscount1;
     if (medDiscount1) updatedData.medDiscount = medDiscount1;
     if (subDiscount1) updatedData.subDiscount = subDiscount1;
-  
+
     axios.put(`http://localhost:8000/admin/healthPackage/${id1}`, updatedData)
       .then(res => {
         console.log(res.data);
@@ -97,27 +98,27 @@ const ADD = () => {
         setMedDiscount1("");
       });
   }
-  
+
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column'}}>
-      <div  style={{display: 'flex', flexDirection: 'column'}}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <label>Name:<input type="text" value={name} onChange={e => setName(e.target.value)} /></label>
         <label>Price:<input type="text" value={price} onChange={e => setPrice(e.target.value)} /></label>
         <label>Dr's session Discount:<input type="text" value={sessDiscount} onChange={e => setSessDiscount(e.target.value)} /></label>
         <label>Medicin Discount:<input type="text" value={medDiscount} onChange={e => setMedDiscount(e.target.value)} /></label>
         <label>Family Subscription Discount:<input type="text" value={subDiscount} onChange={e => setSubDiscount(e.target.value)} /></label>
-        <button style={{"margin":10}} onClick={fn}>ADD NEW</button>
+        <button style={{ "margin": 10 }} onClick={fn}>ADD NEW</button>
       </div>
-      <div  style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <label >please copy and paste the package ID you want to change</label>
-        <label>Package ID:<input type="text" value={id1} onChange={e => setID1(e.target.value)} /></label>  
+        <label>Package ID:<input type="text" value={id1} onChange={e => setID1(e.target.value)} /></label>
         <label>Name:<input type="text" value={name1} onChange={e => setName1(e.target.value)} /></label>
         <label>Price:<input type="text" value={price1} onChange={e => setPrice1(e.target.value)} /></label>
         <label>Dr's session Discount:<input type="text" value={sessDiscount1} onChange={e => setSessDiscount1(e.target.value)} /></label>
         <label>Medicin Discount:<input type="text" value={medDiscount1} onChange={e => setMedDiscount1(e.target.value)} /></label>
         <label>Family Subscription Discount:<input type="text" value={subDiscount1} onChange={e => setSubDiscount1(e.target.value)} /></label>
-        <button style={{"margin-up":10}} onClick={updatePackage}>UPDATE</button>
+        <button style={{ "margin-up": 10 }} onClick={updatePackage}>UPDATE</button>
       </div>
     </div>
   );
@@ -125,10 +126,10 @@ const ADD = () => {
 
 
 
-const Sidebar = ({ changeContent , setRightSideBar}) => (
+const Sidebar1 = ({ changeContent, setRightSideBar }) => (
   <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
-    <div id="welcomeTitle" style={{border: '1px solid black', height:80, fontSize:25 , borderRadius:10 , textAlign:'center'}}>Welcome Admin</div>
-    <button style={{width: '100%', height:40}} onClick={() => {changeContent(<HealthPackage />);setRightSideBar(<ADD/>)}}>Health Packages</button>
+    <div id="welcomeTitle" style={{ border: '1px solid black', height: 80, fontSize: 25, borderRadius: 10, textAlign: 'center' }}>Welcome Admin</div>
+    <button style={{ width: '100%', height: 40 }} onClick={() => { changeContent(<HealthPackage />); setRightSideBar(<ADD />) }}>Health Packages</button>
   </div>
 );
 
@@ -145,28 +146,40 @@ const Footer = () => (
 );
 
 
-const RightSidebar = ({content}) => (
+const RightSidebar = ({ content }) => (
   <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
- {content}
+    {content}
   </div>
 );
 
 
 
-const App1 =()=>{
+const App1 = () => {
   const [content, setContent] = useState('Click a button to change content');
   const [RightSideBar, setRightSideBar] = useState('rightside bar');
   return (
     <>
-      <Header />
-      <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
-        <Sidebar changeContent={setContent} setRightSideBar={setRightSideBar} />
-        <MainContent content={content} />
-        <RightSidebar content={RightSideBar}/>
+
+      <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
+
+        <Sidebar />
+
+        <div className="card m-3 col-12" style={{ width: "80%" }}>
+          <Header />
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', height: 'calc(100vh - 100px)' }}>
+            <Sidebar1 changeContent={setContent} setRightSideBar={setRightSideBar} />
+            <MainContent content={content} />
+            <RightSidebar content={RightSideBar} />
+          </div>
         </div>
+      </div>
+
+
+
       <Footer />
     </>
   );
 }
 
-export default App1 ;
+export default App1;

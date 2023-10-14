@@ -13,6 +13,10 @@ const getAllHealthPackages = async (req, res) => {
   }
 };
 
+
+
+
+
 // Controller function to create a new Health Package (addNew)
 const createHealthPackage = async (req, res) => {
   try {

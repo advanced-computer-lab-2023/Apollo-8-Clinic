@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/SidebarPatient";
-function AllDoctors() {
+import { useNavigate } from "react-router-dom";
+
+function FilterDoctors() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchName, setSearchName] = useState("");
+  const [searchTime, setSearchTime] = useState(null);
   const [searchSpec, setSearchSpec] = useState("");
   const navigate = useNavigate();
 
@@ -25,11 +26,25 @@ function AllDoctors() {
   function handleView(id) {
     // Navigate to another route and pass the ID as a prop
     console.log(id);
-    navigate(`/doctorInfo/${id}`);
+    navigate(`/viewDoctor/${id}`);
     console.log(id);
   }
   function handleFilter() {
-    navigate("/filter");
+    // const response= await axios.get("http://localhost:8000/patient/allDoctors");
+    console.log(searchTime);
+    console.log(searchSpec);
+    axios
+      .post("http://localhost:8000/patient/docFilter", {
+        searchTime,
+        searchSpec,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setData(response.data); // Set the content to MainContent with the appointments data
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
   }
   return (
     <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
@@ -52,17 +67,17 @@ function AllDoctors() {
                   <th>
                     <input
                       type="text"
-                      placeholder="search by a name"
+                      placeholder="filter by available slots"
                       autoComplete="off"
-                      name="name"
+                      name="time"
                       className="form-control rounded-0"
-                      onChange={(e) => setSearchName(e.target.value)}
+                      onChange={(e) => setSearchTime(e.target.value)}
                     />
                   </th>
                   <th>
                     <input
                       type="text"
-                      placeholder="search by a spciality"
+                      placeholder="filter by a spciality"
                       autoComplete="off"
                       name="spec"
                       className="form-control rounded-0"
@@ -74,42 +89,29 @@ function AllDoctors() {
                       className="btn btn-success"
                       onClick={() => handleFilter()}
                     >
-                      or filter with speciality and available slots
+                      apply filter on speciality and available slots
                     </button>
-                  </th>{" "}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {data
-                  .filter((item) => {
-                    return searchName.toLowerCase() === "" &&
-                      searchSpec.toLowerCase() === ""
-                      ? item
-                      : searchName.toLowerCase() !== "" &&
-                        searchSpec.toLowerCase() !== ""
-                      ? item.speciality.toLowerCase().includes(searchSpec) &&
-                        item.name.toLowerCase().includes(searchName)
-                      : searchName.toLowerCase() === ""
-                      ? item.speciality.toLowerCase().includes(searchSpec)
-                      : item.name.toLowerCase().includes(searchName);
-                  })
-                  .map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.name}</td>
-                      <td>{item.speciality}</td>
-                      <td>{item.hourlyRate}</td>
-                      <td></td>
-                      <td></td>
-                      <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={() => handleView(item._id)}
-                        >
-                          view
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.name}</td>
+                    <td>{item.speciality}</td>
+                    <td>{item.hourlyRate}</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <button
+                        className="btn btn-success"
+                        onClick={() => handleView(item._id)}
+                      >
+                        view
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
@@ -119,4 +121,4 @@ function AllDoctors() {
   );
 }
 
-export default AllDoctors;
+export default FilterDoctors;

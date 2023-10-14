@@ -31,47 +31,44 @@ const createAppointment = async (req, res) => {
 //test it using http://localhost:8000/doctor/appointmentWithFilter?startDate=2002-1-1&endDate=2003-1-1
 
 const getAppointmentWithFilter = async (req, res) => {
-    try {
-        const {startDate, endDate, status } = req.body; // Destructure status and dates from query parameters
-        let query = {};
+  try {
+    const { startDate, endDate, status, doctorId, patientId } = req.body; // Destructure status and dates from query parameters
+    let query = {};
 
-        if (startDate && endDate ) {
-            let start = new Date(startDate);
-            let end = new Date(endDate);
-
-            if (start.toDateString() === end.toDateString()) {
-                end.setDate(end.getDate() + 1);
-            }
-
-            if (end > start) {
-                query.date = {
-                    $gte: start,
-                    $lt: end
-                };
-            } else {
-                return res.status(400).json({ error: "Please enter a valid date range" });
-            }
-            }
-            if (status) {
-              query.status = status;
-          }    
-        const appointment = await appointments.find(query);
-        res.status(200).json(appointment);
-//         const appointment = await appointments.find(query).populate('_id');
-//         let appointmentData = [];
-
-//         appointment.forEach(appointment1 => {
-//       // Push each appointment and its associated doctor name to the array
-//       appointmentData.push({
-//         "appointmentID": appointment1._id,
-//         "doctorName": appointment1.name,
-//         "date": appointment1.date,
-//         "status":appointment1.status
-//   });
-// });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    if (patientId) {
+      query.patientId = patientId;
     }
+
+    if (doctorId) {
+      query.doctorId = doctorId;
+    }
+
+    if (status) {
+      query.status = status;
+    }
+
+    if (startDate && endDate) {
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+
+      if (start.toDateString() === end.toDateString()) {
+        end.setDate(end.getDate() + 1);
+      }
+
+      if (end > start) {
+        query.date = {
+          $gte: start,
+          $lt: end
+        };
+      } else {
+        return res.status(400).json({ error: "Please enter a valid date range" });
+      }
+    }
+    const appointment = await appointments.find(query);
+    res.status(200).json(appointment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 

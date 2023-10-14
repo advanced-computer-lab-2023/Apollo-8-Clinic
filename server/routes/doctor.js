@@ -6,13 +6,14 @@ const router = express.Router();
 
 // to test this send a post request to this route: http://localhost:8000/doctor
 router.post("/", controllers.createDoctor);
-router.get("/", controllers.getDoctors);
+router.get("/", controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
+router.get("/getAcceptedDoctors",controllers.getAcceptedDoctors);//for doctors and patients in the sys
 router.get("/:id", controllers.getDoctorById);
 router.put("/accept/:id", controllers.acceptDoctor);
 router.put("/reject/:id", controllers.rejectDoctor);
-router.get("/viewPatients", patient.getMyPatients);
+router.get("/viewPatients/:id", patient.getMyPatients);
 router.get("/viewPatientsByName", patient.getPatientByName);
-router.get("/futureAppointmentPatients", patient.upcomingApp);
+router.get("/futureAppointmentPatients/:id", patient.upcomingApp);
 router.post("/UpdateDoctor", controllers.updateDoctor);
 router.post("/getHealthRecord", controllers.getHealthRecord);
 //view appointments 
