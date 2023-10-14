@@ -12,12 +12,11 @@ function Health() {
   const [birthDate, setDate] = useState(null);
   const [phone, setPhone] = useState(null);
   const [records, setHealth] = useState([]);
-  const { id } = useParams();
+  const { patientID } = useParams();
   const doctorID = "6526653e47c45e179aa6886b";
-  const patientID = "6523ba9cd72b2eb0e39cb137";
+  //const patientID = "6523ba9cd72b2eb0e39cb137";
 
   useEffect(() => {
-    console.log("apolo");
     const apiUrl = "http://localhost:8000/doctor/getHealthRecord";
     axios
       .post(apiUrl, {
