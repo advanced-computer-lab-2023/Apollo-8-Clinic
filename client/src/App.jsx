@@ -9,7 +9,7 @@ import AllDoctors from "./pages/AllDoctors";
 import DoctorInfo from "./pages/DoctorInfo";
 import ViewDoctor from "./pages/ViewDoctor";
 import FilterDoctor from "./pages/FilterDoctor";
-
+import AppPatient from "./pages/patientFamApp";
 import MyPatientsList from "./pages/MyPatientsList";
 import UpcomingAppointments from "./pages/UpcomingAppointments";
 import AddAdmin from "./pages/AddAdmin";
@@ -20,7 +20,6 @@ import Health from "./pages/ViewHealthRecords";
 
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
-import AppPatient from "./pages/patientFamApp";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";

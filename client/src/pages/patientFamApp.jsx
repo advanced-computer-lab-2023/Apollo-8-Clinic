@@ -104,7 +104,7 @@ const Buttons = () => (
 );
 
 
-const Sidebar = ({ changeContent, showForm, setShowForm, showHello, setShowHello  }) => {
+const Sidebar1 = ({ changeContent, showForm, setShowForm, showHello, setShowHello  }) => {
   const [TakenID,setTakenID] = useState("");
   const [familyMembers, setFamilyMembers] = useState([]);
   const fn=()=>{
