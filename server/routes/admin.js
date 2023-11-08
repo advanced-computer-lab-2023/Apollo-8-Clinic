@@ -1,5 +1,6 @@
 import express from "express";
 import controllers from "../controllers/admin.js";
+import Auth from "../Authentication/login.js"
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ router.post("/createUser", controllers.createUser);
 router.get("/getUsers", controllers.getUsers);
 router.post("/addAdministrator", controllers.addAdministrator);
 router.delete("/removeUser", controllers.removeUser);
-
+router.post("/adminLogin",Auth.loginAdmin)
 
 //health packages (view,add,update,delete)
 import HealthPackageController from '../controllers/healthPackageController.js';

@@ -1,6 +1,14 @@
 import "../App.css";
 
 function Sidebar() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem('token');
+    window.location.pathname = '/';
+      
+  };
+
+
   return (
     <div className="sidebar" style={{ marginLeft: "-15%" }}>
       <ul>
@@ -19,6 +27,9 @@ function Sidebar() {
         </li>
         <li style={{ margin: "20px" }}>
           <a href="/adminHealthPackage">Health Packages</a>
+        </li>
+        <li style={{ margin: "20px" }}>
+          <a onClick={handleSubmit}>Log out</a>
         </li>
       </ul>
     </div>

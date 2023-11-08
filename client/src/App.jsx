@@ -9,6 +9,11 @@ import AllDoctors from "./pages/AllDoctors";
 import DoctorInfo from "./pages/DoctorInfo";
 import ViewDoctor from "./pages/ViewDoctor";
 import FilterDoctor from "./pages/FilterDoctor";
+//youhanna milestone 2222
+import Doctorlogin from "./pages/DoctorLogin";
+import Adminlogin from "./pages/AdminLogin";
+import Patientlogin from "./pages/PatientLogin";
+
 
 import MyPatientsList from "./pages/MyPatientsList";
 import UpcomingAppointments from "./pages/UpcomingAppointments";
@@ -17,6 +22,7 @@ import RemoveUser from "./pages/RemoveUser";
 import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
 import Health from "./pages/ViewHealthRecords";
+//import DoctorLogin from "./pages/DoctorLogin";
 
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
@@ -50,6 +56,9 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
+        <Route path="/DoctorLogin"element={<Doctorlogin />}/>
+        <Route path="/AdminLogin"element={<Adminlogin />}/>
+        <Route path="/PatientLogin"element={<Patientlogin />}/>
       </Routes>
     </div>
   );

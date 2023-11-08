@@ -1,6 +1,8 @@
 import express from "express";
 import controllers from "../controllers/patient.js";
 import doctor from "../controllers/doctor.js";
+import Auth from "../Authentication/login.js"
+import Middle  from "../Authentication/Middleware.js";
 
 const router = express.Router();
 
@@ -12,6 +14,7 @@ router.get("/getPatientHealthPackage/:id", controllers.getPatientHealthPackage);
 router.get("/getPerscriptions", controllers.getPrescriptions)
 router.post("/filterPerscriptions", controllers.filterPres)
 router.get("/getPerscription/:id", controllers.getPres)
+router.post("/patientLogin",Auth.loginPatient)
 
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
@@ -36,7 +39,7 @@ import patient from "../controllers/patient.js";
 router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
 
 //sss
-router.get("/allDoctors", doctor.getAllDoctors);
+router.get("/allDoctors",Middle.requireAuthPatient ,doctor.getAllDoctors);
 router.get("/docInfo/:id", doctor.getDoctorById);
 router.get("/docSearch", doctor.searchByNameOrSpec);
 router.post("/docFilter", doctor.filterBySpecOrAv);
@@ -49,4 +52,4 @@ router.post("/docFilter", doctor.filterBySpecOrAv);
 
 // lw mesh fahem el "/patient" gat mnen fa e7na 3amlenha fi el index.js file fi el line da (app.use("/patient", patientRoutes);)
 
-export default router;
+export default router; 

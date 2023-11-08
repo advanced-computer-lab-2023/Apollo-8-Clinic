@@ -1,6 +1,7 @@
 import express from "express";
 import controllers from "../controllers/doctor.js";
 import patient from "../controllers/patient.js";
+import Auth from "../Authentication/login.js"
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get("/viewPatientsByName", patient.getPatientByName);
 router.get("/futureAppointmentPatients/:id", patient.upcomingApp);
 router.post("/UpdateDoctor", controllers.updateDoctor);
 router.post("/getHealthRecord", controllers.getHealthRecord);
+router.post("/doctorLogin",Auth.loginDoctor)
 //view appointments 
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
