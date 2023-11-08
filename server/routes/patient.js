@@ -48,5 +48,6 @@ router.post("/docFilter", doctor.filterBySpecOrAv);
 // then test it by sending post request to this route: http://localhost:8000/patient/something
 
 // lw mesh fahem el "/patient" gat mnen fa e7na 3amlenha fi el index.js file fi el line da (app.use("/patient", patientRoutes);)
+router.post("/myApp", appointmentContoller.patientApp);
 
 export default router;

@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 8000;
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI = "mongodb+srv://myriambotros:1234@cluster0.34tyz4m.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
 
 mongoose.set('strictQuery', false);
 mongoose

@@ -71,8 +71,17 @@ const getAppointmentWithFilter = async (req, res) => {
   }
 };
 
-
+const patientApp = async (req, res) => {  // to get all appointments for a selected dr.
+  try {
+    const {patientId} = req.body; 
+    const appointment = await appointments.find({ patientId: patientId });
+    res.status(200).json(appointment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 export default {
   createAppointment,
-  getAppointmentWithFilter
+  getAppointmentWithFilter,
+  patientApp
 }
