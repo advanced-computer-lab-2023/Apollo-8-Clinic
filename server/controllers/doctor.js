@@ -130,7 +130,10 @@ const rejectDoctor = async (req, res) => {
 
 //sss
 const getAllDoctors = async (req, res) => {
-  //console.log(req.body);
+  console.log("wslnaa hnaa")
+  // console.log(res.locals.userId)
+  const pat=await PatientModel.findOne({user:res.locals.userId}) ;
+   console.log(pat);
   try {
     const doctor = await DoctorModel.find({ status: "Accepted" });
     console.log(doctor);

@@ -21,6 +21,7 @@ const requireAuthPatient = async (req, res, next) => {
             const name=decodedToken.name;
             const user=await UserModel.findOne({username:name,type:{$regex :/patient/i}})
             if(user){
+              res.locals.userId=user._id;
                 next();
             }
             else{
@@ -53,6 +54,7 @@ const requireAuthPatient = async (req, res, next) => {
             const name=decodedToken.name;
             const user=await UserModel.findOne({username:name,type:{$regex :/admin/i}})
             if(user){
+              res.locals.userId=user._id;
                 next();
             }
             else{
@@ -84,6 +86,8 @@ const requireAuthPatient = async (req, res, next) => {
             const name=decodedToken.name;
             const user=await UserModel.findOne({username:name,type:{$regex :/doctor/i}})
             if(user){
+
+              res.locals.userId=user._id;
                 next();
             }
             else{
