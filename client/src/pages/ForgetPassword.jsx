@@ -20,7 +20,8 @@ function Forget(){
               PIN
             })
             .then((result) => {
-              console.log(result.data);
+              sessionStorage.setItem('token',JSON.stringify(result.data.token));
+              window.location.pathname = '/changePass';
             })
             .catch((err) => console.log(err));
 

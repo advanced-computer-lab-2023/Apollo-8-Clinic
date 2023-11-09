@@ -29,6 +29,9 @@ function Sidebar() {
           <a href="/adminHealthPackage">Health Packages</a>
         </li>
         <li style={{ margin: "20px" }}>
+          <a href="/changePass">Change Password</a>
+        </li>
+        <li style={{ margin: "20px" }}>
           <a onClick={handleSubmit}>Log out</a>
         </li>
       </ul>

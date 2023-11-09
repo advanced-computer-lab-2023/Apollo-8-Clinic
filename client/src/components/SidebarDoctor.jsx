@@ -28,6 +28,9 @@ function Sidebar() {
           <a href="/viewUpcomingApp">Upcomming Appointments</a>
         </li>
         <li style={{ margin: "20px" }}>
+          <a href="/changePass">Change Password</a>
+        </li>
+        <li style={{ margin: "20px" }}>
           <a onClick={handleSubmit}>Log out</a>
         </li>
       </ul>

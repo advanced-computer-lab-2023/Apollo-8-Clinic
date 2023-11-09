@@ -2,11 +2,14 @@ import express from "express";
 import controllers from "../controllers/admin.js";
 import Auth from "../Authentication/login.js"
 import forget from "../Authentication/forget.js"
+import changePass from "../Authentication/changePass.js";
 
 const router = express.Router();
 //youhanna reset password
 router.post("/forget",forget.forget)
 router.post("/compare",forget.compare)
+router.post("/chanePass",changePass.changePass)
+
 
 
 
