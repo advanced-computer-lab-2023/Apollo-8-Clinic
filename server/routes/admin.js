@@ -1,8 +1,15 @@
 import express from "express";
 import controllers from "../controllers/admin.js";
 import Auth from "../Authentication/login.js"
+import forget from "../Authentication/forget.js"
 
 const router = express.Router();
+//youhanna reset password
+router.post("/forget",forget.forget)
+router.post("/compare",forget.compare)
+
+
+
 
 // to test this send a post request to this route: http://localhost:8000/doctor
 router.post("/createUser", controllers.createUser);

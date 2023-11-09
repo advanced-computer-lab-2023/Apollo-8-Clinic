@@ -13,6 +13,7 @@ import FilterDoctor from "./pages/FilterDoctor";
 import Doctorlogin from "./pages/DoctorLogin";
 import Adminlogin from "./pages/AdminLogin";
 import Patientlogin from "./pages/PatientLogin";
+import Forget from "./pages/ForgetPassword";
 
 
 import MyPatientsList from "./pages/MyPatientsList";
@@ -32,6 +33,9 @@ import PrescriptionsDetails from "./pages/PrescriptionDetails";
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
 
 function App() {
+  const token=JSON.parse(sessionStorage.getItem('token'));
+  if(token){
+    console.log("hii")
   return (
     <div>
       <Routes>
@@ -59,9 +63,27 @@ function App() {
         <Route path="/DoctorLogin"element={<Doctorlogin />}/>
         <Route path="/AdminLogin"element={<Adminlogin />}/>
         <Route path="/PatientLogin"element={<Patientlogin />}/>
+        <Route path="/ForgetPassword"element={<Forget />}/>
       </Routes>
     </div>
   );
+  }
+  else{
+    console.log("asasa")
+    return (
+      <div>
+        <Routes>
+         <Route path="/" element={<Home />} />
+         <Route path="/registerDoctor" element={<DoctorSignup />} />
+        <Route path="/registerPatient" element={<PatientSignup />} />
+        <Route path="/DoctorLogin"element={<Doctorlogin />}/>
+        <Route path="/AdminLogin"element={<Adminlogin />}/>
+        <Route path="/PatientLogin"element={<Patientlogin />}/>
+         <Route path="/:any" element={<Home />} />
+         </Routes>
+        </div>
+    )
+  }
 }
 
 export default App;

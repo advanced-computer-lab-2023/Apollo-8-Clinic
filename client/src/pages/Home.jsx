@@ -17,13 +17,13 @@ function Home() {
     navigate("/registerPatient");
   };
   const handleAdminLogin = () => {
-    navigate("/addAdministrator");
+    navigate("/Adminlogin");
   };
   const handlePatientLogin = () => {
-    navigate("/allDoctors");
+    navigate("/PatientLogin");
   };
   const handleDoctorLogin = () => {
-    navigate("/editDoctor");
+    navigate("/DoctorLogin");
   };
   // const backgroundStyle = {
   //   backgroundImage: 'url("client/src/images/photo.png")',
