@@ -18,6 +18,7 @@ import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
 import Health from "./pages/ViewHealthRecords";
 import AddTimeSlots from "./pages/AddTimeSlots";
+import AddHealthRecords from "./pages/AddHealthRecords";
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
 import AppPatient from "./pages/patientFamApp";
@@ -50,8 +51,8 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
-        AddtimeSlots
         <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
+        <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
       </Routes>
     </div>
   );
