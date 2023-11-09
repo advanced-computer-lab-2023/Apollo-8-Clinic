@@ -289,7 +289,7 @@ const getHealthRecord = async (req, res) => {
 }
 const addAvailableTimeSlots = async (req, res) => {
   try {
-    const doctorId = req.body.doctorId; 
+    const doctorId = req.body.doctorId;
     console.log('Doctor ID:', doctorId);
     const doctor = await DoctorModel.findOne({ _id: doctorId });
     console.log('Doctor:', doctor);
@@ -308,7 +308,12 @@ const addAvailableTimeSlots = async (req, res) => {
       doctor.availableSlots = [];
   }
 
-  doctor.availableSlots.push(availableSlots); // Push the date directly
+  
+
+  // Ensure availableSlots is an array
+  const slotsArray = Array.isArray(availableSlots) ? availableSlots : [availableSlots];
+  doctor.availableSlots.push(...slotsArray);
+
   await doctor.save();
     res.status(200).json(doctor);
     console.log('Doctor after saving:', doctor);
@@ -367,9 +372,9 @@ const getWallet = async (req, res) => {
 const updateAppointment = async (req, res) => {
   try {
     const { appointmentId, newType } = req.body;
-    const doctorId = req.body.doctorId; 
+    const doctorName = req.body.doctorId; 
 
-    const doctor = await DoctorModel.findById({ _id: doctorId });
+    const doctor = await DoctorModel.findByname({ username: doctorName });
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
     }

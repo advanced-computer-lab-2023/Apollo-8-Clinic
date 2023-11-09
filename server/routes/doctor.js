@@ -17,7 +17,7 @@ router.get("/viewPatientsByName", patient.getPatientByName);
 router.get("/futureAppointmentPatients/:id", patient.upcomingApp);
 router.post("/UpdateDoctor", controllers.updateDoctor);
 router.post("/getHealthRecord", controllers.getHealthRecord);
-router.post('/add-available-time-slot/',controllers.addAvailableTimeSlots);
+router.post('/add-available-time-slot',controllers.addAvailableTimeSlots);
 router.post ('/addHealthRecords',controllers.addHealthRecords);
 router.get("/getWallet",controllers.getWallet);
 router.post("/updateAppointment",controllers.updateAppointment)
