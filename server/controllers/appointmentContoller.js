@@ -8,7 +8,8 @@ const createAppointment = async (req, res) => {
     doctorId,
     patientId,
     date,
-    status
+    status,
+    type
   } = req.body;
   console.log(req.body)
   try {
@@ -16,7 +17,8 @@ const createAppointment = async (req, res) => {
       doctorId,
       patientId,
       date,
-      status
+      status,
+      type 
     });
     await appointment.save();
     console.log(appointment);

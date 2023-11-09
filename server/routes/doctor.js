@@ -2,6 +2,7 @@ import express from "express";
 import controllers from "../controllers/doctor.js";
 import patient from "../controllers/patient.js";
 
+
 const router = express.Router();
 
 // to test this send a post request to this route: http://localhost:8000/doctor
@@ -16,6 +17,10 @@ router.get("/viewPatientsByName", patient.getPatientByName);
 router.get("/futureAppointmentPatients/:id", patient.upcomingApp);
 router.post("/UpdateDoctor", controllers.updateDoctor);
 router.post("/getHealthRecord", controllers.getHealthRecord);
+router.post('/add-available-time-slot/',controllers.addAvailableTimeSlots);
+router.post ('/addHealthRecords',controllers.addHealthRecords);
+router.get("/getWallet",controllers.getWallet);
+router.post("/updateAppointment",controllers.updateAppointment)
 //view appointments 
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);

@@ -22,6 +22,8 @@ const createPatient = async (req, res) => {
     emergencyRel,
     adresses,
     status,
+    wallet,
+    health_records, 
   } = req.body;
 
   try {
@@ -55,6 +57,8 @@ const createPatient = async (req, res) => {
           emergencyRel,
           adresses,
           status,
+          wallet,
+          health_records
         });
         await patient.save();
         console.log(patient);
@@ -323,8 +327,39 @@ const getSessDiscount = async (req, res) => {
     res.status(400).send(e);
   }
 }
+const getHealthRecords = async (req, res) => {
+  try {
+    const patientId = req.body.patientId; 
+    const patient = await PatientModel.findById({_id: patientId});
+    
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
 
+    const patientRecords = patient.health_records;
+    res.status(200).json(patientRecords);
+  } catch (error) {
+    console.error('Error in getHealthRecords:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+  
+const getWallet = async (req, res) => {
+  try {
+    const patientId = req.body.patientId; 
+    const patient = await PatientModel.findById({_id: patientId});
+    
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
 
+    const patientWallet = patient.wallet;
+    res.status(200).json(patientWallet);
+  } catch (error) {
+    console.error('Error in getwallet:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 export default {
   createPatient,
   getPatients,
@@ -335,5 +370,7 @@ export default {
   getPrescriptions,
   filterPres,
   getPres,
-  getSessDiscount
+  getSessDiscount,
+  getHealthRecords,
+  getWallet
 }

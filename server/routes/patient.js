@@ -1,7 +1,6 @@
 import express from "express";
 import controllers from "../controllers/patient.js";
 import doctor from "../controllers/doctor.js";
-
 const router = express.Router();
 
 // DELETE THESE COMMENTS AFTER YOU READ THEM :)
@@ -12,7 +11,7 @@ router.get("/getPatientHealthPackage/:id", controllers.getPatientHealthPackage);
 router.get("/getPerscriptions", controllers.getPrescriptions)
 router.post("/filterPerscriptions", controllers.filterPres)
 router.get("/getPerscription/:id", controllers.getPres)
-
+router.get("/getWallet",controllers.getWallet)
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
 router.get("/Family/:patientID", FamilyMemberController.getAllFamMembers);
@@ -29,6 +28,7 @@ router.post('/getsessDiscount/', controllers.getSessDiscount);
 //view all the health packages 
 import healthPackageController from "../controllers/healthPackageController.js";
 router.get('/healthPackage', healthPackageController.getAllHealthPackages);
+router.get('/health-records', controllers.getHealthRecords);
 
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
@@ -40,6 +40,7 @@ router.get("/allDoctors", doctor.getAllDoctors);
 router.get("/docInfo/:id", doctor.getDoctorById);
 router.get("/docSearch", doctor.searchByNameOrSpec);
 router.post("/docFilter", doctor.filterBySpecOrAv);
+
 // router.get("/searchDocNameASpec", doctor.getDoctorByNameASpec);
 // router.get("/searchDocNameOrSpec", doctor.getDoctorByNameOrSpec);
 // router.get("/searchDocSpecASlots", doctor.getDoctorAvailableAndS);
