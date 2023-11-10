@@ -193,6 +193,7 @@ const subscribeFormember=(memberID,packageName)=>{
 
 
 const cancelsubscFam = (memberid)=>{
+  console.log(memberid);
     axios.post('http://localhost:8000/patient/cancelFMsubscription/'+memberid).then(
         (res) => { 
             alert(res.data) ;     
@@ -223,7 +224,7 @@ return(
     {mainshow?
     (<div style={{ display: 'flex' }}>
     <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src={hpImg} />
+      <Card.Img variant="top" src={hpImg} alt="health package.png"/>
       <Card.Body>
         <Card.Title>Health packages</Card.Title>
         <Card.Text>
@@ -233,7 +234,7 @@ return(
       </Card.Body>
     </Card>
     <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src={famImg}/>
+      <Card.Img variant="top" src={famImg} alt="family.png"/>
       <Card.Body>
         <Card.Title>My family</Card.Title>
         <Card.Text>
@@ -417,7 +418,7 @@ return(
     </Table>
 
 
-    <div><a> Family members   </a> </div>
+    <div style={{justifyContent:"left"}}><a>Family Subscriptions  </a> </div>
     <Table striped bordered hover size="sm">
       <thead>
         <tr>
