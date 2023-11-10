@@ -95,8 +95,7 @@ function PatientWallet() {
                 </Alert>
               </p>
             ) : (
-              <div>${wallet}</div>
-            )}
+              <div style={{ fontFamily: 'Roboto', fontSize: '24px', fontWeight: 'bolder' }}>${wallet}</div>)}
           </div>
         </div>
         <BottomBar />

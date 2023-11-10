@@ -60,6 +60,7 @@ function homePage() {
 
                 <img src={imgSrc} alt="" />
 
+                <BottomBar />
 
 
             </AppBar>

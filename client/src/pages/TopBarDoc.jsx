@@ -63,7 +63,7 @@ function ResponsiveAppBar() {
         navigate("/AddTimeSlots");
     };
     const handleMyWallet = () => {
-        navigate("/PatientWallet/:patientName");
+        navigate("/DoctorWallet/:doctorName");
     };
 
     const handleEditDoc = () => {
