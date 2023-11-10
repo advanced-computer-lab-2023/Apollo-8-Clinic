@@ -42,8 +42,8 @@ const doctorSchema = new mongoose.Schema({
     required: true,
   },
   availableSlots: {
-    type: Date,
-    default: "1700/1/1 12:12:12",
+    type: [Date],
+    default: ["1700/1/1 12:12:12"],
   },
   //sss
 });
