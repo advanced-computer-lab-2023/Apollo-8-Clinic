@@ -355,8 +355,10 @@ const addHealthRecords = async (req, res) => {
 };
 const getWallet = async (req, res) => {
   try {
-    const doctorId = req.body.doctorId; 
-    const doctor = await DoctorModel.findById({_id: doctorId});
+    const doctorName = req.params.doctorName; 
+    console.log(doctorName);
+    const doctor = await DoctorModel.findOne({name: doctorName});
+    console.log(doctor);
     
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });

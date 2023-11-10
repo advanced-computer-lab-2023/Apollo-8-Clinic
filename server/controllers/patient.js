@@ -329,7 +329,7 @@ const getSessDiscount = async (req, res) => {
 }
 const getHealthRecords = async (req, res) => {
   try {
-    const patientId = req.body.patientId; 
+    const patientId = req.params.patientId;
     const patient = await PatientModel.findById({_id: patientId});
     
     if (!patient) {
@@ -346,9 +346,10 @@ const getHealthRecords = async (req, res) => {
   
 const getWallet = async (req, res) => {
   try {
-    const patientId = req.body.patientId; 
-    const patient = await PatientModel.findById({_id: patientId});
-    
+    const patientName = req.params.patientName; 
+    console.log(patientName);
+    const patient = await PatientModel.findOne({name: patientName});
+    console.log(patient);
     if (!patient) {
       return res.status(404).json({ error: 'Patient not found' });
     }

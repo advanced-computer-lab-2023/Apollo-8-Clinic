@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import axios from "axios";
-import Sidebar from "../components/SidebarAdmin";
+import Sidebar from "../components/SidebarDoctor";
 
 function AddHealthRecords() {
     const [healthRecords, setHealthRecords] = useState({
@@ -15,7 +15,8 @@ function AddHealthRecords() {
     try {
       const response = await axios.post("http://localhost:8000/doctor/addHealthRecords", {
         doctorId: "6527c67e46e93ddb9af7b73f",
-        patientId: "654c014c2abe329de581028c",
+        patientId: "654c00da2abe329de5810285"
+        ,
         health_records: {
             records: [healthRecords],
           },

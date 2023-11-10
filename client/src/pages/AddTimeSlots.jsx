@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import axios from "axios";
-import Sidebar from "../components/SidebarAdmin";
+import Sidebar from "../components/SidebarDoctor";
 
 function AddTimeSlots() {
   const [availableSlots, setAvailableSlots] = useState("");

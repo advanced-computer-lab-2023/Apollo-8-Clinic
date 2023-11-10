@@ -11,7 +11,7 @@ router.get("/getPatientHealthPackage/:id", controllers.getPatientHealthPackage);
 router.get("/getPerscriptions", controllers.getPrescriptions)
 router.post("/filterPerscriptions", controllers.filterPres)
 router.get("/getPerscription/:id", controllers.getPres)
-router.get("/getWallet",controllers.getWallet)
+router.get("/getWallet/:patientName",controllers.getWallet)
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
 router.get("/Family/:patientID", FamilyMemberController.getAllFamMembers);
@@ -28,8 +28,7 @@ router.post('/getsessDiscount/', controllers.getSessDiscount);
 //view all the health packages 
 import healthPackageController from "../controllers/healthPackageController.js";
 router.get('/healthPackage', healthPackageController.getAllHealthPackages);
-router.get('/health-records', controllers.getHealthRecords);
-
+router.get('/health-records/:patientId', controllers.getHealthRecords);
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
 import patient from "../controllers/patient.js";
