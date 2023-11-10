@@ -1,7 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
-import axios from "axios";
-import Sidebar from "../components/SidebarDoctor";
+import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -49,58 +46,26 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import BottomBar from './BottomBar';
 
 
+function homePage() {
+    const name = ['Panadol', 'Morphine', 'Aspirin', 'Insulin', 'Concerta', 'Tramadol'];
+    const info = 'Paracetamol is a non-opioid analgesic and antipyretic agent used to treat fever and mild to moderate pain.'
 
-function AddTimeSlots() {
-  const [availableSlots, setAvailableSlots] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    try {
-      const response = await axios.post("http://localhost:8000/doctor/add-available-time-slot", {
-        doctorId: "6527c67e46e93ddb9af7b73f",
-        availableSlots: [availableSlots],
-      });
+    return (
+        <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
+            <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error adding available time slots:", error);
-    }
-  };
+                <ResponsiveAppBar />
 
-  return (
-    <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
-      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
+                <img src={imgSrc} alt="" />
 
-        <ResponsiveAppBar />
-        <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <h2>Add Available Time Slots</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="availableSlots">
-                <strong>Available Slots</strong>
-              </label>
-              <input
-                type="text"
-                placeholder="Enter available slots"
-                autoComplete="off"
-                name="availableSlots"
-                className="form-control rounded-0"
-                value={availableSlots}
-                onChange={(e) => setAvailableSlots(e.target.value)}
-              />
-            </div>
 
-            <button type="submit" className="btn btn-success w-100">
-              Add
-            </button>
-          </form>
-        </div>
-        <BottomBar />
-      </AppBar >
 
-    </div >
-  );
+            </AppBar>
+
+        </div >
+
+    );
 }
-
-export default AddTimeSlots;
+export default homePage;
