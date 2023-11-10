@@ -17,14 +17,18 @@ import RemoveUser from "./pages/RemoveUser";
 import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
 import Health from "./pages/ViewHealthRecords";
-
+import AddTimeSlots from "./pages/AddTimeSlots";
+import AddHealthRecords from "./pages/AddHealthRecords";
+import PatientHealthRecords from "./pages/PatientHealthRecords"
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
 import AppPatient from "./pages/patientFamApp";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
-
+import PatientWallet from "./pages/PatientWallet";
+import DoctorWallet from "./pages/DoctorWallet";
+import FollowUP from "./pages/FollowUP";
 function App() {
   return (
     <div>
@@ -50,6 +54,12 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
+        <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
+        <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
+        <Route path="/PatientHealthRecords/:patientId" element={<PatientHealthRecords />} />
+        <Route path="/PatientWallet/:patientName" element={<PatientWallet />} />
+        <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
+        <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
       </Routes>
     </div>
   );

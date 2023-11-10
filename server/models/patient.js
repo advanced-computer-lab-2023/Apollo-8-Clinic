@@ -55,13 +55,13 @@ const patientSchema = new mongoose.Schema(
     },
     health_records: {
       records: [
-        {
-          decription: { type: String },
-          image_url: { type: String },
-          date: { type: Date }
-        }
+          {
+              description: { type: String },
+              image_url: { type: String },
+              date: { type: Date }
+          }
       ]
-    },
+  },
     healthPackageSub:{
       type:String,
       default:""
