@@ -60,7 +60,7 @@ function ResponsiveAppBar() {
         navigate("/patientFamilyAppointments");
     };
     const handleHealthRecords = () => {
-        navigate("/PatientHealthRecords/:patientId");
+        navigate("/viewHealth/:patientID");
     };
     const handleMyWallet = () => {
         navigate("/PatientWallet/:patientName");
