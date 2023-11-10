@@ -203,6 +203,11 @@ const cancelsubscFam = (memberid)=>{
 }
 
 const cancelMYsubsc = ()=>{
+    if(MyPatient.subscriptionStatus==="cancelled with end date")
+        {
+            alert("already cancelled") ;
+            return;
+        }
     axios.post('http://localhost:8000/patient/cancelMYsubscription/'+patientID).then(
         (res) => { 
             alert(res.data) ;     
