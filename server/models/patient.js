@@ -14,6 +14,7 @@ const patientSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      unique: true,
       required: true,
     },
     birthDate: {
@@ -27,6 +28,7 @@ const patientSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      unique:true,
       required: true,
     },
     emergencyName: {
@@ -66,10 +68,14 @@ const patientSchema = new mongoose.Schema(
       type:String,
       default:""
     },
-    // DateOfSubscribtion:{
-    //   type:date,
-    //   required:false
-    // }
+    DateOfSubscribtion:{
+      type:Date,
+      required:false
+    },
+    subscriptionStatus:{
+      type: String,
+      enum: [" cancelled with end date", "subscribed with renewal date", "unsubscribed"],
+    },
   },
   { timestamps: true }
 );

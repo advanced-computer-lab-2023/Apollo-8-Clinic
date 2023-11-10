@@ -13,12 +13,12 @@ const FamMemberSchema = new mongoose.Schema(
     },
     nationalID: {
       type: String,
-      unique: true,
-      required: true,
+      unique:false
+      //required: true,
     },
     age: {
       type: Number,
-      required: true,
+     
     },
     gender: {
       type: String,
@@ -34,12 +34,20 @@ const FamMemberSchema = new mongoose.Schema(
       type:String,
       required:false
     },
-    // DateOfSubscribtion:{
-    //   type:date,
-    //   required:false
-    // }
+    DateOfSubscribtion:{
+      type:Date,
+      required:false
+    },
+    subscriptionStatus:{
+      type: String,
+      enum: ["cancelled with end date", "subscribed with renewal date", "unsubscribed"],
+    },
+    linkageID:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"patient",
+      default: null
+    },  
   },
-
 );
 
 const FamilyMemberModel = mongoose.model("FamilyMember", FamMemberSchema);

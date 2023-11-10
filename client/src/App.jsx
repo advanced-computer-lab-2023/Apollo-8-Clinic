@@ -23,6 +23,7 @@ import App1 from "./pages/adminHealthP";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
+import PatientHP_FM from "./pages/PatientFamilyHP";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:id" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
+        <Route path='/PatientHP_FM' element={<PatientHP_FM/>}/>
       </Routes>
     </div>
   );

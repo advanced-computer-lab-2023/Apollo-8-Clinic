@@ -311,6 +311,98 @@ const getSessDiscount = async (req, res) => {
   }
 }
 
+import FamilyMemberModel from "../models/familyMember.js"
+
+// req.params -->  current user ID
+//req.body --> email , relation 
+const linkPatient= async (req, res)=>{
+ 
+  try{  
+    const mailORnumber = req.body.input;
+    let patient1 = "";
+    var number = Number(mailORnumber);
+    if(!isNaN(number)) {
+        //Input is a number
+        patient1 = await PatientModel.findOne({"phone": number });
+    } else {      
+            //Input is an email
+            patient1 = await PatientModel.findOne({"email": mailORnumber });
+    }
+    if(patient1===null)
+        res.status(200).send("incorrect email or number , patient not found")  
+    console.log(patient1);
+    
+    const patientID = req.params.patientID ;
+    const rel = req.body.relation ;
+    //const patient1 = await PatientModel.findOne({"email": mail });
+     const age = (new Date()).getFullYear() - patient1.birthDate.getFullYear()+1;
+    const newFamMember = new FamilyMemberModel({ "patientID":patientID ,"name":patient1.name  , "age":age, "gender":patient1.gender,"relation":rel,"linkageID":patient1._id,"healthPackageSub":"","DateOfSubscribtion":null,"subscriptionStatus":"unsubscribed" });
+    newFamMember.save();
+    res.status(200).json(newFamMember);
+    console.log(newFamMember);
+    
+  } catch (error) {
+    res.status(400).json({ error: error.message })  
+  }
+
+}
+
+// req.params --> current user ID
+//req.body --> number , relation 
+// const linkPatientByNumber= async (req, res)=>{
+//   try{  
+//     const no = req.body.number;
+//     const patientID = req.params.patientID ;
+//     const rel = req.body.relation ;
+//     const patient1 = await PatientModel.findOne({"phone": no });
+//     const age = (new Date()).getFullYear() - patient1.birthDate.getFullYear()+1;
+//     const newFamMember = new FamilyMemberModel({"patientID":patientID, "name":patient1.name , "age":age , "gender":patient1.gender,"relation":rel,"linkageID":patient1._id });
+//     await newFamMember.save();
+//     //res.status(200).send(" "+ (new Date()).getFullYear() +"-"+ patient1.birthDate.getFullYear() +" = "+age);
+//     res.status(200).json(newFamMember);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message })
+//     }
+  
+// }
+
+// NEED TO update healthpackage subsc. if it is expired (duration 1 year)
+// let subDate = patient1.DateOfSubscribtion ;
+//   let currentDate = new Date();
+//   let differenceInTime = currentDate.getTime() - subDate.getTime();
+//   let differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+// if(differenceInDays > 365){
+//     //the subscribtion has expired , remove it and display a message for the patient
+// }else{
+
+// }
+
+//req.params --> patientID
+const patientDetails = async(req,res)=>{
+  try{
+  const patientID = req.params.patientID ;
+  const patient1 = await PatientModel.findById(patientID);
+  console.log(patient1);
+    res.status(200).json(patient1);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//req.params --> id
+const cancelSubscription =async(req,res)=>{
+  try{
+    const patientID = req.params.id ;
+    const patient1 = await PatientModel.findById(patientID);
+    patient1.subscriptionStatus = "cancelled with end date";
+    patient1.save();
+    res.status(200).send("Done");
+  }catch(error){
+    res.status(400).json({ error: error.message });
+  }
+}
+
 
 export default {
   createPatient,
@@ -321,5 +413,8 @@ export default {
   getPrescriptions,
   filterPres,
   getPres,
-  getSessDiscount
+  getSessDiscount,
+  linkPatient,
+  patientDetails,
+  cancelSubscription
 }
