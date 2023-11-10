@@ -23,8 +23,8 @@ router.post("/subscribeForMe/:id",healthPackageController.subscribeForPatient);
 router.post("/subscribeForFam/:id",healthPackageController.subscribeForFamily);
 
 //cancel sub
-router.put('/cancelMYsubscription/:id',patient.cancelSubscription);
-router.put('cancelFMsubscription/:id',FamilyMemberController.cancelSubscription);
+router.post('/cancelMYsubscription/:id',patient.cancelSubscription);
+router.post('cancelFMsubscription/:id',FamilyMemberController.cancelSubscription);
 
 //display patient's detials including HP subscription
 // do we need to update healthpackage subsc. if it is expired (duration 1 year)

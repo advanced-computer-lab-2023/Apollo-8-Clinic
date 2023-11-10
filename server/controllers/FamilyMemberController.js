@@ -62,8 +62,9 @@ const cancelSubscription =async(req,res)=>{
     const memberID = req.params.id ;
     const FamilyMem = await FamilyMemberModel.findById(memberID);
     if(FamilyMem.linkageID!==null){
-      res.status(400).send("caonnot cancel subs for a linked patient");
+      res.status(200).send("caonnot cancel subs for a linked patient");
   }
+  console.log(FamilyMem);
     FamilyMem.subscriptionStatus = "cancelled with end date";
     FamilyMem.save();
     res.status(200).send("Done");

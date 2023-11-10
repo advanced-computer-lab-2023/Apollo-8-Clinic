@@ -142,9 +142,9 @@ const fn2 =()=>{
     .catch(error => {
       console.error('There was an error!', error);
     });
-    axios.get('http://localhost:8000/patient/patientdetails'+patientID)
+    axios.get('http://localhost:8000/patient/patientdetails/'+patientID)
     .then(response => {
-        setMyPatient(res.data);
+        setMyPatient(response.data);
     })
     .catch(error => {
       console.error('There was an error!', error);
@@ -193,7 +193,17 @@ const subscribeFormember=(memberID,packageName)=>{
 
 
 const cancelsubscFam = (memberid)=>{
-    axios.put('http://localhost:8000/patient/cancelFMsubscription/'+memberid).then(
+    axios.post('http://localhost:8000/patient/cancelFMsubscription/'+memberid).then(
+        (res) => { 
+            alert(res.data) ;     
+        }
+         ).catch(error => {
+            res.status(400).send(error);
+         });
+}
+
+const cancelMYsubsc = ()=>{
+    axios.post('http://localhost:8000/patient/cancelMYsubscription/'+patientID).then(
         (res) => { 
             alert(res.data) ;     
         }
@@ -380,17 +390,33 @@ return(
 
 <h2 style={{"text-align":"left"}}>subscriptions</h2>
 
-    <Stack gap={3}>
-      <div className="p-2">My Health Package:+ {MyPatient.healthPackageSub}</div>
-      <div className="p-2">Due date:+{MyPatient.DateOfSubscribtion}</div>
-      <div className="p-2">subscription status:+{MyPatient.subscriptionStatus}</div>
-    </Stack>
-    <div><a>    </a> </div>
+    <Table striped bordered hover>
+    <tbody>
+        <tr>
+          <td>My Health Package:</td>
+          <td>{MyPatient.healthPackageSub}</td>
+        </tr>
+        <tr>
+          <td>Due date:</td>
+          <td>{MyPatient.DateOfSubscribtion}</td>
+        </tr>
+        <tr>
+          <td>subscription status:</td>
+          <td>{MyPatient.subscriptionStatus}</td>
+        </tr>
+
+       <tr>
+       <td style={{justifyContent:"right"}}colSpan={2}><Button  variant="outline-danger" onClick={cancelMYsubsc}>cancel Subscription</Button></td>
+       </tr>
+        </tbody>
+    </Table>
+
+
+    <div><a> Family members   </a> </div>
     <Table striped bordered hover size="sm">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>NationalID</th>
+          <th>Member's name</th>
           <th>relation</th>
           <th>health package subscription</th>
           <th>due date</th>
@@ -401,12 +427,11 @@ return(
            {nonlinkedfamily.filter(member => member.healthPackageSub !== '').map(member => (          
            <tr>
             <td>{member.name}</td>
-            <td>{member.nationalID}</td>
             <td>{member.relation}</td>
             <td>{member.healthPackageSub}</td>
             <td>{member.DateOfSubscribtion}</td>
             <td>{member.subscriptionStatus}</td>
-            <td> <Button variant="outline-danger" onClick={cancelsubscFam(member._id)}>cancel</Button>{' '}</td>
+            <td> <Button type="button" variant="outline-danger" onClick={() =>cancelsubscFam(member._id)}>cancel</Button>{' '}</td>
            </tr> ))}
            </tbody>
     </Table>

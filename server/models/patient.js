@@ -74,7 +74,7 @@ const patientSchema = new mongoose.Schema(
     },
     subscriptionStatus:{
       type: String,
-      enum: [" cancelled with end date", "subscribed with renewal date", "unsubscribed"],
+      enum: ["cancelled with end date", "subscribed with renewal date", "unsubscribed"],
     },
   },
   { timestamps: true }
