@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Sidebar from "../components/SidebarPatient";
+import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -33,7 +31,6 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
-import { Alert } from "@mui/material";
 
 import ResponsiveAppBar from './TopBar';
 import Ads from './Ads';
@@ -46,63 +43,30 @@ import CardMedia from '@mui/material/CardMedia';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import BottomBar from "./BottomBar";
+import BottomBar from './BottomBar';
+
+
+function homePage() {
+    const name = ['Panadol', 'Morphine', 'Aspirin', 'Insulin', 'Concerta', 'Tramadol'];
+    const info = 'Paracetamol is a non-opioid analgesic and antipyretic agent used to treat fever and mild to moderate pain.'
 
 
 
+    return (
+        <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
+            <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
-function PatientWallet() {
-  const [loading, setLoading] = useState(true);
-  const [wallet, setWallet] = useState(null);
-  const [error, setError] = useState(null);
-  // Manually set the patient ID
-  const patientName = "roger";
+                <ResponsiveAppBar />
 
-  useEffect(() => {
-    const apiUrl = `http://localhost:8000/patient/getWallet/${patientName}`;
-
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        console.log("API Response:", response.data);
-        setWallet(response.data); // Assuming response.data.wallet is a number
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError(error.message || "An error occurred");
-        setLoading(false);
-      });
-  }, [patientName]);
+                <Ads />
 
 
-  return (
-    <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
-      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
-        <ResponsiveAppBar />
-        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>
-          <div className="card-header" style={{}}>
-            <h2>My wallet</h2>
-          </div>
-          <div className="card-body">
-            {loading ? (
-              <p>Loading...</p>
-            ) : error ? (
 
-              <p>
-                <Alert style={{ marginTop: '5%', fontSize: '18px', backgroundColor: ' RGB(205, 92, 92)' }} variant="filled" severity="error">
-                  Error: {error}
-                </Alert>
-              </p>
-            ) : (
-              <div>${wallet}</div>
-            )}
-          </div>
-        </div>
-        <BottomBar />
-      </AppBar >
-    </div >
-  );
+                <BottomBar />
+            </AppBar>
+
+        </div >
+
+    );
 }
-
-export default PatientWallet;
+export default homePage;
