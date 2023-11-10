@@ -28,7 +28,7 @@ function Sidebar() {
           <a href="/patientFamilyAppointments"> View Appointments </a>
         </li>
         <li style={{ margin: "20px" }}>
-          <a href="/changePass">Change Password</a>
+          <a href="/changePassPat">Change Password</a>
         </li>
         <li style={{ margin: "20px" }}>
           <a onClick={handleSubmit}>Log out</a>

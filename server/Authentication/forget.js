@@ -21,8 +21,9 @@ const compare = async (req, res, next) => {
     if(user){
         
         const token = createToken(username);
+        const type=user.type;
         console.log(token)
-        return res.status(201).json({token:token})
+        return res.status(201).json({token:token,type:type})
     }
     else{
         return res.status(400).json("wrong");   

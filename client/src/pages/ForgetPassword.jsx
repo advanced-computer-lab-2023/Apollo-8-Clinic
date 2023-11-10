@@ -20,8 +20,18 @@ function Forget(){
               PIN
             })
             .then((result) => {
+              console.log(result.data.type)
               sessionStorage.setItem('token',JSON.stringify(result.data.token));
-              window.location.pathname = '/changePass';
+              if(result.data.type==='Doctor'){
+                 window.location.pathname = '/changePassDoc';
+              }
+              else if(result.data.type==='Patient'){
+                window.location.pathname = '/changePassPat';
+              }
+              else{
+                window.location.pathname = '/changePassAdm';
+              }
+             
             })
             .catch((err) => console.log(err));
 

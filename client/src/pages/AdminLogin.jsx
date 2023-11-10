@@ -22,7 +22,6 @@ function Adminlogin(){
               console.log(result.data.token);
               sessionStorage.setItem('token',JSON.stringify(result.data.token));
             
-              console.log("asassaas "+data)
               window.location.pathname = '/addAdministrator';
             })
             .catch((err) => console.log(err));

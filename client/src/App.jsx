@@ -15,6 +15,8 @@ import Adminlogin from "./pages/AdminLogin";
 import Patientlogin from "./pages/PatientLogin";
 import Forget from "./pages/ForgetPassword";
 import ChangePass from "./pages/chnagePass";
+import ChangePassDoc from "./pages/changePassDoc";
+import ChangePassAdm from "./pages/changePassAdm";
 
 
 import MyPatientsList from "./pages/MyPatientsList";
@@ -65,7 +67,9 @@ function App() {
         <Route path="/AdminLogin"element={<Adminlogin />}/>
         <Route path="/PatientLogin"element={<Patientlogin />}/>
         <Route path="/ForgetPassword"element={<Forget />}/>
-        <Route path="/changePass"element={<ChangePass />}/>
+        <Route path="/changePassPat"element={<ChangePass />}/>
+        <Route path="/changePassDoc"element={<ChangePassDoc />}/>
+        <Route path="/changePassAdm"element={<ChangePassAdm />}/>
       </Routes>
     </div>
   );
