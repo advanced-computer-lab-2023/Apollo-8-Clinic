@@ -371,12 +371,13 @@ const getWallet = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
 const updateAppointment = async (req, res) => {
   try {
     const { appointmentId, newType } = req.body;
-    const doctorName = req.body.doctorId; 
-
-    const doctor = await DoctorModel.findByname({ username: doctorName });
+    const doctorName = "helen";
+    const doctor = await DoctorModel.findOne({ name: doctorName });
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
     }
@@ -387,8 +388,7 @@ const updateAppointment = async (req, res) => {
 
     // Check if the doctor is allowed to change appointment type
     const appointment = await AppointmentModel.findOne({
-      _id: appointmentId,
-      doctorId: doctorId,
+      _id: appointmentId
     });
     
     if (!appointment) {
@@ -408,6 +408,8 @@ const updateAppointment = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 export default {
   createDoctor,
   getDoctorById,
@@ -427,5 +429,7 @@ export default {
   addAvailableTimeSlots,
   addHealthRecords,
   getWallet,
+  
   updateAppointment,
+  
 }

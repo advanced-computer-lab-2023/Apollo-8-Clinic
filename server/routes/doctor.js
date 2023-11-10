@@ -20,7 +20,7 @@ router.post("/getHealthRecord", controllers.getHealthRecord);
 router.post('/add-available-time-slot',controllers.addAvailableTimeSlots);
 router.post ('/addHealthRecords',controllers.addHealthRecords);
 router.get("/getWallet/:doctorName",controllers.getWallet);
-router.post("/updateAppointment",controllers.updateAppointment)
+router.put("/updateAppointment/:doctorName",controllers.updateAppointment)
 //view appointments 
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);

@@ -29,6 +29,9 @@ function Sidebar() {
         <li style={{ margin: "20px" }}>
           <a href="/AddTimeSlots">Add Time Slots</a>
         </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/FollowUP/:doctorName">To Follow Up</a>
+        </li>
         
 
       </ul>

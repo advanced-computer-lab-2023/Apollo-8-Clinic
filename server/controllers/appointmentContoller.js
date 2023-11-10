@@ -1,5 +1,5 @@
 import appointments from "../models/appointment.js";
-
+import DoctorModel from '../models/doctor.js';
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';
@@ -72,9 +72,27 @@ const getAppointmentWithFilter = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getAppointments = async (req, res) => {
+  try {
+    const doctorName = req.params.doctorName; 
+    console.log("doctorname"+doctorName);
+    const doctor = await DoctorModel.findOne({ name: doctorName });
+    console.log("doctor"+doctor);
+    
+    if (!doctor) {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    const appointments = await AppointmentModel.find({ doctorId: doctor._id }).populate('doctorId').populate('patientId');
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 export default {
   createAppointment,
-  getAppointmentWithFilter
+  getAppointmentWithFilter,
+  getAppointments
 }
