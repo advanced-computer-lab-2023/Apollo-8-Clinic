@@ -1,5 +1,5 @@
 import appointments from "../models/appointment.js";
-
+import DoctorModel from '../models/doctor.js';
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';
@@ -18,6 +18,12 @@ const createAppointment = async (req, res) => {
       date,
       status
     });
+    const updatedDoctor = await DoctorModel.findOneAndUpdate(
+      { "_id": doctorId },
+      { $pull: { availableSlots: date } },
+      { new: true } // To return the updated document
+    );
+    console.log(updatedDoctor.availableSlots);
     await appointment.save();
     console.log(appointment);
     res.status(200).json(appointment);

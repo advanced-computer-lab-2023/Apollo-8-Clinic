@@ -15,8 +15,13 @@ router.get("/getPerscription/:id", controllers.getPres)
 
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
-router.get("/Family/:patientID", FamilyMemberController.getAllFamMembers);
+router.get("/NotlinkedFamily/:patientID", FamilyMemberController.getNotLinkedFamMembers);
+router.get("/LinkedFamily/:patientID", FamilyMemberController.getLinkedFamMembers);
+
 router.post("/AddFamilyMember/:patientID", FamilyMemberController.addNewFamilyMember);
+
+// link or add a family member using mail or phone number
+router.post("/linkPatient/:patientID", patient.linkPatient);
 
 //for patient - family member connection
 // router.get("/Family/:patientID", FamilyMemberController.getAllFamMembers);

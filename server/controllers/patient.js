@@ -324,7 +324,12 @@ const getSessDiscount = async (req, res) => {
   }
 }
 
+import FamilyMemberModel from "../models/familyMember.js"
 
+// req.params -->  current user ID
+//req.body --> email , relation 
+const linkPatient= async (req, res)=>{
+}
 export default {
   createPatient,
   getPatients,
@@ -335,5 +340,6 @@ export default {
   getPrescriptions,
   filterPres,
   getPres,
-  getSessDiscount
+  getSessDiscount,
+  linkPatient
 }
