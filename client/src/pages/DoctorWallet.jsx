@@ -32,6 +32,7 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
+import { Alert } from "@mui/material";
 
 import ResponsiveAppBar from './TopBarDoc';
 import Ads from './Ads';
