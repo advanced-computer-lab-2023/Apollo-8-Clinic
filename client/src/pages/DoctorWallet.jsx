@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import Sidebar from "../components/SidebarDoctor";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -48,27 +47,30 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import BottomBar from './BottomBar';
 
 
+function DoctorWallet() {
+  const [loading, setLoading] = useState(true);
+  const [wallet, setWallet] = useState(null);
+  const [error, setError] = useState(null);
+  // Manually set the patient ID
+  const doctorName = "youssef";
 
-function EditDoctor() {
-  const email = useRef(null);
-  const rate = useRef(null);
-  const hospital = useRef(null);
+  useEffect(() => {
+    const apiUrl = `http://localhost:8000/doctor/getWallet/${doctorName}`;
 
-  function onClick(e) {
-    // func(email.current.value,rate.current.value,hospital.current.value,ID.current.value)
-    e.preventDefault();
     axios
-      .post("http://localhost:8000/doctor/UpdateDoctor", {
-        email: email.current.value,
-        hourlyRate: rate.current.value,
-        hospital: hospital.current.value,
-        doctorID: "6526653e47c45e179aa6886b",
+      .get(apiUrl)
+      .then((response) => {
+        console.log("API Response:", response.data);
+        setWallet(response.data); // Assuming response.data.wallet is a number
+        setLoading(false);
       })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => console.log(err));
-  }
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setError(error.message || "An error occurred");
+        setLoading(false);
+      });
+  }, [doctorName]);
+
 
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
@@ -76,62 +78,26 @@ function EditDoctor() {
 
         <ResponsiveAppBar />
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <h1 className="display-6">Update My Profile</h1>
-          <div
-            style={{
-              width: "50%",
-              margin: "auto",
-              marginTop: 100,
-              padding: "10px",
-              border: "5px solid ",
-              borderColor: "black",
-            }}
-          >
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                ref={email}
-                type="email"
-                className="form-control"
-                placeholder="example@gmail.com"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Hourly rate</label>
-              <input
-                ref={rate}
-                type="number"
-                className="form-control"
-                placeholder="Number Of Hours You Work"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Hospital</label>
-              <input
-                ref={hospital}
-                type="text"
-                className="form-control"
-                placeholder="Put A Correct Hospital Name"
-              />
-            </div>
-
-            <button type="button" onClick={onClick} className="btn btn-primary">
-              Submit
-            </button>
-
-            <figcaption style={{ margin: 20 }} className="blockquote-footer">
-              note: if somthing you do not want update keep it empty
-            </figcaption>
+          <div className="card-header">
+            <h2>My wallet</h2>
+          </div>
+          <div className="card-body">
+            {loading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p><Alert style={{ marginTop: '5%', fontSize: '18px', backgroundColor: ' RGB(205, 92, 92)' }} variant="filled" severity="error">
+                Error: {error}
+              </Alert>
+              </p>
+            ) : (
+              <div style={{ fontFamily: 'Roboto', fontSize: '24px', fontWeight: 'bolder' }}>${wallet}</div>
+            )}
           </div>
         </div>
         <BottomBar />
-
       </AppBar >
-
     </div >
   );
 }
 
-export default EditDoctor;
+export default DoctorWallet;

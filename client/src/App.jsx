@@ -17,12 +17,19 @@ import RemoveUser from "./pages/RemoveUser";
 import PendingDoctors from "./pages/PendingDoctors";
 import DoctorDetails from "./pages/DoctorDetails";
 import Health from "./pages/ViewHealthRecords";
-
+import AddTimeSlots from "./pages/AddTimeSlots";
+import AddHealthRecords from "./pages/AddHealthRecords";
+import PatientHealthRecords from "./pages/PatientHealthRecords";
 import MainDoctor from "./pages/DoctorAppointments";
 import App1 from "./pages/adminHealthP";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
+import PatientWallet from "./pages/PatientWallet";
+import DoctorWallet from "./pages/DoctorWallet";
+import FollowUP from "./pages/FollowUP";
+import HomePage from "./pages/HomePage";
+import HomePageDoc from "./pages/HomePageDoc";
 import PatientHP_FM from "./pages/PatientFamilyHP";
 
 function App() {
@@ -48,9 +55,21 @@ function App() {
         <Route path="/doctorAppointments" element={<MainDoctor />} />
         <Route path="/patientFamilyAppointments" element={<AppPatient />} />
         <Route path="/adminHealthPackage" element={<App1 />} />
-        <Route path="/viewHealth/:id" element={<Health />} />
+        <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
-        <Route path='/PatientHP_FM' element={<PatientHP_FM/>}/>
+        <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
+        <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
+        <Route
+          path="/PatientHealthRecords/:patientId"
+          element={<PatientHealthRecords />}
+        />
+        <Route path="/PatientWallet/:patientName" element={<PatientWallet />} />
+        <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
+        <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
+        <Route path="/HomePage" element={<HomePage />} />
+        <Route path="/HomePageDoc" element={<HomePageDoc />} />
+
+        <Route path="/PatientHP_FM" element={<PatientHP_FM />} />
       </Routes>
     </div>
   );

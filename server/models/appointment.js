@@ -20,6 +20,11 @@ const appointmentSchema = new mongoose.Schema({
     default:"upcoming",
     required: true,
   },
+  type: {
+    type: String,
+    enum: ["follow up", "regular"],
+    required: true,
+  },
 });
 
 const AppointmentModel = mongoose.model("Appointment", appointmentSchema);

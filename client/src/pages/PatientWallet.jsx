@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Sidebar from "../components/SidebarPatient";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,7 +21,7 @@ import ShoppingBasketSharpIcon from '@mui/icons-material/ShoppingBasketSharp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from "react-router-dom";
 import { height } from '@mui/system';
-import imgSrc from "../images/back.jpg"
+import imgSrc from "../images/photo.png"
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -32,8 +33,9 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
+import { Alert } from "@mui/material";
 
-import ResponsiveAppBar from './TopBarDoc';
+import ResponsiveAppBar from './TopBar';
 import Ads from './Ads';
 
 import Card from '@mui/material/Card';
@@ -44,89 +46,62 @@ import CardMedia from '@mui/material/CardMedia';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import BottomBar from './BottomBar';
+import BottomBar from "./BottomBar";
 
 
-function UpcomingAppointments() {
-  const [data, setData] = useState();
+
+
+function PatientWallet() {
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [wallet, setWallet] = useState(null);
+  const [error, setError] = useState(null);
+  // Manually set the patient ID
+  const patientName = "roger";
 
   useEffect(() => {
+    const apiUrl = `http://localhost:8000/patient/getWallet/${patientName}`;
+
     axios
-      .get(
-        "http://localhost:8000/doctor/futureAppointmentPatients/6526653e47c45e179aa6886b"
-      )
+      .get(apiUrl)
       .then((response) => {
-        setData(response.data);
+        console.log("API Response:", response.data);
+        setWallet(response.data); // Assuming response.data.wallet is a number
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError(error.message || "An error occurred");
         setLoading(false);
       });
-  }, []);
+  }, [patientName]);
 
-  function handleView(id) {
-    // Navigate to another route and pass the ID as a prop
-    navigate(`/viewHealth/${id}`);
-  }
 
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
-      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
-
+      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
         <ResponsiveAppBar />
-        <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-
-          <div className="card-header">
-            <h2>Patients you have an upcoming appointment with</h2>
+        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>
+          <div className="card-header" style={{}}>
+            <h2>My wallet</h2>
           </div>
           <div className="card-body">
             {loading ? (
               <p>Loading...</p>
+            ) : error ? (
+
+              <p>
+                <Alert style={{ marginTop: '5%', fontSize: '18px', backgroundColor: ' RGB(205, 92, 92)' }} variant="filled" severity="error">
+                  Error: {error}
+                </Alert>
+              </p>
             ) : (
-              <table className="table table-striped">
-                <thead className="table-dark">
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.name}</td>
-                      <td>{item.email}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={() => handleView(item._id)}
-                        >
-                          view
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+              <div style={{ fontFamily: 'Roboto', fontSize: '24px', fontWeight: 'bolder' }}>${wallet}</div>)}
           </div>
         </div>
-
         <BottomBar />
-
       </AppBar >
-
     </div >
   );
 }
 
-export default UpcomingAppointments;
+export default PatientWallet;

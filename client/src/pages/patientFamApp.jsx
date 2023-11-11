@@ -1,24 +1,35 @@
-import ReactDOM from "react-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/SidebarPatient";
 
 function FamilyMembers(familyMembers) {
-  if(!familyMembers.familyMembers) return ;
+  if (!familyMembers.familyMembers) return;
   console.log(familyMembers);
   return (
-      <div style={{overflow: 'auto' ,height:440 }}>
-
-          {familyMembers.familyMembers.map(member => (
-              <div key={member.id} style={{border: '1px solid black' , borderRadius:5 }}>
-              <p><strong>Name:</strong> {member.name}</p>
-              <p><strong>National ID:</strong> {member.nationalID}</p>
-              <p><strong>Age:</strong> {member.age}</p>
-              <p><strong>Gender:</strong> {member.gender}</p>
-              <p><strong>Relation:</strong> {member.relation}</p>
-          </div>
-          ))}
-      </div>
+    <div style={{ overflow: "auto", height: 440 }}>
+      {familyMembers.familyMembers.map((member) => (
+        <div
+          key={member.id}
+          style={{ border: "1px solid black", borderRadius: 5 }}
+        >
+          <p>
+            <strong>Name:</strong> {member.name}
+          </p>
+          <p>
+            <strong>National ID:</strong> {member.nationalID}
+          </p>
+          <p>
+            <strong>Age:</strong> {member.age}
+          </p>
+          <p>
+            <strong>Gender:</strong> {member.gender}
+          </p>
+          <p>
+            <strong>Relation:</strong> {member.relation}
+          </p>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -26,13 +37,14 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-      axios.post('http://localhost:8000/patient/appointmentWithFilter',{})
-          .then(response => {
-            setAppointments(response.data);
-          })
-          .catch(error => {
-              console.error('There was an error!', error);
-          });
+    axios
+      .post("http://localhost:8000/patient/appointmentWithFilter", {})
+      .then((response) => {
+        setAppointments(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
   }, []);
 
   return (
@@ -103,30 +115,80 @@ const Buttons = () => (
   </div>
 );
 
-
-const Sidebar1 = ({ changeContent, showForm, setShowForm, showHello, setShowHello  }) => {
-  const [TakenID,setTakenID] = useState("");
+const Sidebar1 = ({
+  changeContent,
+  showForm,
+  setShowForm,
+  showHello,
+  setShowHello,
+}) => {
+  const [TakenID, setTakenID] = useState("");
   const [familyMembers, setFamilyMembers] = useState([]);
-  const fn=()=>{
-    if(TakenID!==""){
-      axios.get('http://localhost:8000/patient/Family/'+TakenID)
-          .then(response => {
-              setFamilyMembers(response.data);
-          })
-          .catch(error => {
-              console.error('There was an error!', error);
-          });
-      changeContent(<FamilyMembers familyMembers={familyMembers} />) }
-  }
+  const fn = () => {
+    if (TakenID !== "") {
+      axios
+        .get("http://localhost:8000/patient/Family/" + TakenID)
+        .then((response) => {
+          setFamilyMembers(response.data);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+      changeContent(<FamilyMembers familyMembers={familyMembers} />);
+    }
+  };
   return (
-  <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
-    <div id="welcomeTitle" style={{border: '1px solid black', height:80, fontSize:25 , borderRadius:10 , textAlign:'center'}}>Welcome Patient</div>
-    <button style={{width: '100%', height:40}} onClick={() => {fn(); setShowForm(true); setShowHello(false);}}>Family Members </button>
-    <button style={{width: '100%', height:40}} onClick={() => {changeContent(<Appointments />); setShowForm(false); setShowHello(true);}}>Appointments</button>
-    <label style={{ display: 'block' }}>patient id:<input type="text" value={TakenID} onChange={e=>setTakenID(e.target.value)} /></label>
-    <button onClick={fn}>view my family</button>
-  </div>
-)};
+    <div
+      style={{
+        width: "20%",
+        height: "calc(100vh - 100px)",
+        border: "1px solid black",
+      }}
+    >
+      <div
+        id="welcomeTitle"
+        style={{
+          border: "1px solid black",
+          height: 80,
+          fontSize: 25,
+          borderRadius: 10,
+          textAlign: "center",
+        }}
+      >
+        Welcome Patient
+      </div>
+      <button
+        style={{ width: "100%", height: 40 }}
+        onClick={() => {
+          fn();
+          setShowForm(true);
+          setShowHello(false);
+        }}
+      >
+        Family Members{" "}
+      </button>
+      <button
+        style={{ width: "100%", height: 40 }}
+        onClick={() => {
+          changeContent(<Appointments />);
+          setShowForm(false);
+          setShowHello(true);
+        }}
+      >
+        Appointments
+      </button>
+      <label style={{ display: "block" }}>
+        patient id:
+        <input
+          type="text"
+          value={TakenID}
+          onChange={(e) => setTakenID(e.target.value)}
+        />
+      </label>
+      <button onClick={fn}>view my family</button>
+    </div>
+  );
+};
 
 const MainContent = ({ content }) => (
   <div
@@ -162,7 +224,7 @@ const AppPatient = () => {
   const [content, setContent] = useState("Click a button to change content");
   const [showHello, setShowHello] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const[TakenID,setTakenID] = useState("");
+  const [TakenID, setTakenID] = useState("");
 
   //add a new family member
   const [name, setName] = useState("");
@@ -174,8 +236,12 @@ const AppPatient = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const familyMember = { name, nationalID, age, gender, relation };
-    axios.post('http://localhost:8000/patient/AddFamilyMember/'+TakenID, familyMember)
-      .then(res => console.log(res.data));
+    axios
+      .post(
+        "http://localhost:8000/patient/AddFamilyMember/" + TakenID,
+        familyMember
+      )
+      .then((res) => console.log(res.data));
   };
   //search appointments
   const [startDate, setStartDate] = useState("");
@@ -278,7 +344,14 @@ const AppPatient = () => {
                       onChange={(e) => setRelation(e.target.value)}
                     />
                   </label>
-                  <label style={{ display: 'block' }}>patient id:<input type="text" value={TakenID} onChange={e=>setTakenID(e.target.value)} /></label>
+                  <label style={{ display: "block" }}>
+                    patient id:
+                    <input
+                      type="text"
+                      value={TakenID}
+                      onChange={(e) => setTakenID(e.target.value)}
+                    />
+                  </label>
                   <button style={{ display: "block" }} type="submit">
                     Submit
                   </button>

@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const FamMemberSchema = new mongoose.Schema(
   {
-    patientID:{
+    patientID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref:"patient",
-      required:true 
+      ref: "patient",
+      required: true
     },
     name: {
       type: String,
@@ -13,12 +13,12 @@ const FamMemberSchema = new mongoose.Schema(
     },
     nationalID: {
       type: String,
-      unique:false
+      unique: false
       //required: true,
     },
     age: {
       type: Number,
-     
+
     },
     gender: {
       type: String,
@@ -30,23 +30,23 @@ const FamMemberSchema = new mongoose.Schema(
       enum: ["wife", "husband", "child"],
       required: true,
     },
-    healthPackageSub:{
-      type:String,
-      required:false
+    healthPackageSub: {
+      type: String,
+      required: false
     },
-    DateOfSubscribtion:{
-      type:Date,
-      required:false
+    DateOfSubscribtion: {
+      type: Date,
+      required: false
     },
-    subscriptionStatus:{
+    subscriptionStatus: {
       type: String,
       enum: ["cancelled with end date", "subscribed with renewal date", "unsubscribed"],
     },
-    linkageID:{
+    linkageID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref:"patient",
+      ref: "patient",
       default: null
-    },  
+    },
   },
 );
 

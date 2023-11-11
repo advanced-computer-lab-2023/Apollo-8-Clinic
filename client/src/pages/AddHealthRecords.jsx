@@ -1,6 +1,7 @@
-import { useRef } from "react";
-import Sidebar from "../components/SidebarDoctor";
+// eslint-disable-next-line no-unused-vars
+import React, { useState } from "react";
 import axios from "axios";
+import Sidebar from "../components/SidebarDoctor";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -49,26 +50,30 @@ import BottomBar from './BottomBar';
 
 
 
-function EditDoctor() {
-  const email = useRef(null);
-  const rate = useRef(null);
-  const hospital = useRef(null);
-
-  function onClick(e) {
-    // func(email.current.value,rate.current.value,hospital.current.value,ID.current.value)
+function AddHealthRecords() {
+  const [healthRecords, setHealthRecords] = useState({
+    description: "",
+    image_url: "",
+    date: "",
+  });
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/doctor/UpdateDoctor", {
-        email: email.current.value,
-        hourlyRate: rate.current.value,
-        hospital: hospital.current.value,
-        doctorID: "6526653e47c45e179aa6886b",
-      })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => console.log(err));
-  }
+
+    try {
+      const response = await axios.post("http://localhost:8000/doctor/addHealthRecords", {
+        doctorId: "6527c67e46e93ddb9af7b73f",
+        patientId: "654c00da2abe329de5810285"
+        ,
+        health_records: {
+          records: [healthRecords],
+        },
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error adding health records:", error);
+    }
+  };
 
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
@@ -76,55 +81,55 @@ function EditDoctor() {
 
         <ResponsiveAppBar />
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <h1 className="display-6">Update My Profile</h1>
-          <div
-            style={{
-              width: "50%",
-              margin: "auto",
-              marginTop: 100,
-              padding: "10px",
-              border: "5px solid ",
-              borderColor: "black",
-            }}
-          >
+          <h2>Add Health Records</h2>
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Email</label>
+              <label htmlFor="description">
+                <strong>Description</strong>
+              </label>
               <input
-                ref={email}
-                type="email"
-                className="form-control"
-                placeholder="example@gmail.com"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Hourly rate</label>
-              <input
-                ref={rate}
-                type="number"
-                className="form-control"
-                placeholder="Number Of Hours You Work"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Hospital</label>
-              <input
-                ref={hospital}
                 type="text"
-                className="form-control"
-                placeholder="Put A Correct Hospital Name"
+                placeholder="Enter description"
+                autoComplete="off"
+                name="description"
+                className="form-control rounded-0"
+                value={healthRecords.description}
+                onChange={(e) => setHealthRecords({ ...healthRecords, description: e.target.value })}
               />
             </div>
 
-            <button type="button" onClick={onClick} className="btn btn-primary">
-              Submit
-            </button>
+            <div className="mb-3">
+              <label htmlFor="image_url">
+                <strong>Image URL</strong>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter image URL"
+                autoComplete="off"
+                name="image_url"
+                className="form-control rounded-0"
+                value={healthRecords.image_url}
+                onChange={(e) => setHealthRecords({ ...healthRecords, image_url: e.target.value })}
+              />
+            </div>
 
-            <figcaption style={{ margin: 20 }} className="blockquote-footer">
-              note: if somthing you do not want update keep it empty
-            </figcaption>
-          </div>
+            <div className="mb-3">
+              <label htmlFor="date">
+                <strong>Date</strong>
+              </label>
+              <input
+                type="date"
+                name="date"
+                className="form-control rounded-0"
+                value={healthRecords.date}
+                onChange={(e) => setHealthRecords({ ...healthRecords, date: e.target.value })}
+              />
+            </div>
+
+            <button type="submit" className="btn btn-success w-100">
+              Add
+            </button>
+          </form>
         </div>
         <BottomBar />
 
@@ -134,4 +139,4 @@ function EditDoctor() {
   );
 }
 
-export default EditDoctor;
+export default AddHealthRecords;

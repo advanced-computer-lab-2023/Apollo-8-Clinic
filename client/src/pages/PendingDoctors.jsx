@@ -13,7 +13,10 @@ function PendingDoctors() {
     axios
       .get(apiUrl)
       .then((response) => {
-        setData(response.data);
+        const pendingDoctors = response.data.filter(
+          (doctor) => doctor.status === "Pending"
+        );
+        setData(pendingDoctors);
         setLoading(false);
       })
       .catch((error) => {
