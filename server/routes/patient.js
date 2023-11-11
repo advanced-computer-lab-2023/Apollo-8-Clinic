@@ -1,7 +1,7 @@
 import express from "express";
 import controllers from "../controllers/patient.js";
 import doctor from "../controllers/doctor.js";
-import "../controllers/healthPackageController.js";
+import healthPackageController from "../controllers/healthPackageController.js";
 const router = express.Router();
 
 // DELETE THESE COMMENTS AFTER YOU READ THEM :)
@@ -14,7 +14,7 @@ router.post("/filterPerscriptions", controllers.filterPres)
 router.get("/getPerscription/:id", controllers.getPres)
 
 //view all the health packages 
-import healthPackageController from "../controllers/healthPackageController.js";
+// import healthPackageController from "../controllers/healthPackageController.js";
 //when testing it on postman, make sure to send the request with an empty body {} 
 router.get('/healthPackage', healthPackageController.getAllHealthPackages);
 router.get('/healthPackage/:id', healthPackageController.getHealthPackageDetails);
@@ -50,7 +50,7 @@ router.post('/getsessDiscount/', controllers.getSessDiscount);
 
 
 //view all the health packages 
-import healthPackageController from "../controllers/healthPackageController.js";
+// import healthPackageController from "../controllers/healthPackageController.js";
 router.get('/healthPackage', healthPackageController.getAllHealthPackages);
 router.get('/health-records/:patientId', controllers.getHealthRecords);
 //view appointments

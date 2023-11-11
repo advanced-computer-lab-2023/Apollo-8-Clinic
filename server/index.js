@@ -11,11 +11,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 8000;
-const MONGO_URI = "mongodb+srv://myriambotros:1234@cluster0.34tyz4m.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.set('strictQuery', false);
 mongoose
-  .connect("mongodb://localhost:27017/employee")
+  .connect(MONGO_URI)
   .then(() => {
     console.log("MongoDB is now connected!");
     // Starting server
