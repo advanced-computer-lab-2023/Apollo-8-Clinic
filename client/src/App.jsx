@@ -34,14 +34,31 @@ import AppPatient from "./pages/patientFamApp";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-function App() {
+function App()  {
   const token=JSON.parse(sessionStorage.getItem('token'));
-  if(token){
-    console.log("hii")
-  return (
-    <div>
-      <Routes>
+  const [type, setData] = useState(null);
+
+  useEffect( () => {
+   axios.get(" http://localhost:8000/admin/getType", {
+      headers:{
+          Authorization:`Barer ${token}`
+        }
+    }).then((result) => {
+              setData(result.data.type)
+            }).catch((err) => console.log("sssss  "+err));
+          }, []);
+
+
+
+  //console.log(type)
+   if(type==="Patient"){
+     console.log("fady")    
+   return (
+     <div>
+       <Routes>
         <Route path="/registerDoctor" element={<DoctorSignup />} />
         <Route path="/registerPatient" element={<PatientSignup />} />
         <Route path="/prescriptionsList" element={<PrescriptionsList />} />
@@ -74,6 +91,34 @@ function App() {
     </div>
   );
   }
+  else if(type==="Doctor"){ 
+    return (
+    <Routes>
+         <Route path="/" element={<Home />} />
+         <Route path="/registerDoctor" element={<DoctorSignup />} />
+        <Route path="/registerPatient" element={<PatientSignup />} />
+        <Route path="/DoctorLogin"element={<Doctorlogin />}/>
+        <Route path="/AdminLogin"element={<Adminlogin />}/>
+        <Route path="/PatientLogin"element={<Patientlogin />}/>
+        <Route path="/ForgetPassword"element={<Forget />}/>
+         <Route path="/:any" element={<Home />} />
+      </Routes>
+    );
+  }
+  else if(type==="Admin"){
+    return (
+    <Routes>
+         <Route path="/" element={<Home />} />
+         <Route path="/registerDoctor" element={<DoctorSignup />} />
+        <Route path="/registerPatient" element={<PatientSignup />} />
+        <Route path="/DoctorLogin"element={<Doctorlogin />}/>
+        <Route path="/AdminLogin"element={<Adminlogin />}/>
+        <Route path="/PatientLogin"element={<Patientlogin />}/>
+        <Route path="/ForgetPassword"element={<Forget />}/>
+         <Route path="/:any" element={<Home />} />
+      </Routes>
+    );
+  }
   else{
     console.log("asasa")
     return (
@@ -86,11 +131,11 @@ function App() {
         <Route path="/AdminLogin"element={<Adminlogin />}/>
         <Route path="/PatientLogin"element={<Patientlogin />}/>
         <Route path="/ForgetPassword"element={<Forget />}/>
-         <Route path="/:any" element={<Home />} />
          </Routes>
         </div>
     )
   }
+
 }
 
 export default App;

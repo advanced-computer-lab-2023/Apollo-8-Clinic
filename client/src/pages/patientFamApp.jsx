@@ -5,10 +5,15 @@ import Sidebar from "../components/SidebarPatient";
 
 function FamilyMembers() {
   const [familyMembers, setFamilyMembers] = useState([]);
-
+  const token=JSON.parse(sessionStorage.getItem('token'));
   useEffect(() => {
+
     axios
-      .get("http://localhost:8000/patient/Family/" + "6523ba9cd72b2eb0e39cb137")
+      .get("http://localhost:8000/patient/Family",{
+        headers:{
+            Authorization:`Barer ${token}`
+          }
+      })
       .then((response) => {
         setFamilyMembers(response.data);
       })

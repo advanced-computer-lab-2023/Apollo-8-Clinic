@@ -58,6 +58,9 @@ const loginPatient = async (req, res) => {
     }
 }
 
+
+
+
 const loginAdmin = async (req, res) => {
     try{
     const { name,  password } = req.body;
