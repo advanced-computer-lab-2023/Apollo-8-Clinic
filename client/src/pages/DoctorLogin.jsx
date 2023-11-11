@@ -60,7 +60,7 @@ function Doctorlogin(){
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-      
+                <a href="/ForgetPassword">ForgetPassword</a>
                 <button
                   style={{ marginTop: "10px" }}
                   type="submit"
@@ -68,6 +68,8 @@ function Doctorlogin(){
                 >
                   Login
                 </button>
+              
+
               </form>
             </div>
           </div>

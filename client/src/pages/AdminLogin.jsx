@@ -58,12 +58,13 @@ function Adminlogin(){
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-      
+                <a href="/ForgetPassword">ForgetPassword</a>
                 <button
                   style={{ marginTop: "10px" }}
                   type="submit"
                   className="btn btn-success w-100 rounded-0"
                 >
+                  
                   Login
                 </button>
               </form>
