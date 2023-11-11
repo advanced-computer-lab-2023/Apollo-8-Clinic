@@ -52,14 +52,13 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/patient/appointmentWithFilter")
-      .then((response) => {
-        setAppointments(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
+      axios.post('http://localhost:8000/patient/appointmentWithFilter')
+          .then(response => {
+            setAppointments(response.data);
+          })
+          .catch(error => {
+              console.error('There was an error!', error);
+          });
   }, []);
 
   return (
