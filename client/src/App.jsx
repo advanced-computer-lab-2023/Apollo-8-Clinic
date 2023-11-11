@@ -31,6 +31,8 @@ import FollowUP from "./pages/FollowUP";
 import HomePage from "./pages/HomePage";
 import HomePageDoc from "./pages/HomePageDoc";
 import PatientHP_FM from "./pages/PatientFamilyHP";
+import PatientAppointments from "./pages/PatientAppointments";
+import AvailableAppointments from "./pages/AvailableAppointments";
 
 function App() {
   return (
@@ -70,6 +72,11 @@ function App() {
         <Route path="/HomePageDoc" element={<HomePageDoc />} />
 
         <Route path="/PatientHP_FM" element={<PatientHP_FM />} />
+        <Route path="/PatientAppointments" element={<PatientAppointments />} />
+        <Route
+          path="/AvailableAppointments"
+          element={<AvailableAppointments />}
+        />
       </Routes>
     </div>
   );

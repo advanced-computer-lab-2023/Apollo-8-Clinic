@@ -33,10 +33,10 @@ router.get('/patientdetails/:patientID', patient.patientDetails);
 router.get("/getWallet/:patientName", controllers.getWallet)
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
-router.get("/NotlinkedFamily/:patientID/:patientID", FamilyMemberController.getNotLinkedFamMembers);
+router.get("/NotlinkedFamily/:patientID", FamilyMemberController.getNotLinkedFamMembers);
 router.get("/LinkedFamily/:patientID", FamilyMemberController.getLinkedFamMembers);
 
-router.post("/AddFamilyMember/:patientID/:patientID", FamilyMemberController.addNewFamilyMember);
+router.post("/AddFamilyMember/:patientID", FamilyMemberController.addNewFamilyMember);
 
 // link or add a family member using mail or phone number
 router.post("/linkPatient/:patientID", patient.linkPatient);
@@ -72,5 +72,6 @@ router.post("/docFilter", doctor.filterBySpecOrAv);
 // then test it by sending post request to this route: http://localhost:8000/patient/something
 
 // lw mesh fahem el "/patient" gat mnen fa e7na 3amlenha fi el index.js file fi el line da (app.use("/patient", patientRoutes);)
+router.post("/myApp", appointmentContoller.patientApp);
 
 export default router;
