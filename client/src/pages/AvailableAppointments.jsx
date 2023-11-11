@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ResponsiveAppBar from './TopBar';
+import { AppBar } from '@mui/material';
+import BottomBar from './BottomBar';
 import {
   Typography,
   Card,
@@ -25,7 +28,7 @@ import {
   InputLabel,
 } from '@mui/material';
 const doctorId = "654d8a73bb465e1aaf27c508";
-const patientID= "651fd358364267c68b56ba41";
+const patientID = "651fd358364267c68b56ba41";
 const AvailableAppointments = () => {
   const [doctor, setDoctor] = useState(null);
   const [slots, setSlots] = useState([]);
@@ -47,14 +50,14 @@ const AvailableAppointments = () => {
     axios.get(`http://localhost:8000/doctor/${doctorId}`)
       .then((response) => {
         setDoctor(response.data);
-        setSlots(response.data.availableSlots); 
+        setSlots(response.data.availableSlots);
         console.log(response.data);
         console.log(doctor);
       })
       .catch((error) => {
         console.error('Failed to fetch doctor:', error);
       });
-      axios.get('http://localhost:8000/patient/NotlinkedFamily/'+patientID)
+    axios.get('http://localhost:8000/patient/NotlinkedFamily/' + patientID)
       .then((res) => {
         setOptions(res.data);
         console.log(res.data);
@@ -63,7 +66,7 @@ const AvailableAppointments = () => {
       .catch((error) => {
         console.error('Failed to family members', error);
       });
-  }, [doctorId,patientID]);
+  }, [doctorId, patientID]);
 
   // Organize slots by date
   const slotsByDate = {};
@@ -111,74 +114,79 @@ const AvailableAppointments = () => {
   };
 
   return (
-    <div>
-      <Typography variant="h4">{doctor?.name}</Typography>
-      <Card>
-        <CardContent>
-          <Typography variant="h6">{doctor?.speciality}</Typography>
-        </CardContent>
-      </Card>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>Available Slots</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.keys(slotsByDate).map((date) => (
-              <TableRow key={date}>
-                <TableCell style={{ fontSize: '18px' }}>{date}</TableCell>
-                <TableCell>
-                  <List>
-                    {slotsByDate[date].map((slot) => (
-                      <ListItem key={slot._id}>
-                        <ListItemText primary={formatTime(slot)} />
-                        <Button variant="contained" color="primary" onClick={() => reserveSlot(slot)}>
-                          Reserve
-                        </Button>
-                      </ListItem>
-                    ))}
-                  </List>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
+      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
+        <ResponsiveAppBar />
+        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>      <Typography variant="h4">{doctor?.name}</Typography>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">{doctor?.speciality}</Typography>
+            </CardContent>
+          </Card>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Available Slots</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.keys(slotsByDate).map((date) => (
+                  <TableRow key={date}>
+                    <TableCell style={{ fontSize: '18px' }}>{date}</TableCell>
+                    <TableCell>
+                      <List>
+                        {slotsByDate[date].map((slot) => (
+                          <ListItem key={slot._id}>
+                            <ListItemText primary={formatTime(slot)} />
+                            <Button variant="contained" color="primary" onClick={() => reserveSlot(slot)}>
+                              Reserve
+                            </Button>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-      {/* Reservation Dialog */}
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Reserve for..</DialogTitle>
-        <DialogContent>
-          <FormControl fullWidth>
-            <InputLabel id="option-label">Choose</InputLabel>
-            <Select
-              labelId="option-label"
-              id="option-select"
-              value={selectedOption}
-              onChange={handleOptionChange}
-            >
-              <MenuItem value="Option 1">Me</MenuItem>
-              {options.map((option) => (
-                <MenuItem key={option._id} value={option.name}>
-                  {option.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={confirmReservation} color="primary">
-            Confirm Reservation
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          {/* Reservation Dialog */}
+          <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+            <DialogTitle>Reserve for..</DialogTitle>
+            <DialogContent>
+              <FormControl fullWidth>
+                <InputLabel id="option-label">Choose</InputLabel>
+                <Select
+                  labelId="option-label"
+                  id="option-select"
+                  value={selectedOption}
+                  onChange={handleOptionChange}
+                >
+                  <MenuItem value="Option 1">Me</MenuItem>
+                  {options.map((option) => (
+                    <MenuItem key={option._id} value={option.name}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={confirmReservation} color="primary">
+                Confirm Reservation
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+        <BottomBar />
+      </AppBar >
+    </div >
   );
 };
 

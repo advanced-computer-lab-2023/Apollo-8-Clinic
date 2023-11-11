@@ -33,6 +33,7 @@ import HomePageDoc from "./pages/HomePageDoc";
 import PatientHP_FM from "./pages/PatientFamilyHP";
 import PatientAppointments from "./pages/PatientAppointments";
 import AvailableAppointments from "./pages/AvailableAppointments";
+import HomePageAdmin from "./pages/HomePageAdmin";
 
 function App() {
   return (
@@ -61,10 +62,10 @@ function App() {
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
         <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
         <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
-        <Route
+        {/* <Route
           path="/PatientHealthRecords/:patientId"
           element={<PatientHealthRecords />}
-        />
+        /> */}
         <Route path="/PatientWallet/:patientName" element={<PatientWallet />} />
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
@@ -77,7 +78,10 @@ function App() {
           path="/AvailableAppointments"
           element={<AvailableAppointments />}
         />
+        <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
+
       </Routes>
+
     </div>
   );
 }
