@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
+// eslint-disable-next-line no-unused-vars
+import React from "react";
+import { useState } from "react";
+//import { Link } from "react-router-dom";
 import axios from "axios";
+//import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import Sidebar from "../components/SidebarDoctor";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -47,34 +53,49 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import BottomBar from './BottomBar';
 
 
-function MyPatientsList() {
-  const [data, setData] = useState();
+
+function FollowUP() {
+
+  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const [name, setName] = useState();
-  const [search, setSearch] = useState("");
+  const doctorName = "helen";
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/doctor/viewPatients/6526653e47c45e179aa6886b")
+      .get(`http://localhost:8000/appointment/${doctorName}`)
       .then((response) => {
-        setData(response.data);
+        console.log("API Response:", response.data);
+        setAppointments(response.data);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching appointments:", error);
         setLoading(false);
       });
-  }, []);
-  function handleFilter() {
-    // Navigate to another route and pass the ID as a prop
-    navigate(`/viewUpcomingApp`);
-  }
+  }, [doctorName]);
 
-  function handleView(id) {
-    // Navigate to another route and pass the ID as a prop
-    navigate(`/viewHealth/${id}`);
-  }
+  const handleUpdateAppointment = async (appointment) => {
+    let newType = 'follow up';
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/doctor/updateAppointment/${appointment.doctorId.name}`,
+        { appointmentId: appointment._id, newType: newType }
+      );
+      if (
+        response.data
+      ) {
+        setAppointments((prevAppointments) =>
+          prevAppointments.map((prevAppointment) =>
+            prevAppointment._id === appointment._id
+              ? { ...prevAppointment, type: newType }
+              : prevAppointment
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
 
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
@@ -83,10 +104,7 @@ function MyPatientsList() {
         <ResponsiveAppBar />
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
           <div className="card-header">
-            <h2>Your patients' list</h2>
-            <button className="btn btn-success" onClick={() => handleFilter()}>
-              filter to future appointments
-            </button>
+            <h2>FollowUP</h2>
           </div>
           <div className="card-body">
             {loading ? (
@@ -95,47 +113,36 @@ function MyPatientsList() {
               <table className="table table-striped">
                 <thead className="table-dark">
                   <tr>
-                    <th>Name</th>
-                    <th>Email</th>
+                    <th>Patient Name</th>
+                    <th>Doctor Name</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Type</th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>
-                      <input
-                        type="text"
-                        placeholder="search with a name"
-                        autoComplete="off"
-                        name="email"
-                        className="form-control rounded-0"
-                        onChange={(e) => setSearch(e.target.value)}
-                      />
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data
-                    .filter((item) => {
-                      return search.toLowerCase() === ""
-                        ? item
-                        : item.name.toLowerCase().includes(search);
-                    })
-                    .map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.name}</td>
-                        <td>{item.email}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                  {appointments.length > 0 ? (
+                    appointments.map((appointment) => (
+                      <tr key={appointment._id}>
+                        <td>{appointment.patientId?.name}</td>
+                        <td>{appointment.doctorId?.name}</td>
+                        <td>{appointment.date}</td>
+                        <td>{appointment.status}</td>
+                        <td>{appointment.type}</td>
                         <td>
-                          <button
-                            className="btn btn-success"
-                            onClick={() => handleView(item._id)}
-                          >
-                            view
+                          <button className="btn btn-success"
+                            onClick={() => handleUpdateAppointment(appointment)}>
+                            Follow Up
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6">No appointments found</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             )}
@@ -143,10 +150,9 @@ function MyPatientsList() {
         </div>
         <BottomBar />
 
-      </AppBar >
+      </AppBar>
 
-    </div >
-  );
+    </div >);
 }
 
-export default MyPatientsList;
+export default FollowUP;

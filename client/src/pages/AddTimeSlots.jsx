@@ -1,6 +1,7 @@
-import { useRef } from "react";
-import Sidebar from "../components/SidebarDoctor";
+// eslint-disable-next-line no-unused-vars
+import React, { useState } from "react";
 import axios from "axios";
+import Sidebar from "../components/SidebarDoctor";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -49,26 +50,23 @@ import BottomBar from './BottomBar';
 
 
 
-function EditDoctor() {
-  const email = useRef(null);
-  const rate = useRef(null);
-  const hospital = useRef(null);
+function AddTimeSlots() {
+  const [availableSlots, setAvailableSlots] = useState("");
 
-  function onClick(e) {
-    // func(email.current.value,rate.current.value,hospital.current.value,ID.current.value)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/doctor/UpdateDoctor", {
-        email: email.current.value,
-        hourlyRate: rate.current.value,
-        hospital: hospital.current.value,
-        doctorID: "6526653e47c45e179aa6886b",
-      })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => console.log(err));
-  }
+
+    try {
+      const response = await axios.post("http://localhost:8000/doctor/add-available-time-slot", {
+        doctorId: "6527c67e46e93ddb9af7b73f",
+        availableSlots: [availableSlots],
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error adding available time slots:", error);
+    }
+  };
 
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
@@ -76,62 +74,33 @@ function EditDoctor() {
 
         <ResponsiveAppBar />
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <h1 className="display-6">Update My Profile</h1>
-          <div
-            style={{
-              width: "50%",
-              margin: "auto",
-              marginTop: 100,
-              padding: "10px",
-              border: "5px solid ",
-              borderColor: "black",
-            }}
-          >
+          <h2>Add Available Time Slots</h2>
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Email</label>
+              <label htmlFor="availableSlots">
+                <strong>Available Slots</strong>
+              </label>
               <input
-                ref={email}
-                type="email"
-                className="form-control"
-                placeholder="example@gmail.com"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Hourly rate</label>
-              <input
-                ref={rate}
-                type="number"
-                className="form-control"
-                placeholder="Number Of Hours You Work"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Hospital</label>
-              <input
-                ref={hospital}
                 type="text"
-                className="form-control"
-                placeholder="Put A Correct Hospital Name"
+                placeholder="Enter available slots"
+                autoComplete="off"
+                name="availableSlots"
+                className="form-control rounded-0"
+                value={availableSlots}
+                onChange={(e) => setAvailableSlots(e.target.value)}
               />
             </div>
 
-            <button type="button" onClick={onClick} className="btn btn-primary">
-              Submit
+            <button type="submit" className="btn btn-success w-100">
+              Add
             </button>
-
-            <figcaption style={{ margin: 20 }} className="blockquote-footer">
-              note: if somthing you do not want update keep it empty
-            </figcaption>
-          </div>
+          </form>
         </div>
         <BottomBar />
-
       </AppBar >
 
     </div >
   );
 }
 
-export default EditDoctor;
+export default AddTimeSlots;

@@ -8,9 +8,8 @@ const appointmentSchema = new mongoose.Schema({
   },
   patientId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Patient",
-    required: true,
-  },
+    ref: "Patient"
+    },
   date: {
     type: Date,
     required: true,
@@ -18,6 +17,12 @@ const appointmentSchema = new mongoose.Schema({
   status: {
     type: String,
     enum:["upcoming", "completed", "cancelled", "rescheduled"],
+    default:"upcoming",
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ["follow up", "regular"],
     required: true,
   },
 });
