@@ -29,6 +29,9 @@ import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
 import PatientWallet from "./pages/PatientWallet";
 import DoctorWallet from "./pages/DoctorWallet";
 import FollowUP from "./pages/FollowUP";
+import HomePage from "./pages/HomePage";
+import HomePageDoc from "./pages/HomePageDoc";
+
 function App() {
   return (
     <div>
@@ -60,6 +63,10 @@ function App() {
         <Route path="/PatientWallet/:patientName" element={<PatientWallet />} />
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
+        <Route path="/HomePage" element={<HomePage />} />
+        <Route path="/HomePageDoc" element={<HomePageDoc />} />
+
+
       </Routes>
     </div>
   );
