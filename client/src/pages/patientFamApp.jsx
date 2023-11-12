@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/SidebarPatient";
+import { useNavigate } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -115,13 +116,31 @@ const Appointments = () => {
           <p>
             <strong>status:</strong> {member.status}
           </p>
+          <p>
+            <button className="btn btn-success m-3 btn-sm" onClick={handleWalletPayment}>
+              Pay using wallet
+            </button>
+            <form action="http://localhost:8000/AppointmentCheckout" method="POST" >
+            <button className="btn btn-success m-3 btn-sm">Pay using credit card</button>
+            </form>
+          </p>
         </div>
       ))}
     </div>
   );
 };
+function handleWalletPayment() {
+  window.location.href = '/appointmentWalletPayment' ;
 
+};
+const handleCreditCardPayment = () => {
+  //window.location.href = '/appointmentCreditCardPayment' ;
+  axios.post("http://localhost:8000/AppointmentCheckout").then((response) => {}).catch((error) => {
+    console.error("Error fetching data:", error);});
+
+};
 const AppointmentFilterPage = ({ appointments }) => {
+  const navigate = useNavigate();
   console.log(appointments);
   return (
     <div style={{ overflow: "auto", height: 440 }}>
@@ -142,6 +161,15 @@ const AppointmentFilterPage = ({ appointments }) => {
           <p>
             <strong>status:</strong> {member.status}
           </p>
+          <div>
+            <button className="btn btn-success m-3 btn-sm" 
+            onClick={handleWalletPayment}>
+              Pay using wallet
+            </button>
+            <form action="http://localhost:8000/AppointmentCheckout" method="POST" >
+            <button className="btn btn-success m-3 btn-sm" >Pay using credit card</button>
+            </form>
+          </div>
         </div>
       ))}
     </div>

@@ -47,6 +47,7 @@ router.post("/linkPatient/:patientID", patient.linkPatient);
 
 //apply sessDiscount on dr's session price
 router.post('/getsessDiscount/', controllers.getSessDiscount);
+router.put('/updateWallet', controllers.updateWallet);
 
 
 //view all the health packages 
