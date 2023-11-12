@@ -49,9 +49,7 @@ import BottomBar from './BottomBar';
 
 
 const Header = () => (
-  <div style={{ width: '100%', border: '1px solid black', textAlign: 'center' }}>
-    <h1>MY CLINIC</h1>
-  </div>
+  <div></div>
 );
 
 const HealthPackage = () => {
@@ -82,7 +80,7 @@ const HealthPackage = () => {
   return (
     <div style={{ overflow: 'auto', height: 440 }}>
       {healthPackages.map(package1 => (
-        <div key={package1._id} style={{ border: '1px solid black', borderRadius: 5 }}>
+        <div key={package1._id} style={{ border: '1px solid black', borderRadius: '20px' }}>
           <p><strong>ID:</strong> {package1._id}</p>
           <p><strong>Name:</strong> {package1.name}</p>
           <p><strong>Price:</strong> {package1.price}</p>
@@ -145,24 +143,41 @@ const ADD = () => {
 
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <label>Name:<input type="text" value={name} onChange={e => setName(e.target.value)} /></label>
-        <label>Price:<input type="text" value={price} onChange={e => setPrice(e.target.value)} /></label>
-        <label>Dr's session Discount:<input type="text" value={sessDiscount} onChange={e => setSessDiscount(e.target.value)} /></label>
-        <label>Medicin Discount:<input type="text" value={medDiscount} onChange={e => setMedDiscount(e.target.value)} /></label>
-        <label>Family Subscription Discount:<input type="text" value={subDiscount} onChange={e => setSubDiscount(e.target.value)} /></label>
-        <button style={{ "margin": 10 }} onClick={fn}>ADD NEW</button>
+        <h2 style={{ backgroundColor: " rgb(65, 105, 225)", color: 'white', marginBottom: '20px', height: '90px', borderRadius: '20px', textAlign: "center" }}>    Add Health Package</h2>
+
+        <label>Name:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Name" type="text" value={name} onChange={e => setName(e.target.value)} /></label>
+        <label>Price:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Price" type="text" value={price} onChange={e => setPrice(e.target.value)} /></label>
+        <label>Dr's session Discount:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Session Discount" type="text" value={sessDiscount} onChange={e => setSessDiscount(e.target.value)} /></label>
+        <label>Medicin Discount:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Discount" type="text" value={medDiscount} onChange={e => setMedDiscount(e.target.value)} /></label>
+        <label>Family Subscription Discount:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Discount" type="text" value={subDiscount} onChange={e => setSubDiscount(e.target.value)} /></label>
+        <button style={{ "margin": 10 }} className="btn btn-success" onClick={fn}>ADD NEW</button>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10%' }}>
+
+        <h2 style={{ backgroundColor: " rgb(65, 105, 225)", color: 'white', marginBottom: '20px', height: '90px', borderRadius: '20px', textAlign: "center" }}>    Update Health Package</h2>
+
         <label >please copy and paste the package ID you want to change</label>
-        <label>Package ID:<input type="text" value={id1} onChange={e => setID1(e.target.value)} /></label>
-        <label>Name:<input type="text" value={name1} onChange={e => setName1(e.target.value)} /></label>
-        <label>Price:<input type="text" value={price1} onChange={e => setPrice1(e.target.value)} /></label>
-        <label>Dr's session Discount:<input type="text" value={sessDiscount1} onChange={e => setSessDiscount1(e.target.value)} /></label>
-        <label>Medicin Discount:<input type="text" value={medDiscount1} onChange={e => setMedDiscount1(e.target.value)} /></label>
-        <label>Family Subscription Discount:<input type="text" value={subDiscount1} onChange={e => setSubDiscount1(e.target.value)} /></label>
-        <button style={{ "margin-up": 10 }} onClick={updatePackage}>UPDATE</button>
+        <br />
+        <label>Package ID:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Package ID" type="text" value={id1} onChange={e => setID1(e.target.value)} /></label>
+        <label>Name:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Name" type="text" value={name1} onChange={e => setName1(e.target.value)} /></label>
+        <label>Price:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Price" type="text" value={price1} onChange={e => setPrice1(e.target.value)} /></label>
+        <label>Dr's session Discount:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Discount" type="text" value={sessDiscount1} onChange={e => setSessDiscount1(e.target.value)} /></label>
+        <label>Medicin Discount:<input type="text" style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Discount" value={medDiscount1} onChange={e => setMedDiscount1(e.target.value)} /></label>
+        <label>Family Subscription Discount:<input style={{ border: "1px solid black", borderRadius: '10px', height: '40px', marginBottom: '10px' }}
+          placeholder="  Discount" type="text" value={subDiscount1} onChange={e => setSubDiscount1(e.target.value)} /></label>
+        <button style={{ "margin": 10, marginBottom: '5%', width: '93%' }} className="btn btn-success" onClick={updatePackage}>UPDATE</button>
       </div>
     </div>
   );
@@ -171,27 +186,28 @@ const ADD = () => {
 
 
 const Sidebar1 = ({ changeContent, setRightSideBar }) => (
-  <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
-    <div id="welcomeTitle" style={{ border: '1px solid black', height: 80, fontSize: 25, borderRadius: 10, textAlign: 'center' }}>Welcome Admin</div>
-    <button style={{ width: '100%', height: 40 }} onClick={() => { changeContent(<HealthPackage />); setRightSideBar(<ADD />) }}>Health Packages</button>
+  <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black', borderRadius: '20px', overflowY: "auto" }}>
+    <div id="welcomeTitle" style={{ border: '1px solid black', height: '60px', fontSize: 25, borderRadius: '20px', textAlign: 'center', backgroundColor: " rgb(65, 105, 225)", color: 'white', fontWeight: 'bold' }}>Welcome Admin</div>
+    <button style={{ width: '100%', height: 40, marginTop: '30px' }} className="btn btn-success"
+      onClick={() => { changeContent(<HealthPackage />); setRightSideBar(<ADD />) }}>Health Packages</button>
   </div>
 );
 
 const MainContent = ({ content }) => (
-  <div style={{ width: '60%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
+  <div style={{ width: '60%', height: 'calc(100vh - 100px)', border: '1px solid black', borderRadius: '20px' }}>
     {content}
   </div>
 );
 
 const Footer = () => (
-  <div style={{ width: '100%', border: '1px solid black', textAlign: 'center' }}>
+  <div style={{ width: '100%', border: '1px solid black', textAlign: 'center', borderRadius: '20px' }}>
     <p>Contact us on (+100)123456788 or by email clinic@gmail.com</p>
   </div>
 );
 
 
 const RightSidebar = ({ content }) => (
-  <div style={{ width: '20%', height: 'calc(100vh - 100px)', border: '1px solid black' }}>
+  <div style={{ width: '23%', height: 'calc(100vh - 80px)', border: '1px solid black', borderRadius: '20px', overflowY: "auto" }}>
     {content}
   </div>
 );
@@ -200,7 +216,7 @@ const RightSidebar = ({ content }) => (
 
 const App1 = () => {
   const [content, setContent] = useState('Click a button to change content');
-  const [RightSideBar, setRightSideBar] = useState('rightside bar');
+  const [RightSideBar, setRightSideBar] = useState('');
   return (
     <>
 
@@ -208,6 +224,11 @@ const App1 = () => {
         <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
           <ResponsiveAppBar />
+          <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+            <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+              Welcome Admin</h1>
+
+          </div>
           <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
             <Header />
 

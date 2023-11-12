@@ -393,7 +393,7 @@ const AppPatient = () => {
                     onSubmit={handleSubmit}
                   >
                     <h2 style={{ backgroundColor: " rgb(65, 105, 225)", color: 'white', marginBottom: '20px', height: '90px', borderRadius: '20px', textAlign: "center" }}>    Family Memebers</h2>
-                    <label style={{ display: "block" }}>
+                    <label style={{ marginBottom: '10px' }}>
                       Name:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
@@ -403,7 +403,7 @@ const AppPatient = () => {
                         onChange={(e) => setName(e.target.value)}
                       />
                     </label>
-                    <label style={{ display: "block" }}>
+                    <label style={{ marginBottom: '10px' }}>
                       National ID:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px', width: '12' }}
@@ -414,7 +414,7 @@ const AppPatient = () => {
                         onChange={(e) => setNationalID(e.target.value)}
                       />
                     </label>
-                    <label style={{ display: "block" }}>
+                    <label style={{ marginBottom: '10px' }}>
                       Age:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
@@ -424,7 +424,7 @@ const AppPatient = () => {
                         onChange={(e) => setAge(e.target.value)}
                       />
                     </label>
-                    <label style={{ display: "block" }}>
+                    <label style={{ marginBottom: '10px' }}>
                       Gender:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
@@ -434,7 +434,7 @@ const AppPatient = () => {
                         onChange={(e) => setGender(e.target.value)}
                       />
                     </label>
-                    <label style={{ display: "block" }}>
+                    <label style={{ marginBottom: '10px' }}>
                       Relation:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
@@ -444,7 +444,7 @@ const AppPatient = () => {
                         onChange={(e) => setRelation(e.target.value)}
                       />
                     </label>
-                    <label style={{ display: "block" }}>
+                    <label style={{ marginBottom: '10px' }}>
                       patient id:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
@@ -463,7 +463,7 @@ const AppPatient = () => {
                 {showHello && (
                   <form>
                     <h2 style={{ backgroundColor: " rgb(65, 105, 225)", color: 'white', marginBottom: '20px', height: '50px', borderRadius: '20px', textAlign: "center" }}>    Appointments</h2>
-                    <label>
+                    <label style={{ marginBottom: '10px' }}>
                       Start Date:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
@@ -473,7 +473,7 @@ const AppPatient = () => {
                         onChange={(e) => setStartDate(e.target.value)}
                       />
                     </label>
-                    <label>
+                    <label style={{ marginBottom: '10px' }}>
                       End Date:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
@@ -484,7 +484,7 @@ const AppPatient = () => {
                         onChange={(e) => setEndDate(e.target.value)}
                       />
                     </label>
-                    <label>
+                    <label style={{ marginBottom: '10px' }}>
                       Status:
                       <input
                         style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
