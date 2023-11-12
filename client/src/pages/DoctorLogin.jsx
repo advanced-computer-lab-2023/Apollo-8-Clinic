@@ -22,8 +22,6 @@ function Doctorlogin(){
               console.log(result.data.token);
               sessionStorage.setItem('token', JSON.stringify(result.data.token));
             
-              const data = sessionStorage.getItem('token');
-              console.log("asassaas "+data)
               window.location.pathname = '/editDoctor';
             })
             .catch((err) => console.log(err));

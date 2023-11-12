@@ -2,8 +2,10 @@ import UserModel from '../models/user.js';
 import jwt from "jsonwebtoken";
 
 const getType = async (req, res, next) => {
+  
   const authHeader=req.headers['authorization'];
   const token =authHeader && (authHeader.split(' ')[1])
+  console.log(token);
   // check json web token exists & is verified
   if (token) {
      jwt.verify(token, process.env.SECRET, async (err, decodedToken) => {

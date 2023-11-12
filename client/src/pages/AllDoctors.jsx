@@ -25,11 +25,7 @@ function AllDoctors() {
       });
     const apiUrl = "http://localhost:8000/patient/allDoctors";
     axios
-      .get(apiUrl,{
-        headers:{
-          Authorization:`Barer ${token}`
-        }
-      })
+      .get(apiUrl)
       .then((response) => {
         setData(response.data);
         setLoading(false);

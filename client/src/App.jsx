@@ -37,33 +37,22 @@ import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(sessionStorage.getItem('token'))}`;
+
 function App()  {
   const token=JSON.parse(sessionStorage.getItem('token'));
   const [type, setData] = useState(null);
   const [dataFetched, setDataFetched] = useState(false);
 
-  /*useEffect( () => {
-   axios.get(" http://localhost:8000/admin/getType", {
-      headers:{
-          Authorization:`Barer ${token}`
-        }
-    }).then((result) => {
-              setData(result.data.type)
-            }).catch((err) => console.log("sssss  "+err));
-          }, []);*/
           useEffect(() => {
             const fetchData = async () => {
               try {
-                const result = await axios.get("http://localhost:8000/admin/getType", {
-                  headers: {
-                    Authorization: `Bearer ${token}`
-                  }
-                });
+                const result = await axios.get("http://localhost:8000/admin/getType");
         
                 setData(result.data.type);
                 setDataFetched(true);
               } catch (err) {
-                console.log("Error: " + err);
+                console.log(err);
                 setDataFetched(true);
               }
             };
@@ -178,6 +167,7 @@ function App()  {
         <Route path="/changePassPat"element={<ChangePass />}/>
         <Route path="/changePassDoc"element={<ChangePassDoc />}/>
         <Route path="/changePassAdm"element={<ChangePassAdm />}/>
+        
       </Routes>
     );
   }
