@@ -137,9 +137,13 @@ const PatientAppointments = () => {
     <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
       <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
         <ResponsiveAppBar />
-        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>      <Typography variant="h4" component="div" style={{ marginBottom: '20px' }}>
-          Your Appointments
-        </Typography>
+        <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+          <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+            Your Appointments
+          </h1>
+
+        </div>
+        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>
 
           <Box>
             <Button variant="contained" onClick={getApps} margin="normal" padding="normal" style={{ marginRight: '10px' }}>

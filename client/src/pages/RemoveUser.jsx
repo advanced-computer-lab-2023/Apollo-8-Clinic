@@ -90,10 +90,13 @@ function RemoveUser() {
       <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
         <ResponsiveAppBar />
+        <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+          <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+            Remove User</h1>
+
+        </div>
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <div className="card-header">
-            <h2>Remove User</h2>
-          </div>
+
           <div className="card-body">
             {loading ? (
               <p>Loading...</p>
