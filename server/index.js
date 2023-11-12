@@ -19,7 +19,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.set('strictQuery', false);
 mongoose
-  .connect("mongodb://localhost:27017")
+  .connect(MONGO_URI)
   .then(() => {
     console.log("MongoDB is now connected!");
     // Starting server
@@ -39,7 +39,7 @@ app.use("/appointment", appointmentRoutes);
 
 
 
-const YOUR_DOMAIN = 'http://localhost:5173/';
+const YOUR_DOMAIN = 'http://localhost:5173/patientFamilyAppointments/';
 
 const storeItems = new Map([
   [1, {price: 200 , name:'Dr. hamada session'}], [2,  {price: 200 , name:'Dr. hamada session'}]
@@ -57,6 +57,25 @@ app.post('/AppointmentCheckout', async (req, res) => {
     ],
     success_url: `${YOUR_DOMAIN}?success=true`,
     cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+  });
+
+  res.redirect(303, session.url);
+});
+
+const PACKAGE_DOMAIN = 'http://localhost:5173/PatientHP_FM/';
+
+app.post('/PackageCheckout', async (req, res) => {
+  const session = await stripeInstance.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'payment',
+    line_items: [
+      {
+        price: 'price_1OAhcrFG7BNY2kzIxPQqkTZi', // Replace with the actual Price ID from your Stripe Dashboard
+        quantity: 1
+      }, 
+    ],
+    success_url: `${PACKAGE_DOMAIN}?success=true`,
+    cancel_url: `${PACKAGE_DOMAIN}?canceled=true`,
   });
 
   res.redirect(303, session.url);

@@ -498,7 +498,7 @@ export default {
   getPrescriptions,
   filterPres,
   getPres, 
-  updateWallet
+  updateWallet,
   getSessDiscount,
   linkPatient,
   patientDetails,

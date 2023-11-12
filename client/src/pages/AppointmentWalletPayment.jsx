@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/SidebarPatient";
+import ResponsiveAppBar from './TopBar';
+import BottomBar from "./BottomBar";
+import { AppBar } from '@mui/material';
+import {Button} from '@mui/material';
 
 function AppointmentWalletPayment() {
     const [wallet, setWallet] = useState();
@@ -69,9 +73,10 @@ function AppointmentWalletPayment() {
 
    
     return (
-        <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
-            <Sidebar />
-            <div className="card m-3 col-12" style={{ width: "80%" }}>
+        <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
+        <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
+          <ResponsiveAppBar />
+            <div className="card m-3 col-12" style={{ width: "80%" , left: '8%'  }}>
                 <h2>Payment Using Wallet</h2>
                 <br></br>
 
@@ -100,12 +105,13 @@ function AppointmentWalletPayment() {
                         <strong>Total: </strong> {total} L.E.
                     </label>
                 </div>
-                <button type="submit" className="btn btn-success w-100" onClick={handlePayment} disabled={isButtonDisabled}>
+                <Button variant="contained" color="primary" type="submit"  onClick={handlePayment} disabled={isButtonDisabled}>
                     Pay Now
-                </button>
-
+                </Button>
             </div>
-        </div>
+        <BottomBar/>
+      </AppBar>
+    </div >
     );
 }
 export default AppointmentWalletPayment;

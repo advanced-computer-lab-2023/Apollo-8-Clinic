@@ -65,7 +65,7 @@ const PatientHP_FM = () => {
   const params = new URLSearchParams(window.location.search);
   let patientID = params.get('patientId');
   /////////////////////REMOVE THAT
-  patientID = "6529c70a6be1d55abc0d0114";
+  patientID = "652f955bdea721b31ef04335";
   const [mainshow, setmainshow] = useState(true);
   const [familyshow, setfamilyshow] = useState(false);
   const [addFamilyMemForm, setaddFamilyMemForm] = useState(false);
@@ -264,6 +264,25 @@ const PatientHP_FM = () => {
       res.status(400).send(error);
     });
   }
+  const handleWalletPayment = async () => {
+    try {
+      // Make a request to your backend to update the wallet
+      const response = await axios.put(`http://localhost:8000/patient/updateWallet`, {
+        patientId: patientID,
+        paymentAmount: -package1.price,
+      });
+      // Update the wallet state with the updated value from the response
+      console.log('walletUpdated');
+      setWallet(response.data.updatedWallet);
+    } catch (error) {
+      console.error('Error updating wallet:', error);
+    }
+  }
+  const handleCreditCardPayment = () => {
+    axios.post("http://localhost:8000/PackageCheckout").then((response) => {}).catch((error) => {
+      console.error("Error fetching data:", error);});
+  
+  };
 
 
   return (
@@ -425,7 +444,7 @@ const PatientHP_FM = () => {
                     <p><strong>family subscribtion discount:</strong> {package1.subDiscount + "%"}</p>
                     <Button1 href="#id" style={{ "margin-right": 15, "margin-bottom": 5 }} onClick={() => subscribeforMe(package1._id, package1.name)}>subscribe for myself</Button1>
                     <Button1 style={{ "margin-bottom": 5 }} onClick={() => handleFMSubsc(package1._id)}>subscribe for a family member</Button1>
-                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary">Pay by wallet</Button1> <Button1 variant="outline-primary">Pay by credit card</Button1>  </div>) : null}
+                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary" onClick={() => handleWalletPayment} >Pay by wallet</Button1> <Button1 variant="outline-primary" onClick={() => handleCreditCardPayment}>Pay by credit card</Button1>  </div>) : null}
                     {selectedPackageId === package1._id && dropdownFam ? (
                       <div>
                         <h3 style={{ "margin-up": 10 }}>Choose a member</h3>
