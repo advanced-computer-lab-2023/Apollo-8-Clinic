@@ -3,6 +3,8 @@ import appointments from "../models/appointment.js";
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';
+
+
 const createAppointment = async (req, res) => {
   const {
     doctorId,
@@ -26,6 +28,7 @@ const createAppointment = async (req, res) => {
   }
 
 };
+
 
 
 //test it using http://localhost:8000/doctor/appointmentWithFilter?startDate=2002-1-1&endDate=2003-1-1

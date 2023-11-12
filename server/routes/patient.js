@@ -24,6 +24,7 @@ router.post("/AddFamilyMember/:patientID", FamilyMemberController.addNewFamilyMe
 
 //apply sessDiscount on dr's session price
 router.post('/getsessDiscount/', controllers.getSessDiscount);
+router.put('/updateWallet', controllers.updateWallet);
 
 
 //view all the health packages 

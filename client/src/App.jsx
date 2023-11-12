@@ -24,6 +24,8 @@ import AppPatient from "./pages/patientFamApp";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
+import AppointmentWalletPayment from "./pages/AppointmentWalletPayment";
+import AppointmentCardPayment from "./pages/AppointmentCardPayment";
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
+        <Route path="/appointmentWalletPayment" element={<AppointmentWalletPayment/>}/>
+        <Route path="/appointmentCreditCardPayment" element={<AppointmentCardPayment/>}/>
       </Routes>
     </div>
   );
