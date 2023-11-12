@@ -77,6 +77,9 @@ const PatientHP_FM = () => {
   const [dropdownFam, setdropdownFam] = useState(false);
   const [MyPatient, setMyPatient] = useState({});
   const [discount,setDiscount] = useState(0);
+  const [whom,setWhom]=useState(0);
+  const [Fammember,setFammember]= useState("");
+  const[wallet,setWallet]=useState("");
 
   const fn1 = () => {
     setmainshow(false);
@@ -209,20 +212,14 @@ const PatientHP_FM = () => {
 
 
 
-  const subscribeforMe = (packageid, packageName) => {
+  const subscribeforMe = (packageid) => {
     setSelectedPackageId(packageid);
-    axios.post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, { "HPname": packageName }).then(
-      (res) => {
-        alert(res.data);
-        setSelectedPackageId("");
-      }
-    ).catch(error => {
-      res.status(400).send(error);
-    });
+    setWhom(1);
   }
 
   const handleFMSubsc = (packageid) => {
     setSelectedPackageId(packageid);
+    setWhom(2);
     setdropdownFam(true);
     axios.get(`http://localhost:8000/patient/NotlinkedFamily/${patientID}`).then(
       (res) => {
@@ -235,17 +232,7 @@ const PatientHP_FM = () => {
     });
   }
 
-  const subscribeFormember = (memberID, packageName) => {
-    axios.post(`http://localhost:8000/patient/subscribeForFam/${memberID}`, { "HPname": packageName }).then(
-      (res) => {
-        alert(res.data);
-      }
-    ).catch(error => {
-      res.status(400).send(error);
-    });
-    setdropdownFam(false);
-    setSelectedPackageId("");
-  }
+  
 
 
   const cancelsubscFam = (memberid) => {
@@ -272,12 +259,17 @@ const PatientHP_FM = () => {
       res.status(400).send(error);
     });
   }
-  const handleWalletPayment = async () => {
+
+
+
+
+  const handleWalletPayment = async (price,packageName) => {
+    //payment
     try {
       // Make a request to your backend to update the wallet
       const response = await axios.put(`http://localhost:8000/patient/updateWallet`, {
         patientId: patientID,
-        paymentAmount: -package1.price,
+        paymentAmount: -price,
       });
       // Update the wallet state with the updated value from the response
       console.log('walletUpdated');
@@ -285,10 +277,66 @@ const PatientHP_FM = () => {
     } catch (error) {
       console.error('Error updating wallet:', error);
     }
+    //subscription
+    if(whom===1){
+      axios.post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, { "HPname": packageName }).then(
+        (res) => {
+          alert(res.data);
+          setSelectedPackageId("");
+          setWhom(0);
+        }
+      ).catch(error => {
+        res.status(400).send(error);
+      });
+    }
+
+if(whom===2 && Fammember!=""){
+  axios.post(`http://localhost:8000/patient/subscribeForFam/${Fammember}`, { "HPname": packageName }).then(
+    (res) => {
+      alert(res.data);
+    }
+  ).catch(error => {
+    res.status(400).send(error);
+  });
+  setdropdownFam(false);
+  setSelectedPackageId("");
+  setFammember("");
+  setWhom(0);
+}
+
   }
-  const handleCreditCardPayment = () => {
+
+
+  const handleCreditCardPayment = (packageName) => {
     axios.post("http://localhost:8000/PackageCheckout").then((response) => {}).catch((error) => {
       console.error("Error fetching data:", error);});
+    
+     //subscription
+     if(whom===1){
+      axios.post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, { "HPname": packageName }).then(
+        (res) => {
+          alert(res.data);
+          setSelectedPackageId("");
+          setWhom(0);
+        }
+      ).catch(error => {
+        res.status(400).send(error);
+      });
+    }
+
+if(whom===2 && Fammember!=""){
+  axios.post(`http://localhost:8000/patient/subscribeForFam/${Fammember}`, { "HPname": packageName }).then(
+    (res) => {
+      alert(res.data);
+    }
+  ).catch(error => {
+    res.status(400).send(error);
+  });
+  setdropdownFam(false);
+  setSelectedPackageId("");
+  setFammember("");
+  setWhom(0);
+}
   
   };
 
@@ -474,15 +522,16 @@ const unsubscribeForMe = ()=>{
                     <p><strong>doctor's session price discount:</strong> {package1.sessDiscount + "%"}</p>
                     <p><strong>medicin discount:</strong> {package1.medDiscount + "%"}</p>
                     <p><strong>family subscribtion discount:</strong> {package1.subDiscount + "%"}</p>
-                    <Button1 href="#id" style={{ "margin-right": 15, "margin-bottom": 5 }} onClick={ ()=>{subscribeforMe(package1._id, package1.name)}}>subscribe for myself</Button1>
+                    <Button1 href="#id" style={{ "margin-right": 15, "margin-bottom": 5 }} onClick={ ()=>{subscribeforMe(package1._id)}}>subscribe for myself</Button1>
                     <Button1 style={{ "margin-bottom": 5 }} onClick={()=>{ handleFMSubsc(package1._id)}}>subscribe for a family member</Button1>
-                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary" onClick={() => {handleWalletPayment()}} >Pay by wallet</Button1> <Button1 variant="outline-primary" onClick={() => {handleCreditCardPayment()}}>Pay by credit card</Button1>  </div>) : null}
+                    <Badge  bg="secondary">{discount} % Offer</Badge>
+                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary" onClick={() => {handleWalletPayment(package1.price,package1.name)}} >Pay by wallet</Button1> <Button1 variant="outline-primary" onClick={() => {handleCreditCardPayment(package1.price,package1.name)}}>Pay by credit card</Button1>  </div>) : null}
                     {selectedPackageId === package1._id && dropdownFam ? (
                       <div>
                         <h3 style={{ "margin-up": 10 }}>Choose a member</h3>
                         <ListGroup defaultActiveKey="#link1">
                           {nonlinkedfamily.map(member => (
-                            <ListGroup.Item variant="primary" action key={member.id} onClick={ ()=>{subscribeFormember(member._id, package1.name)}}>
+                            <ListGroup.Item variant="primary" action key={member.id} onClick={ ()=>{setFammember(member._id);}}>
 
                               <p><strong>Name:</strong> {member.name}</p>
                               <p><strong>Relation:</strong> {member.relation}</p>
