@@ -9,7 +9,7 @@ import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Table from 'react-bootstrap/Table';
-
+import Badge from 'react-bootstrap/Badge';
 const PatientHP_FM=()=>{
     //assuming that patient id is in window.location named patientID
     const params = new URLSearchParams(window.location.search);
@@ -27,7 +27,7 @@ const [healthPackages, setHealthPackages] = useState([]);
 const [selectedPackageId, setSelectedPackageId] = useState("");
 const [dropdownFam,setdropdownFam] = useState(false);
 const [MyPatient,setMyPatient] = useState({});
-
+const [discount,setDiscount] = useState(0);
     const fn1=()=>{
         setmainshow(false);
         setfamilyshow(true);
@@ -125,6 +125,7 @@ const fn2 =()=>{
     setmainshow(false);
     setfamilyshow(false);
 
+
     axios.get(`http://localhost:8000/patient/NotlinkedFamily/${patientID}`).then(
         (res) => { 
             setnonlinkedfamily(res.data);  
@@ -134,17 +135,23 @@ const fn2 =()=>{
             res.status(400).send(error);
             console.error("Error fetching data:", error);
          });
+    
+    Promise.all([
+    axios.get('http://localhost:8000/patient/patientdetails/'+patientID),
+    axios.get('http://localhost:8000/patient/healthPackage')])
+    .then(([response1, response2]) => {
+        setMyPatient(response1.data);
+        setHealthPackages(response2.data);
+        const subscribedHP = response1.data.healthPackageSub ;
+        console.log(response1.data);
+        console.log(subscribedHP);
+        if(subscribedHP!=="")
+        {
+          //get family discount
+           setDiscount(response2.data.filter(HP => HP.name === subscribedHP)[0].subDiscount );
+           // console.log(response2.data.filter(HP => HP.name === subscribedHP)[0].subDiscount);
 
-    axios.get('http://localhost:8000/patient/healthPackage')
-    .then(response => {
-      setHealthPackages(response.data);
-    })
-    .catch(error => {
-      console.error('There was an error!', error);
-    });
-    axios.get('http://localhost:8000/patient/patientdetails/'+patientID)
-    .then(response => {
-        setMyPatient(response.data);
+          }
     })
     .catch(error => {
       console.error('There was an error!', error);
@@ -152,6 +159,18 @@ const fn2 =()=>{
 
 }
 
+// const inaTesht8l = ()=>{
+//   const subscribedHP = MyPatient.healthPackageSub ;
+//   console.log(MyPatient);
+//   console.log(subscribedHP);
+//    if(subscribedHP!=="")
+//    {
+//     //get family discount
+//        setDiscount(healthPackages.filter(HP => HP.name === MyPatient.healthPackageSub).subDiscount );
+//         //console.log("AAAAAAAAHHHHHH"+healthPackages.filter(HP => HP.name === "Gold").subDiscount);
+
+//     }
+// }
 
 const subscribeforMe=(packageid,packageName)=>{
     setSelectedPackageId(packageid);
@@ -218,6 +237,25 @@ const cancelMYsubsc = ()=>{
          });
 }
 
+const unsubscribeFam = (memberid)=>{
+  axios.post('http://localhost:8000/patient/unsubscribeForMember/'+memberid).then(
+    (res) => { 
+        alert(res.data) ;     
+    }
+     ).catch(error => {
+        res.status(400).send(error);
+     });
+}
+
+const unsubscribeForMe = ()=>{
+  axios.post('http://localhost:8000/patient/unsubscribeForMe/'+patientID).then(
+    (res) => { 
+        alert(res.data) ;     
+    }
+     ).catch(error => {
+        res.status(400).send(error);
+     });
+}
 
 return(
 <div>
@@ -373,8 +411,10 @@ return(
           <p><strong>doctor's session price discount:</strong> {package1.sessDiscount + "%"}</p>
           <p><strong>medicin discount:</strong> {package1.medDiscount+ "%"}</p>
           <p><strong>family subscribtion discount:</strong> {package1.subDiscount+ "%"}</p>
+          
           <Button href="#id" style={{"margin-right":15,"margin-bottom":5}}onClick={() =>subscribeforMe(package1._id,package1.name)}>subscribe for myself</Button>
           <Button style={{"margin-bottom":5}} onClick={() => handleFMSubsc(package1._id)}>subscribe for a family member</Button>
+          <Badge bg="secondary">{discount} % Offer</Badge>
           {selectedPackageId === package1._id ?( <div> <Button variant="outline-primary">Pay by wallet</Button> <Button variant="outline-primary">Pay by credit card</Button>  </div>):null}
           {selectedPackageId === package1._id && dropdownFam?( 
             <div> 
@@ -412,7 +452,8 @@ return(
         </tr>
 
        <tr>
-       <td style={{justifyContent:"right"}}colSpan={2}><Button  variant="outline-danger" onClick={cancelMYsubsc}>cancel Subscription</Button></td>
+       <td style={{justifyContent:"right"}}colSpan={2}><Button  variant="outline-danger" onClick={cancelMYsubsc}>Cancel Subscription</Button>{'  '}
+       <Button  variant="outline-danger" onClick={unsubscribeForMe}>Unsubscribe</Button></td>
        </tr>
         </tbody>
     </Table>
@@ -430,7 +471,7 @@ return(
         </tr>
       </thead>
       <tbody>
-           {nonlinkedfamily.filter(member => member.healthPackageSub !== '').map(member => (          
+           {nonlinkedfamily.map(member => (          
            <tr>
             <td>{member.name}</td>
             <td>{member.relation}</td>
@@ -438,6 +479,8 @@ return(
             <td>{member.DateOfSubscribtion}</td>
             <td>{member.subscriptionStatus}</td>
             <td> <Button type="button" variant="outline-danger" onClick={() =>cancelsubscFam(member._id)}>cancel</Button>{' '}</td>
+            <td> <Button type="button" variant="outline-danger" onClick={() =>unsubscribeFam(member._id)}>unsubscribe</Button>{' '}</td>
+
            </tr> ))}
            </tbody>
     </Table>
@@ -448,5 +491,5 @@ return(
 </div>
 );
 }
-
+//.filter(member => member.healthPackageSub !== '') in line 433
 export default PatientHP_FM;

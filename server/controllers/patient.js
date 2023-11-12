@@ -412,6 +412,11 @@ const cancelSubscription = async (req, res) => {
   try {
     const patientID = req.params.id;
     const patient1 = await PatientModel.findById(patientID);
+    if(patient1.healthPackageSub==="")
+    {
+      res.status(200).send("you are not subscribed to any Health Package");
+      return ;
+    }
     patient1.subscriptionStatus = "cancelled with end date";
     patient1.save();
     res.status(200).send("Done");
@@ -419,6 +424,32 @@ const cancelSubscription = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 }
+
+
+const unsubscribe = async (req, res) => {
+  try {
+
+    const patientID = req.params.id;
+    const patient1 = await PatientModel.findById(patientID);
+    console.log("MY CONSOLE FOR UNSUBSCRIBE FOR ME"+patient1);
+    if(patient1.healthPackageSub==="")
+    {
+      res.status(200).send("you are not subscribed to any Health Package");
+      return ;
+    }
+    if (patient1.subscriptionStatus === "unsubscribed") { res.status(200).send("already unsubscribed"); return; }
+    patient1.subscriptionStatus = "unsubscribed";
+    patient1.healthPackageSub = "";
+    patient1.DateOfSubscribtion="";
+    patient1.save();
+    res.status(200).send("Done");
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+
+
 const getHealthRecords = async (req, res) => {
   try {
     const patientId = req.params.patientId;
@@ -467,6 +498,7 @@ export default {
   linkPatient,
   patientDetails,
   cancelSubscription,
+  unsubscribe,
   getHealthRecords,
   getWallet
 }
