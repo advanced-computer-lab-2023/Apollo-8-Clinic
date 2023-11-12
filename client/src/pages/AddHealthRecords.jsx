@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+// eslint-disable-next-line no-unused-vars
+import React, { useState } from "react";
 import axios from "axios";
+import Sidebar from "../components/SidebarDoctor";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -32,9 +34,8 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
-import { Alert } from "@mui/material";
 
-import ResponsiveAppBar from './TopBarAdmin';
+import ResponsiveAppBar from './TopBarDoc';
 import Ads from './Ads';
 
 import Card from '@mui/material/Card';
@@ -47,66 +48,95 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import BottomBar from './BottomBar';
 
-function AddAdmin() {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
 
-  const handleSubmit = (e) => {
+
+function AddHealthRecords() {
+  const [healthRecords, setHealthRecords] = useState({
+    description: "",
+    image_url: "",
+    date: "",
+  });
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/admin/addAdministrator", {
-        username,
-        password,
-        type: "Admin",
-      })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => console.log(err));
+
+    try {
+      const response = await axios.post("http://localhost:8000/doctor/addHealthRecords", {
+        doctorId: "6527c67e46e93ddb9af7b73f",
+        patientId: "654c00da2abe329de5810285"
+        ,
+        health_records: {
+          records: [healthRecords],
+        },
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error adding health records:", error);
+    }
   };
+
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
       <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
         <ResponsiveAppBar />
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <h2>add Administrator</h2>
-          <form action="" onSubmit={handleSubmit}>
+          <h2>Add Health Records</h2>
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="email">
-                <strong>Username</strong>
+              <label htmlFor="description">
+                <strong>Description</strong>
               </label>
               <input
                 type="text"
-                placeholder="Enter Username"
+                placeholder="Enter description"
                 autoComplete="off"
-                name="username"
+                name="description"
                 className="form-control rounded-0"
-                onChange={(e) => setUsername(e.target.value)}
+                value={healthRecords.description}
+                onChange={(e) => setHealthRecords({ ...healthRecords, description: e.target.value })}
               />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="email">
-                <strong>Password</strong>
+              <label htmlFor="image_url">
+                <strong>Image URL</strong>
               </label>
               <input
-                type="password"
-                placeholder="Enter Password"
-                name="password"
+                type="text"
+                placeholder="Enter image URL"
+                autoComplete="off"
+                name="image_url"
                 className="form-control rounded-0"
-                onChange={(e) => setPassword(e.target.value)}
+                value={healthRecords.image_url}
+                onChange={(e) => setHealthRecords({ ...healthRecords, image_url: e.target.value })}
               />
             </div>
+
+            <div className="mb-3">
+              <label htmlFor="date">
+                <strong>Date</strong>
+              </label>
+              <input
+                type="date"
+                name="date"
+                className="form-control rounded-0"
+                value={healthRecords.date}
+                onChange={(e) => setHealthRecords({ ...healthRecords, date: e.target.value })}
+              />
+            </div>
+
             <button type="submit" className="btn btn-success w-100">
               Add
             </button>
           </form>
         </div>
         <BottomBar />
+
       </AppBar >
+
     </div >
   );
 }
 
-export default AddAdmin;
+export default AddHealthRecords;

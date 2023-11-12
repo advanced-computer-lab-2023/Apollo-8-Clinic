@@ -20,6 +20,20 @@ function Sidebar() {
         <li style={{ margin: "20px" }}>
           <a href="/viewUpcomingApp">Upcomming Appointments</a>
         </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/DoctorWallet/:doctorName">My wallet</a>
+        </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/AddHealthRecords">Add Health Records</a>
+        </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/AddTimeSlots">Add Time Slots</a>
+        </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/FollowUP/:doctorName">To Follow Up</a>
+        </li>
+        
+
       </ul>
     </div>
   );

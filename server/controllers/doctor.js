@@ -19,6 +19,7 @@ const createDoctor = async (req, res) => {
     hospital,
     eduBackground,
     status,
+    wallet,
     //sss
     speciality,
     availableSlots,
@@ -52,6 +53,7 @@ const createDoctor = async (req, res) => {
           hospital,
           eduBackground,
           status,
+          wallet,
           //sss
           speciality,
           availableSlots,
@@ -285,6 +287,128 @@ const getHealthRecord = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 }
+const addAvailableTimeSlots = async (req, res) => {
+  try {
+    const doctorId = req.body.doctorId;
+    console.log('Doctor ID:', doctorId);
+    const doctor = await DoctorModel.findOne({ _id: doctorId });
+    console.log('Doctor:', doctor);
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    if (doctor.status !== 'Accepted') {
+      return res.status(403).json({ error: 'Doctor is not accepted by the admin' });
+    }
+    console.log('Doctor status:', doctor.status);
+    console.log('Request Body:', req.body);
+    const { availableSlots } = req.body;
+    console.log('Date:', availableSlots);
+    if (!doctor.availableSlots) {
+      doctor.availableSlots = [];
+  }
+
+  
+
+  // Ensure availableSlots is an array
+  const slotsArray = Array.isArray(availableSlots) ? availableSlots : [availableSlots];
+  doctor.availableSlots.push(...slotsArray);
+
+  await doctor.save();
+    res.status(200).json(doctor);
+    console.log('Doctor after saving:', doctor);
+  } catch (error) {
+    console.error("Error in addAvailableTimeSlots:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+const addHealthRecords = async (req, res) => {
+  try {
+    const doctorId = req.body.doctorId;
+    const patientId = req.body.patientId;
+    console.log('Doctor ID:', doctorId);
+    console.log('Patient ID:', patientId);
+    const doctor = await DoctorModel.findOne({ _id: doctorId });
+    if (!doctor || doctor.status !== 'Accepted') {
+      return res.status(403).json({ error: 'Doctor not found or not accepted by the admin' });
+    }
+    const patient = await PatientModel.findOne({ _id: patientId });
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+    const { records } = req.body.health_records;
+    if (!patient.health_records) {
+      patient.health_records = { records: [] };
+    }
+    if (Array.isArray(records)) {
+      patient.health_records.records.push(...records);
+    } else {
+      patient.health_records.records.push(records);
+    }
+    await patient.save();
+    console.log('Patient after saving health records:', patient);
+    res.status(200).json(patient);
+  } catch (error) {
+    console.error('Error in addHealthRecords:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+const getWallet = async (req, res) => {
+  try {
+    const doctorName = req.params.doctorName; 
+    console.log(doctorName);
+    const doctor = await DoctorModel.findOne({name: doctorName});
+    console.log(doctor);
+    
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    const doctorWallet = doctor.wallet;
+    res.status(200).json(doctorWallet);
+  } catch (error) {
+    console.error('Error in getwallet:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+const updateAppointment = async (req, res) => {
+  try {
+    const { appointmentId, newType } = req.body;
+    const doctorName = "helen";
+    const doctor = await DoctorModel.findOne({ name: doctorName });
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    if (!appointmentId || !newType) {
+      return res.status(400).json({ error: "Invalid input" });
+    }
+
+    // Check if the doctor is allowed to change appointment type
+    const appointment = await AppointmentModel.findOne({
+      _id: appointmentId
+    });
+    
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+    // Allow changing from 'regular' to 'follow up'
+    if (appointment.type === "regular" && newType === "follow up") {
+      appointment.type = newType;
+      await appointment.save();
+      return res.status(200).json(appointment);
+    } else {
+      return res.status(400).json({ error: "Invalid type change request" });
+    }
+  } catch (error) {
+    console.error("Error in changeAppointmentType:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 export default {
   createDoctor,
@@ -302,5 +426,10 @@ export default {
   updateDoctor,
   getHealthRecord,
   getAcceptedDoctors,
-
+  addAvailableTimeSlots,
+  addHealthRecords,
+  getWallet,
+  
+  updateAppointment,
+  
 }
