@@ -49,7 +49,8 @@ const addNewFamilyMember = async (req, res) => {
     //const newFamMember = new FamilyMemberModel({name,nationalID,age,gender,relation});
     await newFamMember.save();
 
-    res.status(200).json(newFamMember);
+    res.status(200).send("Added Successfully");
+    console.log(newFamMember);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

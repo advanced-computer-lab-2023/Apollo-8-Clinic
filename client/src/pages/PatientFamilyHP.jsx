@@ -132,7 +132,7 @@ const PatientHP_FM = () => {
     try {
       const familyMember = { name, nationalID, age, gender, relation };
       axios.post('http://localhost:8000/patient/AddFamilyMember/' + patientID, familyMember)
-        .then(res => console.log(res.data));
+        .then(res => alert(res.data));
     } catch (error) {
       console.error(error);
     };
@@ -155,12 +155,12 @@ const PatientHP_FM = () => {
     const numberFormat = /^\d+$/;
     const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!numberFormat.test(name) && !mailFormat.test(name))
-      alert('invalid input format');
+      {alert('invalid input format'); return ;}
     try {
       //console.log({"input":name,"relation":relation})
       const body = { "input": name, "relation": relation };
       axios.post('http://localhost:8000/patient/linkPatient/' + patientID, body)
-        .then(res => console.log(res.data));
+        .then(res => alert(res.data));
     } catch (error) {
       console.error(error);
     };
@@ -458,7 +458,7 @@ const unsubscribeForMe = ()=>{
                       <option value="wife">wife</option>
                       <option value="husband" >husband</option>
                     </Form.Select>
-                    <Button1 type="submit" onClick={()=>{handleSubmit()}}>
+                    <Button1 type="submit" onClick={handleSubmit}>
                       Submit
                     </Button1>
                   </Form>
@@ -501,7 +501,7 @@ const unsubscribeForMe = ()=>{
                         <option value="wife">wife</option>
                         <option value="husband" >husband</option>
                     </Form.Select> 
-                    <Button  type="submit" onClick={()=>{linkPatient()}}>
+                    <Button  type="submit" onClick={linkPatient}>
                     Submit
                   </Button>
                 </Form>

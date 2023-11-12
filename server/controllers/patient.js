@@ -381,16 +381,16 @@ const linkPatient = async (req, res) => {
       patient1 = await PatientModel.findOne({ "email": mailORnumber });
     }
     if (patient1 === null)
-      res.status(200).send("incorrect email or number , patient not found")
-    console.log(patient1);
+      {res.status(200).send("incorrect email or number , patient not found") ; return ;}
 
+    console.log(patient1);
     const patientID = req.params.patientID;
     const rel = req.body.relation;
     //const patient1 = await PatientModel.findOne({"email": mail });
     const age = (new Date()).getFullYear() - patient1.birthDate.getFullYear() + 1;
     const newFamMember = new FamilyMemberModel({ "patientID": patientID, "name": patient1.name, "age": age, "gender": patient1.gender, "relation": rel, "linkageID": patient1._id, "healthPackageSub": "", "DateOfSubscribtion": null, "subscriptionStatus": "unsubscribed" });
     newFamMember.save();
-    res.status(200).json(newFamMember);
+    res.status(200).send("Added Successfully");
     console.log(newFamMember);
 
   } catch (error) {
