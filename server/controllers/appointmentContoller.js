@@ -3,6 +3,8 @@ import DoctorModel from '../models/doctor.js';
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';
+
+
 const createAppointment = async (req, res) => {
   const {
     doctorId,
@@ -18,8 +20,14 @@ const createAppointment = async (req, res) => {
       patientId,
       date,
       status,
-      type 
+      type
     });
+    const updatedDoctor = await DoctorModel.findOneAndUpdate(
+      { "_id": doctorId },
+      { $pull: { availableSlots: date } },
+      { new: true } // To return the updated document
+    );
+    console.log(updatedDoctor.availableSlots);
     await appointment.save();
     console.log(appointment);
     res.status(200).json(appointment);
@@ -28,6 +36,7 @@ const createAppointment = async (req, res) => {
   }
 
 };
+
 
 
 //test it using http://localhost:8000/doctor/appointmentWithFilter?startDate=2002-1-1&endDate=2003-1-1
@@ -74,11 +83,11 @@ const getAppointmentWithFilter = async (req, res) => {
 };
 const getAppointments = async (req, res) => {
   try {
-    const doctorName = req.params.doctorName; 
-    console.log("doctorname"+doctorName);
+    const doctorName = req.params.doctorName;
+    console.log("doctorname" + doctorName);
     const doctor = await DoctorModel.findOne({ name: doctorName });
-    console.log("doctor"+doctor);
-    
+    console.log("doctor" + doctor);
+
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
     }
@@ -89,10 +98,18 @@ const getAppointments = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
+const patientApp = async (req, res) => {  // to get all appointments for a selected dr.
+  try {
+    const { patientId } = req.body;
+    const appointment = await appointments.find({ patientId: patientId });
+    res.status(200).json(appointment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 export default {
   createAppointment,
   getAppointmentWithFilter,
-  getAppointments
+  getAppointments,
+  patientApp
 }

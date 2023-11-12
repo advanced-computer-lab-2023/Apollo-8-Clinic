@@ -85,6 +85,7 @@ const getPatients = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 };
+
 const getMyPatients = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
   const doctorId = req.params.id;
@@ -300,6 +301,25 @@ const filterPres = async (req, res) => {
   }
 };
 
+// const PayAppointmentByWallet = async (req, res) => {
+//   try {
+//     const patientID = req.body.id;
+//     const discount = await getSessDiscount(patientID);
+//     const sessionPrice = 200;
+//     const discountedAmount = (discount / 100) * sessionPrice;
+//     const patient = await PatientModel.findById(patientID);
+//     if (!patient) {
+//       throw new Error('Patient not found');
+//     }
+//     patient.wallet -= discountedAmount;
+//     await patient.save();
+
+//     res.status(200).send({ "discount": discount, "deductedAmount": discountedAmount });
+//   } catch (e) {
+//     res.status(400).send(e);
+//   }
+// }
+
 const getPres = async (req, res) => {
   try {
     const presID = req.params.id
@@ -325,6 +345,21 @@ const getSessDiscount = async (req, res) => {
     res.status(200).send({ "discount": discount });
   } catch (e) {
     res.status(400).send(e);
+  }
+}
+
+
+const updateWallet = async (req, res) => {
+  try {
+    const { patientId , paymentAmount } = req.body;
+    const patient = await PatientModel.findById(patientId);
+    console.log(patient);
+    patient.wallet += paymentAmount;
+    const updatedPatient = await patient.save();
+    res.status(200).json({ updatedWallet: updatedPatient.wallet });
+  } catch (error) {
+    console.error('Error updating wallet:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
@@ -493,7 +528,8 @@ export default {
   upcomingApp,
   getPrescriptions,
   filterPres,
-  getPres,
+  getPres, 
+  updateWallet,
   getSessDiscount,
   linkPatient,
   patientDetails,
@@ -501,4 +537,5 @@ export default {
   unsubscribe,
   getHealthRecords,
   getWallet
+
 }

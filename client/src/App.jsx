@@ -25,12 +25,17 @@ import App1 from "./pages/adminHealthP";
 import PrescriptionsDetails from "./pages/PrescriptionDetails";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
+import AppointmentWalletPayment from "./pages/AppointmentWalletPayment";
 import PatientWallet from "./pages/PatientWallet";
 import DoctorWallet from "./pages/DoctorWallet";
 import FollowUP from "./pages/FollowUP";
 import HomePage from "./pages/HomePage";
 import HomePageDoc from "./pages/HomePageDoc";
 import PatientHP_FM from "./pages/PatientFamilyHP";
+import PatientAppointments from "./pages/PatientAppointments";
+import AvailableAppointments from "./pages/AvailableAppointments";
+import HomePageAdmin from "./pages/HomePageAdmin";
+
 
 function App() {
   return (
@@ -57,12 +62,13 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
+        <Route path="/appointmentWalletPayment" element={<AppointmentWalletPayment/>}/>
         <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
         <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
-        <Route
+        {/* <Route
           path="/PatientHealthRecords/:patientId"
           element={<PatientHealthRecords />}
-        />
+        /> */}
         <Route path="/PatientWallet/:patientName" element={<PatientWallet />} />
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
@@ -70,7 +76,15 @@ function App() {
         <Route path="/HomePageDoc" element={<HomePageDoc />} />
 
         <Route path="/PatientHP_FM" element={<PatientHP_FM />} />
+        <Route path="/PatientAppointments" element={<PatientAppointments />} />
+        <Route
+          path="/AvailableAppointments"
+          element={<AvailableAppointments />}
+        />
+        <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
+
       </Routes>
+
     </div>
   );
 }

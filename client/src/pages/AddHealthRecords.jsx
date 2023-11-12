@@ -80,8 +80,13 @@ function AddHealthRecords() {
       <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
         <ResponsiveAppBar />
+        <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+          <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+            Add Health Records</h1>
+
+        </div>
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <h2>Add Health Records</h2>
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="description">

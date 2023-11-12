@@ -43,7 +43,7 @@ const doctorSchema = new mongoose.Schema({
   },
   availableSlots: {
     type: [Date],
-    default: [], 
+    default: [],
   },
   wallet: {
     type: Number,
