@@ -3,6 +3,7 @@ import controllers from "../controllers/doctor.js";
 import patient from "../controllers/patient.js";
 import uploadMiddleware from "../middlewares/uploadmiddleware.js";
 
+import Auth from "../Authentication/login.js"
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.post('/add-available-time-slot', controllers.addAvailableTimeSlots);
 router.post('/addHealthRecords', controllers.addHealthRecords);
 router.get("/getWallet/:doctorName", controllers.getWallet);
 router.put("/updateAppointment/:doctorName", controllers.updateAppointment)
+router.post("/doctorLogin", Auth.loginDoctor)
 //view appointments 
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);

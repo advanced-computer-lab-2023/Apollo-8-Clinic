@@ -50,6 +50,7 @@ function AllDoctors() {
     const patientApiUrl =
       "http://localhost:8000/patient/getPatientHealthPackage/" +
       "6523ba9cd72b2eb0e39cb137";
+      const token=JSON.parse(sessionStorage.getItem('token'));
     axios
       .get(patientApiUrl)
       .then((response) => {
