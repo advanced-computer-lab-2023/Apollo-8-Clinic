@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 import 'dotenv/config';
 import doctorRoutes from "./routes/doctor.js";
 import patientRoutes from "./routes/patient.js";
@@ -25,6 +27,15 @@ mongoose
   })
   .catch((err) => console.log(err));
 
+// images
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Define the directory where your images are located
+const imagesDirectory = path.join(__dirname, './uploads');
+
+// Set up a route to serve images
+app.use('/images', express.static(imagesDirectory));
 
 // routes
 app.use("/doctor", doctorRoutes);

@@ -25,7 +25,16 @@ const createDoctor = async (req, res) => {
     availableSlots,
     //sss
   } = req.body;
-
+  let files = {}
+  req.files.forEach(file => {
+    if (file.fieldname == "idFile") {
+      files = { ...files, idFile: file.filename }
+    } else if (file.fieldname == "degreeFile") {
+      files = { ...files, degreeFile: file.filename }
+    } else if (file.fieldname == "licenseFile") {
+      files = { ...files, licenseFile: file.filename }
+    }
+  });
   try {
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -58,6 +67,7 @@ const createDoctor = async (req, res) => {
           speciality,
           availableSlots,
           //sss
+          ...files
         });
         await doctor.save();
         console.log(doctor);
@@ -306,15 +316,15 @@ const addAvailableTimeSlots = async (req, res) => {
     console.log('Date:', availableSlots);
     if (!doctor.availableSlots) {
       doctor.availableSlots = [];
-  }
+    }
 
-  
 
-  // Ensure availableSlots is an array
-  const slotsArray = Array.isArray(availableSlots) ? availableSlots : [availableSlots];
-  doctor.availableSlots.push(...slotsArray);
 
-  await doctor.save();
+    // Ensure availableSlots is an array
+    const slotsArray = Array.isArray(availableSlots) ? availableSlots : [availableSlots];
+    doctor.availableSlots.push(...slotsArray);
+
+    await doctor.save();
     res.status(200).json(doctor);
     console.log('Doctor after saving:', doctor);
   } catch (error) {
@@ -355,11 +365,11 @@ const addHealthRecords = async (req, res) => {
 };
 const getWallet = async (req, res) => {
   try {
-    const doctorName = req.params.doctorName; 
+    const doctorName = req.params.doctorName;
     console.log(doctorName);
-    const doctor = await DoctorModel.findOne({name: doctorName});
+    const doctor = await DoctorModel.findOne({ name: doctorName });
     console.log(doctor);
-    
+
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
     }
@@ -390,7 +400,7 @@ const updateAppointment = async (req, res) => {
     const appointment = await AppointmentModel.findOne({
       _id: appointmentId
     });
-    
+
     if (!appointment) {
       return res.status(404).json({ error: "Appointment not found" });
     }
@@ -429,7 +439,7 @@ export default {
   addAvailableTimeSlots,
   addHealthRecords,
   getWallet,
-  
+
   updateAppointment,
-  
+
 }

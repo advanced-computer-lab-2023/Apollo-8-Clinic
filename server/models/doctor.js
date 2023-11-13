@@ -50,6 +50,18 @@ const doctorSchema = new mongoose.Schema({
     default: 0,
   },
   //sss
+  idFile: {
+    type: String,
+    required: true,
+  },
+  degreeFile: {
+    type: String,
+    required: true,
+  },
+  licenseFile: {
+    type: String,
+    required: true,
+  },
 });
 
 const DoctorModel = mongoose.model("Doctor", doctorSchema);
