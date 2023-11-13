@@ -1,5 +1,6 @@
 import appointments from "../models/appointment.js";
 import DoctorModel from '../models/doctor.js';
+import PatientModel from "../models/patient.js";
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';
@@ -68,7 +69,10 @@ const getAppointmentWithFilter = async (req, res) => {
   try {
     const { startDate, endDate, status, doctorId, patientId } = req.body; // Destructure status and dates from query parameters
     let query = {};
-
+    const doctor =  await DoctorModel.findOne({user:res.locals.userId});
+    const patient =  await PatientModel.findOne({user:res.locals.userId});
+    doctorId=doctor._id;
+    patientId=patient._id;
     if (patientId) {
       query.patientId = patientId;
     }
