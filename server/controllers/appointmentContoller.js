@@ -3,6 +3,7 @@ import DoctorModel from '../models/doctor.js';
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';
+import PatientModel from "../models/patient.js";
 
 
 const createAppointment = async (req, res) => {
@@ -42,19 +43,19 @@ const getPatientAppointments = async (req, res) => {
   try {
     const patientID = req.params.id;
     const appointments1 = await AppointmentModel.find({ "patientId": patientID });
-//     let result = {};
+    //     let result = {};
 
-// for(let appointment1 of appointments1) {
-//   let doctor = await DoctorModel.findById(appointment1.doctorId);
-//   let newObj = {
-//     status: appointment1.status,
-//     date: appointment1.date,
-//     doctorName: doctor.name
-//   };
-//   result[appointment1._id] = newObj;
-// }
-//      res.status(200).send(result);
-res.status(200).json(appointments1);
+    // for(let appointment1 of appointments1) {
+    //   let doctor = await DoctorModel.findById(appointment1.doctorId);
+    //   let newObj = {
+    //     status: appointment1.status,
+    //     date: appointment1.date,
+    //     doctorName: doctor.name
+    //   };
+    //   result[appointment1._id] = newObj;
+    // }
+    //      res.status(200).send(result);
+    res.status(200).json(appointments1);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -66,15 +67,17 @@ res.status(200).json(appointments1);
 
 const getAppointmentWithFilter = async (req, res) => {
   try {
-    const { startDate, endDate, status, doctorId, patientId } = req.body; // Destructure status and dates from query parameters
+    const { startDate, endDate, status } = req.body; // Destructure status and dates from query parameters
     let query = {};
 
-    if (patientId) {
-      query.patientId = patientId;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if (patient) {
+      query.patientId = patient._id;
     }
 
-    if (doctorId) {
-      query.doctorId = doctorId;
+    if (doctor) {
+      query.doctorId = doctor._id;
     }
 
     if (status) {

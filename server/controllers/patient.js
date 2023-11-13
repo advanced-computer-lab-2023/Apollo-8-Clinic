@@ -138,7 +138,7 @@ const getMyPatients = async (req, res) => {
 };
 const getPatientHealthPackage = async (req, res) => {
   try {
-    const patient = await PatientModel.findById(req.params.id);
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
     if (!patient) return res.status(404).send("patient not found");
     if (patient.healthPackageSub) {
       const hp = await HealthPackageModel.find({ name: patient.healthPackageSub });
@@ -260,7 +260,8 @@ const upcomingApp = async (req, res) => {
 const getPrescriptions = async (req, res) => {
   try {
     console.log(req.query)
-    const patientID = req.query.patientId;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient._id;
     const arr = await PresModel.find({ patientId: patientID }).populate('doctorId');
     console.log(arr);
     res.status(200).json(arr);
@@ -272,13 +273,13 @@ const getPrescriptions = async (req, res) => {
 //searching by the name of the doctor take care of the is it oring or anding
 const filterPres = async (req, res) => {
   try {
-
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
     const doctorName = req.body.doctorName;
     const doctor = await DocModel.findOne({ name: doctorName })
     const date = req.body.date;
     console.log(doctor);
     const state = req.body.state;
-    const patientId = req.body.patientId;
+    const patientId = patient._id;
     if (doctor !== null) {
       const arr = await PresModel.find({
         $or: [
@@ -334,8 +335,8 @@ const getPres = async (req, res) => {
 const getSessDiscount = async (req, res) => {
   try {
     //const patientID = req.params.id;
-    const patientID = req.body.id;
-    const patient = await PatientModel.findById(patientID);
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient._id;
     const subscribtion = patient.healthPackageSub;
     var discount = 0;
     if (subscribtion !== null && subscribtion !== "" && subscribtion !== " ") {
@@ -352,7 +353,7 @@ const getSessDiscount = async (req, res) => {
 const updateWallet = async (req, res) => {
   try {
     const { patientId, paymentAmount } = req.body;
-    const patient = await PatientModel.findById(patientId);
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
     console.log(patient);
     patient.wallet += paymentAmount;
     const updatedPatient = await patient.save();
@@ -383,7 +384,8 @@ const linkPatient = async (req, res) => {
     if (patient1 === null) { res.status(200).send("incorrect email or number , patient not found"); return; }
 
     console.log(patient1);
-    const patientID = req.params.patientID;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient._id;
     const rel = req.body.relation;
     //const patient1 = await PatientModel.findOne({"email": mail });
     const age = (new Date()).getFullYear() - patient1.birthDate.getFullYear() + 1;
@@ -433,7 +435,7 @@ const linkPatient = async (req, res) => {
 const patientDetails = async (req, res) => {
   try {
     const patientID = req.params.patientID;
-    const patient1 = await PatientModel.findById(patientID);
+    const patient1 = await PatientModel.findOne({ user: res.locals.userId });
     console.log(patient1);
     res.status(200).json(patient1);
   } catch (error) {
@@ -445,7 +447,7 @@ const patientDetails = async (req, res) => {
 const cancelSubscription = async (req, res) => {
   try {
     const patientID = req.params.id;
-    const patient1 = await PatientModel.findById(patientID);
+    const patient1 = await PatientModel.findOne({ user: res.locals.userId });
     if (patient1.healthPackageSub === "") {
       res.status(200).send("you are not subscribed to any Health Package");
       return;
@@ -459,22 +461,23 @@ const cancelSubscription = async (req, res) => {
 }
 
 
-const checkIfLinked =async (req,res)=>{
-try{
-  const patientID = req.params.id;
-  const member1 = await FamilyMemberModel.findOne({"linkageID" : patientID});
-  if(!member1) return ;
-  const parentID = member1.patientID ;
-  const parent = await PatientModel.findById(parentID);
-  console.log("my parent patient that i am linked to"+parent);
-  if(!parent){console.log("wrong linkage id , no patient with this id asln") ;return; };
-  const hp = await HealthPackageModel.find({"name":parent.healthPackageSub});
-  if(!hp){console.log("wrong hp name , no hp with that name") ;return; };
-  //console.log("hp "+hp + hp[0].subDiscount);
-  res.status(200).json(hp[0].subDiscount);
-}catch(error){
-  res.status(400).send(error);
-}
+const checkIfLinked = async (req, res) => {
+  try {
+    const patient1 = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient1._id;
+    const member1 = await FamilyMemberModel.findOne({ "linkageID": patientID });
+    if (!member1) return;
+    const parentID = member1.patientID;
+    const parent = await PatientModel.findById(parentID);
+    console.log("my parent patient that i am linked to" + parent);
+    if (!parent) { console.log("wrong linkage id , no patient with this id asln"); return; };
+    const hp = await HealthPackageModel.find({ "name": parent.healthPackageSub });
+    if (!hp) { console.log("wrong hp name , no hp with that name"); return; };
+    //console.log("hp "+hp + hp[0].subDiscount);
+    res.status(200).json(hp[0].subDiscount);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 }
 
 
@@ -483,7 +486,7 @@ const unsubscribe = async (req, res) => {
   try {
 
     const patientID = req.params.id;
-    const patient1 = await PatientModel.findById(patientID);
+    const patient1 = await PatientModel.findOne({ user: res.locals.userId });
     console.log("MY CONSOLE FOR UNSUBSCRIBE FOR ME" + patient1);
     if (patient1.healthPackageSub === "") {
       res.status(200).send("you are not subscribed to any Health Package");

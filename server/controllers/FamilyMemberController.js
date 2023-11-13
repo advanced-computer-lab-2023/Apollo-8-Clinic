@@ -17,7 +17,8 @@ const memberDetails = async (req, res) => {
 // Controller function to retrieve all Family Members (NOT LINKED) (displayAll)
 const getNotLinkedFamMembers = async (req, res) => {
   try {
-    const patientID = req.params.patientID;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient._id;
     const Fam = await FamilyMember.find({ "patientID": patientID, "linkageID": null });
     //const Fam = await FamilyMember.find();
     res.status(200).json(Fam);
@@ -29,7 +30,8 @@ const getNotLinkedFamMembers = async (req, res) => {
 // Controller function to retrieve all Family Members (NOT LINKED) (displayAll)
 const getLinkedFamMembers = async (req, res) => {
   try {
-    const patientID = req.params.patientID;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient._id;
     const Fam = await FamilyMember.find({ "patientID": patientID, "linkageID": { $ne: null } });
     //const Fam = await FamilyMember.find();
     res.status(200).json(Fam);
@@ -42,7 +44,8 @@ const getLinkedFamMembers = async (req, res) => {
 const addNewFamilyMember = async (req, res) => {
   try {
 
-    const patientID = req.params.patientID;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient._id;
     const { name, nationalID, age, gender, relation } = req.body;
 
     const newFamMember = new FamilyMember({ "patientID": patientID, "name": name, "nationalID": nationalID, "age": Number(age), "gender": gender, "relation": relation, "healthPackageSub": "", "DateOfSubscribtion": null, "subscriptionStatus": "unsubscribed", "linkageID": null });
@@ -69,10 +72,9 @@ const cancelSubscription = async (req, res) => {
       res.status(200).send("caonnot cancel subs for a linked patient");
     }
     if (FamilyMem.subscriptionStatus === "cancelled with end date") { res.status(200).send("already cancelled"); return; }
-    if(FamilyMem.healthPackageSub==="")
-    {
+    if (FamilyMem.healthPackageSub === "") {
       res.status(200).send("you are not subscribed to any Health Package");
-      return ;
+      return;
     }
     FamilyMem.subscriptionStatus = "cancelled with end date";
     FamilyMem.save();
@@ -94,14 +96,13 @@ const unsubscribe = async (req, res) => {
       res.status(200).send("caonnot cancel subs for a linked patient");
     }
     if (FamilyMem.subscriptionStatus === "unsubscribed") { res.status(200).send("already unsubscribed"); return; }
-    if(FamilyMem.healthPackageSub==="")
-    {
+    if (FamilyMem.healthPackageSub === "") {
       res.status(200).send("you are not subscribed to any Health Package");
-      return ;
+      return;
     }
     FamilyMem.subscriptionStatus = "unsubscribed";
     FamilyMem.healthPackageSub = "";
-    FamilyMem.DateOfSubscribtion="";
+    FamilyMem.DateOfSubscribtion = "";
     FamilyMem.save();
     res.status(200).send("Done");
   } catch (error) {
