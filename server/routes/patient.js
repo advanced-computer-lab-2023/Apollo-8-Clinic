@@ -38,7 +38,7 @@ router.post('/unsubscribeForMember/:id', FamilyMemberController.unsubscribe);
 //display patient's detials including HP subscription
 // do we need to update healthpackage subsc. if it is expired (duration 1 year)
 router.get('/patientdetails/:patientID', patient.patientDetails);
-router.get("/getWallet/:patientName", controllers.getWallet)
+router.get("/getWallet/:patientName", Middle.requireAuthPatient, controllers.getWallet)
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
 router.get("/NotlinkedFamily/:patientID", FamilyMemberController.getNotLinkedFamMembers);
@@ -59,7 +59,7 @@ router.put('/updateWallet', controllers.updateWallet);
 
 
 //view all the health packages 
-router.get('/health-records/:patientId', controllers.getHealthRecords);
+router.get('/health-records/:patientId', Middle.requireAuthPatient, controllers.getHealthRecords);
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
 import patient from "../controllers/patient.js";

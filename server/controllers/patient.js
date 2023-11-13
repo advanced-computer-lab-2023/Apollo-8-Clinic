@@ -351,7 +351,7 @@ const getSessDiscount = async (req, res) => {
 
 const updateWallet = async (req, res) => {
   try {
-    const { patientId , paymentAmount } = req.body;
+    const { patientId, paymentAmount } = req.body;
     const patient = await PatientModel.findById(patientId);
     console.log(patient);
     patient.wallet += paymentAmount;
@@ -380,8 +380,7 @@ const linkPatient = async (req, res) => {
       //Input is an email
       patient1 = await PatientModel.findOne({ "email": mailORnumber });
     }
-    if (patient1 === null)
-      {res.status(200).send("incorrect email or number , patient not found") ; return ;}
+    if (patient1 === null) { res.status(200).send("incorrect email or number , patient not found"); return; }
 
     console.log(patient1);
     const patientID = req.params.patientID;
@@ -447,10 +446,9 @@ const cancelSubscription = async (req, res) => {
   try {
     const patientID = req.params.id;
     const patient1 = await PatientModel.findById(patientID);
-    if(patient1.healthPackageSub==="")
-    {
+    if (patient1.healthPackageSub === "") {
       res.status(200).send("you are not subscribed to any Health Package");
-      return ;
+      return;
     }
     patient1.subscriptionStatus = "cancelled with end date";
     patient1.save();
@@ -466,16 +464,15 @@ const unsubscribe = async (req, res) => {
 
     const patientID = req.params.id;
     const patient1 = await PatientModel.findById(patientID);
-    console.log("MY CONSOLE FOR UNSUBSCRIBE FOR ME"+patient1);
-    if(patient1.healthPackageSub==="")
-    {
+    console.log("MY CONSOLE FOR UNSUBSCRIBE FOR ME" + patient1);
+    if (patient1.healthPackageSub === "") {
       res.status(200).send("you are not subscribed to any Health Package");
-      return ;
+      return;
     }
     if (patient1.subscriptionStatus === "unsubscribed") { res.status(200).send("already unsubscribed"); return; }
     patient1.subscriptionStatus = "unsubscribed";
     patient1.healthPackageSub = "";
-    patient1.DateOfSubscribtion="";
+    patient1.DateOfSubscribtion = "";
     patient1.save();
     res.status(200).send("Done");
   } catch (error) {
@@ -488,7 +485,7 @@ const unsubscribe = async (req, res) => {
 const getHealthRecords = async (req, res) => {
   try {
     const patientId = req.params.patientId;
-    const patient = await PatientModel.findById({ _id: patientId });
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
 
     if (!patient) {
       return res.status(404).json({ error: 'Patient not found' });
@@ -506,7 +503,7 @@ const getWallet = async (req, res) => {
   try {
     const patientName = req.params.patientName;
     console.log(patientName);
-    const patient = await PatientModel.findOne({ name: patientName });
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
     console.log(patient);
     if (!patient) {
       return res.status(404).json({ error: 'Patient not found' });
@@ -528,7 +525,7 @@ export default {
   upcomingApp,
   getPrescriptions,
   filterPres,
-  getPres, 
+  getPres,
   updateWallet,
   getSessDiscount,
   linkPatient,
