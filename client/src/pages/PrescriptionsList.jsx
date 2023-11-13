@@ -136,11 +136,17 @@ function PrescriptionsList() {
       <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
         <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
           <ResponsiveAppBar />
-          <div className="card m-3 col-12" style={{ width: "80%" }}>
-            <div>
-              <div className="form-check">
+          <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+            <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+              My Prescriptions</h1>
+
+          </div>
+          <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>
+            <div style={{ display: 'flex' }}>
+              <div className="form-check" style={{ height: '2%' }}>
                 <input
                   ref={name}
+                  style={{ marginTop: '15px', }}
                   className="form-check-input"
                   value="lolos"
                   type="radio"
@@ -148,16 +154,18 @@ function PrescriptionsList() {
                   id="flexRadioDefault1"
                 />
                 <label
-                  style={{ paddingRight: "80%" }}
+                  style={{ margin: '10px', marginRight: '50px' }}
+
                   className="form-check-label"
                   htmlFor="flexRadioDefault1"
                 >
                   Filter By doctor name
                 </label>
               </div>
-              <div className="form-check">
+              <div className="form-check" style={{}}>
                 <input
                   ref={date}
+                  style={{ marginTop: '15px' }}
                   className="form-check-input"
                   type="radio"
                   name="flexRadioDefault"
@@ -165,7 +173,7 @@ function PrescriptionsList() {
                   checked
                 />
                 <label
-                  style={{ paddingRight: "80%" }}
+                  style={{ margin: '10px', marginRight: '50px' }}
                   className="form-check-label"
                   htmlFor="flexRadioDefault2"
                 >
@@ -175,6 +183,7 @@ function PrescriptionsList() {
               <div className="form-check">
                 <input
                   ref={status}
+                  style={{ marginTop: '15px', marginLeft: '10px' }}
                   className="form-check-input"
                   type="radio"
                   name="flexRadioDefault"
@@ -182,7 +191,7 @@ function PrescriptionsList() {
                   checked
                 />
                 <label
-                  style={{ paddingRight: "80%" }}
+                  style={{ margin: '10px', marginRight: '50px' }}
                   className="form-check-label"
                   htmlFor="flexRadioDefault3"
                 >
@@ -194,6 +203,7 @@ function PrescriptionsList() {
                 <input
                   type="text"
                   ref={filter}
+                  style={{ border: "1px solid black" }}
                   name="patientId"
                   className="form-control"
                   aria-label="Sizing example input"

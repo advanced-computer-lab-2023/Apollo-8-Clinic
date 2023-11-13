@@ -1,11 +1,55 @@
-import axios from 'axios';
-import { useState, useEffect } from "react";
-import Button from '@mui/material/Button';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Sidebar from "../components/SidebarPatient";
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
 import TextField from '@mui/material/TextField';
+import "../App.css";
+
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+import ShoppingBasketSharpIcon from '@mui/icons-material/ShoppingBasketSharp';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useNavigate } from "react-router-dom";
+import { height } from '@mui/system';
+import imgSrc from "../images/photo.png"
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import HomeIcon from '@mui/icons-material/Home';
+import Stack from '@mui/material/Stack';
+import Pagination from '@mui/material/Pagination';
+import { Alert } from "@mui/material";
+
+import ResponsiveAppBar from './TopBar';
+import Ads from './Ads';
+
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import BottomBar from "./BottomBar";
+
+
+
 const requestData = {
   patientId: '651fd358364267c68b56ba41',
   // Add more data as needed
@@ -25,7 +69,7 @@ const PatientAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [filteredAppointments, setFilteredAppointments] = useState([]);
-useEffect(() => {
+  useEffect(() => {
     getApps();
   }, []);
 
@@ -75,7 +119,7 @@ useEffect(() => {
     const filtered = appointments.filter(appointment => {
       const appointmentDate = new Date(appointment.date);
       const filterDate = new Date(year, month - 1, day); // Month is 0-indexed in JavaScript
-  
+
       // Compare the dates (ignoring time)
       return (
         appointmentDate.getDate() === filterDate.getDate() &&
@@ -83,86 +127,96 @@ useEffect(() => {
         appointmentDate.getFullYear() === filterDate.getFullYear()
       );
     });
-  
+
     setFilteredAppointments(filtered);
   };
-  
+
 
   return (
-    <div className="AppointmentList">
-      <Typography variant="h4" component="div" style={{ marginBottom: '20px' }}>
-        Your Appointments
-      </Typography>
 
-      <Box>
-        <Button variant="contained" onClick={getApps} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
-          All Appointments
-        </Button>
-        <Button variant="contained" onClick={() => filterByStatus('Upcoming')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
-          Upcoming Appointments
-        </Button>
-        <Button variant="contained" onClick={() => filterByStatus('Completed')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
-          Completed Appointments
-        </Button>
-        <Button variant="contained" onClick={() => filterByStatus('Cancelled')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
-          Cancelled Appointments
-        </Button>
-        <Button variant="contained" onClick={() => filterByStatus('Rescheduled')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
-          Rescheduled Appointments
-        </Button>
-        <TextField
-        label="DD" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
-        value={day}
-        onChange={(e) => {
-          const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
-          setDay(value);
-        }}
-        
-        />
-        <TextField
-         label="MM" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
-         value={month}
-          onChange={(e) => {
-            const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
-            setMonth(value);
-          }}
-        />
-         <TextField
-         label="YYYY" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
-         onChange={(e) => {
-          const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
-          setYear(value);
-        }}
-       />
-        <Button variant="contained" onClick={() => filterByDate(day,month,year)} margin="normal" padding="normal" style={{width: '100px', marginRight: '10px',marginTop: '15px' }}>
-          Filter by Date
-        </Button>
-        {/* You can add more filter buttons as needed */}
-      </Box>
+    <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
+      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
+        <ResponsiveAppBar />
+        <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+          <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+            Your Appointments
+          </h1>
 
-      <div className="appointment-cards">
-        {filteredAppointments.map((appointment) => {
-          const doctorId = appointment.doctorId;
-          const doctor = doctors.find(doc => doc._id === doctorId);
+        </div>
+        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>
 
-          return (
-            <Card key={appointment._id} sx={{ minWidth: 275, marginBottom: 2 }}>
-              <CardContent>
-                <Typography variant="h6" component="div">
-                  {doctor ? doctor.name : 'Doctor Not Found'}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Status: {appointment.status}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Date: {formatDate(appointment.date)}
-                </Typography>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-    </div>
+          <Box>
+            <Button variant="contained" onClick={getApps} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+              All Appointments
+            </Button>
+            <Button variant="contained" onClick={() => filterByStatus('Upcoming')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+              Upcoming Appointments
+            </Button>
+            <Button variant="contained" onClick={() => filterByStatus('Completed')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+              Completed Appointments
+            </Button>
+            <Button variant="contained" onClick={() => filterByStatus('Cancelled')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+              Cancelled Appointments
+            </Button>
+            <Button variant="contained" onClick={() => filterByStatus('Rescheduled')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+              Rescheduled Appointments
+            </Button>
+            <TextField
+              label="DD" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
+              value={day}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
+                setDay(value);
+              }}
+
+            />
+            <TextField
+              label="MM" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
+              value={month}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
+                setMonth(value);
+              }}
+            />
+            <TextField
+              label="YYYY" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
+                setYear(value);
+              }}
+            />
+            <Button variant="contained" onClick={() => filterByDate(day, month, year)} margin="normal" padding="normal" style={{ width: '100px', marginRight: '10px', marginTop: '15px' }}>
+              Filter by Date
+            </Button>
+            {/* You can add more filter buttons as needed */}
+          </Box>
+
+          <div className="appointment-cards">
+            {filteredAppointments.map((appointment) => {
+              const doctorId = appointment.doctorId;
+              const doctor = doctors.find(doc => doc._id === doctorId);
+
+              return (
+                <Card key={appointment._id} sx={{ minWidth: 275, marginBottom: 2 }}>
+                  <CardContent>
+                    <Typography variant="h6" component="div">
+                      {doctor ? doctor.name : 'Doctor Not Found'}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Status: {appointment.status}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Date: {formatDate(appointment.date)}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+        <BottomBar />
+      </AppBar >
+    </div >
   );
 };
 

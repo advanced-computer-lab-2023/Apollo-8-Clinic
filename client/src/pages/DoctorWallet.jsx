@@ -32,6 +32,7 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import HomeIcon from '@mui/icons-material/Home';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
+import { Alert } from "@mui/material";
 
 import ResponsiveAppBar from './TopBarDoc';
 import Ads from './Ads';
@@ -77,10 +78,13 @@ function DoctorWallet() {
       <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
         <ResponsiveAppBar />
+        <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+          <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+            My Wallet</h1>
+
+        </div>
         <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
-          <div className="card-header">
-            <h2>My wallet</h2>
-          </div>
+
           <div className="card-body">
             {loading ? (
               <p>Loading...</p>

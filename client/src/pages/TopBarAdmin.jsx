@@ -44,30 +44,22 @@ function ResponsiveAppBar() {
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleDoctorList = () => {
-        navigate("/AllDoctors");
+    const handleAdd = () => {
+        navigate("/addAdministrator");
     };
     const handleHome = () => {
-        navigate("/HomePage");
+        navigate("/HomePageAdmin");
     };
-    const handlePresList = () => {
-        navigate("/PrescriptionsList");
+    const handleRemove = () => {
+        navigate("/removeUser");
     };
-    const handleAddFamilyMember = () => {
-        navigate("/patientFamilyAppointments");
+    const handlePending = () => {
+        navigate("/pendingDoctors");
     };
-    const handlePack = () => {
-        navigate("/PatientHP_FM");
+    const handlePackages = () => {
+        navigate("/adminHealthPackage");
     };
-    const handleMyApp = () => {
-        navigate("/PatientAppointments");
-    };
-    const handleHealthRecords = () => {
-        navigate("/viewHealth/:patientID");
-    };
-    const handleMyWallet = () => {
-        navigate("/PatientWallet/:patientName");
-    };
+
     const handleCloseNavMenu = () => {
         //   navigate("/cart");
         setAnchorElNav();
@@ -156,25 +148,18 @@ function ResponsiveAppBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button onClick={handleHome} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Home     </Button>
-                        <Button onClick={handleDoctorList} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Doctors     </Button>
-                        <Button onClick={handlePresList} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Prescriptions     </Button>
-                        <Button onClick={handleAddFamilyMember} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Add Family Member     </Button>
-                        <Button onClick={handleMyApp} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> My Appointments     </Button>
+                        <Button onClick={handleAdd} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Add Admin     </Button>
+                        <Button onClick={handleRemove} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Remove User     </Button>
+                        <Button onClick={handlePending} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Doctor Pending     </Button>
+                        <Button onClick={handlePackages} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Health Packages  </Button>
 
-                        <Button onClick={handleHealthRecords} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Health Records     </Button>
-                        <Button onClick={handlePack} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Health Packages     </Button>
 
                     </Box>
 
 
                     <Box sx={{ flexGrow: 0 }}>
 
-                        <Tooltip title="My Wallet">
-                            <IconButton style={{}} onClick={handleMyWallet} sx={{ p: 0, }}>
 
-                                <WalletIcon fontSize='large' sx={{ color: "white" }} />
-                            </IconButton>
-                        </Tooltip>
                         <Tooltip title="Open Your Profile">
                             <IconButton style={{ paddingLeft: "20px" }} onClick={"/cart"} sx={{ p: 0 }}>
 

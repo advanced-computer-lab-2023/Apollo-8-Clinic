@@ -52,13 +52,13 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-      axios.post('http://localhost:8000/patient/appointmentWithFilter')
-          .then(response => {
-            setAppointments(response.data);
-          })
-          .catch(error => {
-              console.error('There was an error!', error);
-          });
+    axios.post('http://localhost:8000/patient/appointmentWithFilter')
+      .then(response => {
+        setAppointments(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
   }, []);
 
   return (
@@ -114,11 +114,7 @@ const AppointmentFilterPage = ({ appointments }) => {
 };
 
 const Header = () => (
-  <div
-    style={{ width: "100%", border: "1px solid black", textAlign: "center" }}
-  >
-    <h1>MY CLINIC</h1>
-  </div>
+  <div></div>
 );
 
 //<button style={{width: '100%', height:40}} onClick={() => {changeContent(<Buttons />);setShowForm(false);}}>Health Packages</button>
@@ -134,22 +130,26 @@ const Sidebar1 = ({
       width: "20%",
       height: "calc(100vh - 100px)",
       border: "1px solid black",
+      borderRadius: '20px'
     }}
   >
     <div
       id="welcomeTitle"
       style={{
         border: "1px solid black",
-        height: 80,
+        backgroundColor: " rgb(65, 105, 225)",
+        color: 'white',
+        height: 60,
         fontSize: 25,
-        borderRadius: 10,
+        borderRadius: '20px',
         textAlign: "center",
       }}
     >
       Welcome Doctor
     </div>
     <button
-      style={{ width: "100%", height: 40 }}
+      className="btn btn-success"
+      style={{ width: "100%", height: 40, marginTop: '10%', borderRadius: '20px', }}
       onClick={() => {
         changeContent(<Appointments />);
         setShowHello(true);
@@ -166,6 +166,8 @@ const MainContent = ({ content }) => (
       width: "60%",
       height: "calc(100vh - 100px)",
       border: "1px solid black",
+      borderRadius: '20px'
+
     }}
   >
     {content}
@@ -174,7 +176,9 @@ const MainContent = ({ content }) => (
 
 const Footer = () => (
   <div
-    style={{ width: "100%", border: "1px solid black", textAlign: "center" }}
+    style={{
+      width: "100%", border: "1px solid black", textAlign: "center", borderRadius: '20px'
+    }}
   >
     <p>Contact us on (+100)123456788 or by email clinic@gmail.com</p>
   </div>
@@ -186,6 +190,8 @@ const RightSidebar = ({ showForm, showHello }) => (
       width: "20%",
       height: "calc(100vh - 100px)",
       border: "1px solid black",
+      borderRadius: '20px'
+
     }}
   ></div>
 );
@@ -225,6 +231,11 @@ const MainDoctor = () => {
         <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
           <ResponsiveAppBar />
+          <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+            <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+              Welcome Doctor</h1>
+
+          </div>
           <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
             <Header />
 
@@ -246,36 +257,44 @@ const MainDoctor = () => {
                   width: "20%",
                   height: "calc(100vh - 100px)",
                   border: "1px solid black",
+                  borderRadius: '20px'
+
                 }}
               >
                 {showHello && (
                   <form>
-                    <h2>Appointments</h2>
-                    <label>
+                    <h2 style={{ backgroundColor: " rgb(65, 105, 225)", color: 'white', marginBottom: '20px', height: '50px', borderRadius: '20px', textAlign: "center" }}>    Appointments</h2>
+                    <label style={{ marginBottom: '10px' }}>
                       Start Date:
                       <input
+                        style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
+                        placeholder="  Start Date"
                         type="text"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                       />
                     </label>
-                    <label>
+                    <label style={{ marginBottom: '10px' }}>
                       End Date:
                       <input
+                        style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
+                        placeholder="  End Date"
                         type="text"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
                       />
                     </label>
-                    <label>
+                    <label style={{ marginBottom: '10px' }}>
                       Status:
                       <input
+                        style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
+                        placeholder="  Example: Accepted"
                         type="text"
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                       />
                     </label>
-                    <button type="button" onClick={searchApp}>
+                    <button type="button" className="btn btn-success m-3 btn-sm" style={{ marginTop: '5%', width: '50%', height: '40px', fontSize: '16px' }} onClick={searchApp}>
                       Apply Filter
                     </button>
                   </form>
