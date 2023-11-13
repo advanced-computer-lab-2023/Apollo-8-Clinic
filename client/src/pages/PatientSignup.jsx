@@ -55,6 +55,8 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import BottomBar from './BottomBar';
+import axios from "axios";
+
 
 function PatientSignup() {
   const [name, setName] = useState();

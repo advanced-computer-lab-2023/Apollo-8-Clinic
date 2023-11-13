@@ -62,7 +62,7 @@ const Appointments = () => {
   }, []);
 
   return (
-    <div style={{ overflow: "auto", height: 440 }}>
+    <div style={{ overflow: "auto", height: '100%' }}>
       {appointments.map((member) => (
         <div
           key={member.id}

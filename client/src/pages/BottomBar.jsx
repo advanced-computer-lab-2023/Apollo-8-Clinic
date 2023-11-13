@@ -35,9 +35,9 @@ function BottomBar() {
 
 
     return (
-        <div style={{ backgroundColor: 'rgb(65, 105, 225)', minHeight: '400px', marginTop: '100px' }}> <h1>Hena Hayethat El Bottom Navigation</h1>
-            <h1>BY THE WAY</h1>
-            <h1> MOHAMED RAMADAN IS THE BEST</h1></div>
+        <footer> <div style={{ backgroundColor: 'rgb(65, 105, 225)', marginTop: '15%' }}>
+        </div></footer>
+
     )
 }
 export default BottomBar;

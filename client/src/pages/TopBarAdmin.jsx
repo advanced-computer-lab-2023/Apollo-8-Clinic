@@ -59,7 +59,9 @@ function ResponsiveAppBar() {
     const handlePackages = () => {
         navigate("/adminHealthPackage");
     };
-
+    const handlePass = () => {
+        navigate("/changePassAdm");
+    };
     const handleCloseNavMenu = () => {
         //   navigate("/cart");
         setAnchorElNav();
@@ -68,7 +70,12 @@ function ResponsiveAppBar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        sessionStorage.removeItem('token');
+        window.location.pathname = '/';
 
+    };
     return (
         <AppBar style={{
             height: "100px", backgroundColor: " rgb(65, 105, 225)"
@@ -152,6 +159,7 @@ function ResponsiveAppBar() {
                         <Button onClick={handleRemove} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Remove User     </Button>
                         <Button onClick={handlePending} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Doctor Pending     </Button>
                         <Button onClick={handlePackages} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Health Packages  </Button>
+                        <Button onClick={handlePass} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%' }}> Change Password  </Button>
 
 
                     </Box>
@@ -160,8 +168,8 @@ function ResponsiveAppBar() {
                     <Box sx={{ flexGrow: 0 }}>
 
 
-                        <Tooltip title="Open Your Profile">
-                            <IconButton style={{ paddingLeft: "20px" }} onClick={"/cart"} sx={{ p: 0 }}>
+                        <Tooltip title="Logout">
+                            <IconButton style={{ paddingLeft: "20px" }} onClick={handleSubmit} sx={{ p: 0 }}>
 
                                 <AccountCircleIcon fontSize='large' sx={{ color: "white" }} />
                             </IconButton>

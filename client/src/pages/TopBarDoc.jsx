@@ -73,6 +73,9 @@ function ResponsiveAppBar() {
     const handleFollowUp = () => {
         navigate("/FollowUP/:doctorName");
     };
+    const handlePass = () => {
+        navigate("/changePassDoc");
+    };
     const handleCloseNavMenu = () => {
         //   navigate("/cart");
         setAnchorElNav();
@@ -82,9 +85,15 @@ function ResponsiveAppBar() {
         setAnchorElUser(null);
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        sessionStorage.removeItem("token");
+        window.location.pathname = "/";
+    };
+
     return (
         <AppBar style={{
-            height: "100px", backgroundColor: " rgb(65, 105, 225)"
+            height: "90px", backgroundColor: " rgb(65, 105, 225)"
         }} position="static" >
             <Container style={{ marginTop: "10px" }
             } maxWidth="xl" >
@@ -160,13 +169,15 @@ function ResponsiveAppBar() {
                     >
                     </Typography>
                     <Box style={{}} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Button onClick={handleHome} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '12px' }}> Home     </Button>
-                        <Button onClick={handleApp} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '12px' }}> Appointments     </Button>
-                        <Button onClick={handlePatientsList} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '12px' }}> My Patients     </Button>
-                        <Button onClick={handleUpcoming} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '12px' }}> Upcomming Appointments     </Button>
-                        <Button onClick={handleHealthRecords} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '12px' }}> Add Health Record     </Button>
-                        <Button onClick={handleTimeSlots} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '12px' }}> Add Time-Slots     </Button>
-                        <Button onClick={handleFollowUp} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '12px' }}> Follow Up     </Button>
+                        <Button onClick={handleHome} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Home     </Button>
+                        <Button onClick={handleApp} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Appointments     </Button>
+                        <Button onClick={handlePatientsList} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> My Patients     </Button>
+                        <Button onClick={handleUpcoming} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Upcomming Appointments     </Button>
+                        <Button onClick={handleHealthRecords} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Add Health Record     </Button>
+                        <Button onClick={handleTimeSlots} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Add Time-Slots     </Button>
+                        <Button onClick={handleFollowUp} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Follow Up     </Button>
+                        <Button onClick={handleEditDoc} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Update Profile     </Button>
+                        <Button onClick={handlePass} sx={{ my: 2, color: 'white', display: 'block', marginRight: '0.5%', marginLeft: '0.5%', fontSize: '9px' }}> Change Password     </Button>
 
 
                     </Box>
@@ -180,8 +191,8 @@ function ResponsiveAppBar() {
                                 <WalletIcon fontSize='large' sx={{ color: "white" }} />
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="Open Your Profile">
-                            <IconButton style={{ paddingLeft: "20px" }} onClick={handleEditDoc} sx={{ p: 0 }}>
+                        <Tooltip title="Logout">
+                            <IconButton style={{ paddingLeft: "20px" }} onClick={handleSubmit} sx={{ p: 0 }}>
 
                                 <AccountCircleIcon fontSize='large' sx={{ color: "white" }} />
                             </IconButton>

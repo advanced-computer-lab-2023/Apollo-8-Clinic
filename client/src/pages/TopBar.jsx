@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
     navigate("/PrescriptionsList");
   };
   const handleAddFamilyMember = () => {
-    navigate("/patientFamilyAppointments");
+    navigate("/PatientHP_FM");
   };
   const handlePack = () => {
     navigate("/PatientHP_FM");
@@ -68,6 +68,9 @@ function ResponsiveAppBar() {
   const handleMyWallet = () => {
     navigate("/PatientWallet/:patientName");
   };
+  const handlePass = () => {
+    navigate("/changePassPat");
+  };
   const handleCloseNavMenu = () => {
     //   navigate("/cart");
     setAnchorElNav();
@@ -76,6 +79,12 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem("token");
+    window.location.pathname = "/";
+  }
 
   return (
     <AppBar
@@ -162,6 +171,7 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
               }}
             >
               {" "}
@@ -173,6 +183,7 @@ function ResponsiveAppBar() {
                 my: 2,
                 color: "white",
                 display: "block",
+                fontSize: '11px',
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
               }}
@@ -188,6 +199,8 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
@@ -201,10 +214,12 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
-              Add Family Member{" "}
+              Family Members{" "}
             </Button>
             <Button
               onClick={handleMyApp}
@@ -214,6 +229,8 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
@@ -228,6 +245,8 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
@@ -241,10 +260,27 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
               Health Packages{" "}
+            </Button>
+            <Button
+              onClick={handlePass}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: '11px'
+
+              }}
+            >
+              {" "}
+              Change Password{" "}
             </Button>
           </Box>
 
@@ -254,10 +290,10 @@ function ResponsiveAppBar() {
                 <WalletIcon fontSize="large" sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Open Your Profile">
+            <Tooltip title="Logout">
               <IconButton
                 style={{ paddingLeft: "20px" }}
-                onClick={"/cart"}
+                onClick={handleLogout}
                 sx={{ p: 0 }}
               >
                 <AccountCircleIcon fontSize="large" sx={{ color: "white" }} />
