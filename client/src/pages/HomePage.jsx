@@ -47,9 +47,6 @@ import BottomBar from './BottomBar';
 
 
 function homePage() {
-    const name = ['Panadol', 'Morphine', 'Aspirin', 'Insulin', 'Concerta', 'Tramadol'];
-    const info = 'Paracetamol is a non-opioid analgesic and antipyretic agent used to treat fever and mild to moderate pain.'
-
 
 
     return (

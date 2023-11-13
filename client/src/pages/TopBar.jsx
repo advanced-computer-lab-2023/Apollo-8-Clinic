@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
     navigate("/PrescriptionsList");
   };
   const handleAddFamilyMember = () => {
-    navigate("/patientFamilyAppointments");
+    navigate("/PatientHP_FM");
   };
   const handlePack = () => {
     navigate("/PatientHP_FM");
@@ -67,6 +67,9 @@ function ResponsiveAppBar() {
   };
   const handleMyWallet = () => {
     navigate("/PatientWallet/:patientName");
+  };
+  const handlePass = () => {
+    navigate("/changePassPat");
   };
   const handleCloseNavMenu = () => {
     //   navigate("/cart");
@@ -168,6 +171,7 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
               }}
             >
               {" "}
@@ -179,6 +183,7 @@ function ResponsiveAppBar() {
                 my: 2,
                 color: "white",
                 display: "block",
+                fontSize: '11px',
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
               }}
@@ -194,6 +199,8 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
@@ -207,10 +214,12 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
-              Add Family Member{" "}
+              Family Members{" "}
             </Button>
             <Button
               onClick={handleMyApp}
@@ -220,6 +229,8 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
@@ -234,6 +245,8 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
@@ -247,10 +260,27 @@ function ResponsiveAppBar() {
                 display: "block",
                 marginRight: "0.5%",
                 marginLeft: "0.5%",
+                fontSize: '11px'
+
               }}
             >
               {" "}
               Health Packages{" "}
+            </Button>
+            <Button
+              onClick={handlePass}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: '11px'
+
+              }}
+            >
+              {" "}
+              Change Password{" "}
             </Button>
           </Box>
 

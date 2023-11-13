@@ -79,7 +79,7 @@ function Doctorlogin() {
           console.log(result.data.token);
           sessionStorage.setItem('token', JSON.stringify(result.data.token));
 
-          window.location.pathname = '/editDoctor';
+          window.location.pathname = '/HomePageDoc';
         })
         .catch((err) => console.log(err));
 

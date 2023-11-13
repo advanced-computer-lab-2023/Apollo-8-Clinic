@@ -80,7 +80,7 @@ function Patientlogin() {
 
           const data = sessionStorage.getItem('token');
           console.log("asassaas " + data)
-          window.location.pathname = '/allDoctors';
+          window.location.pathname = '/homePage';
         })
         .catch((err) => console.log(err));
 

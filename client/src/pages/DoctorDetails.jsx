@@ -45,7 +45,7 @@ import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
 import { Alert } from "@mui/material";
 
-import ResponsiveAppBar from './TopBarHome';
+import ResponsiveAppBar from './TopBarAdmin';
 import Ads from './Ads';
 
 import Card from '@mui/material/Card';

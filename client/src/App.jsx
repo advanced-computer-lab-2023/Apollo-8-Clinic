@@ -110,8 +110,6 @@ function App() {
             path="/appointmentWalletPayment"
             element={<AppointmentWalletPayment />}
           />
-          <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
-          <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
           <Route
             path="/PatientHealthRecords/:patientId"
             element={<PatientHealthRecords />}
@@ -120,10 +118,8 @@ function App() {
             path="/PatientWallet/:patientName"
             element={<PatientWallet />}
           />
-          <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
-          <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
+
           <Route path="/HomePage" element={<HomePage />} />
-          <Route path="/HomePageDoc" element={<HomePageDoc />} />
 
           <Route path="/PatientHP_FM" element={<PatientHP_FM />} />
           {/* <Route path="/PatientAppointments" element={<PatientAppointments />} /> */}
@@ -131,7 +127,6 @@ function App() {
             path="/AvailableAppointments/:id"
             element={<AvailableAppointments />}
           />
-          <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
           <Route path="/DoctorLogin" element={<Doctorlogin />} />
           <Route path="/AdminLogin" element={<Adminlogin />} />
           <Route path="/PatientLogin" element={<Patientlogin />} />
@@ -151,10 +146,18 @@ function App() {
         <Route path="/prescriptions/:id" element={<PrescriptionsDetails />} />
         <Route path="/editDoctor" element={<EditDoctor />} />
         <Route path="/" element={<Home />} />
+        <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
+
+        <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
+        <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
         <Route path="/allDoctors" element={<AllDoctors />} />
+        <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
+
         <Route path="/doctorInfo/:id" element={<DoctorInfo />} />
         <Route path="/viewDoctor/:id" element={<ViewDoctor />} />
         <Route path="/filter" element={<FilterDoctor />} />
+        <Route path="/HomePageDoc" element={<HomePageDoc />} />
+
         <Route path="/viewMyPatients" element={<MyPatientsList />} />
         <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
         <Route path="/addAdministrator" element={<AddAdmin />} />
@@ -203,6 +206,8 @@ function App() {
         <Route path="/AdminLogin" element={<Adminlogin />} />
         <Route path="/PatientLogin" element={<Patientlogin />} />
         <Route path="/ForgetPassword" element={<Forget />} />
+        <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
+
         <Route path="/changePassPat" element={<ChangePass />} />
         <Route path="/changePassDoc" element={<ChangePassDoc />} />
         <Route path="/changePassAdm" element={<ChangePassAdm />} />
