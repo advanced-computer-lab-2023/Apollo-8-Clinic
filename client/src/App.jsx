@@ -132,6 +132,13 @@ function App() {
             element={<AvailableAppointments />}
           />
           <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
+          <Route path="/DoctorLogin" element={<Doctorlogin />} />
+          <Route path="/AdminLogin" element={<Adminlogin />} />
+          <Route path="/PatientLogin" element={<Patientlogin />} />
+          <Route path="/ForgetPassword" element={<Forget />} />
+          <Route path="/changePassPat" element={<ChangePass />} />
+          <Route path="/changePassDoc" element={<ChangePassDoc />} />
+          <Route path="/changePassAdm" element={<ChangePassAdm />} />
         </Routes>
       </div>
     );
