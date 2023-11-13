@@ -36,7 +36,6 @@ import PatientAppointments from "./pages/PatientAppointments";
 import AvailableAppointments from "./pages/AvailableAppointments";
 import HomePageAdmin from "./pages/HomePageAdmin";
 
-
 function App() {
   return (
     <div>
@@ -62,13 +61,16 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
-        <Route path="/appointmentWalletPayment" element={<AppointmentWalletPayment/>}/>
+        <Route
+          path="/appointmentWalletPayment"
+          element={<AppointmentWalletPayment />}
+        />
         <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
         <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
-        {/* <Route
+        <Route
           path="/PatientHealthRecords/:patientId"
           element={<PatientHealthRecords />}
-        /> */}
+        />
         <Route path="/PatientWallet/:patientName" element={<PatientWallet />} />
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
@@ -76,15 +78,13 @@ function App() {
         <Route path="/HomePageDoc" element={<HomePageDoc />} />
 
         <Route path="/PatientHP_FM" element={<PatientHP_FM />} />
-        <Route path="/PatientAppointments" element={<PatientAppointments />} />
+        {/* <Route path="/PatientAppointments" element={<PatientAppointments />} /> */}
         <Route
-          path="/AvailableAppointments"
+          path="/AvailableAppointments/:id"
           element={<AvailableAppointments />}
         />
         <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
-
       </Routes>
-
     </div>
   );
 }
