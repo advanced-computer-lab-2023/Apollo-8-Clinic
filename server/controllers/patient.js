@@ -88,7 +88,8 @@ const getPatients = async (req, res) => {
 
 const getMyPatients = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
-  const doctorId = req.params.id;
+  const doc=await DocModel.findOne({user:res.locals.userId})
+  const doctorId = doc._id;
   console.log(req.query.id);
   const myPatients = [];
   try {
@@ -206,7 +207,8 @@ const getPatientByName = async (req, res) => {
 const upcomingApp = async (req, res) => {
   console.log("YARABBBBB")
   //retrieve patients that have an appointmen wth this dr from the database
-  const doctorId = req.params.id;
+  const doc=await DocModel.findOne({user:res.locals.userId})
+  const doctorId = doc._id;
   console.log(doctorId);
 
   const myPatients = [];

@@ -1,5 +1,6 @@
 import appointments from "../models/appointment.js";
 import DoctorModel from '../models/doctor.js';
+import PatientModel from "../models/patient.js";
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';

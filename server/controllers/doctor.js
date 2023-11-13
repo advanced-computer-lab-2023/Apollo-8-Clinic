@@ -266,7 +266,7 @@ const updateDoctor = async (req, res) => {
     const hospital = req.body.hospital.trim();
     //temp until get it from session
     const doctorID = req.body.doctorID;
-    const doctor = await DoctorModel.findById(doctorID)
+    const doctor = await DoctorModel.findOne({user:res.locals.userId})
     if (email && email !== "" && email.includes("@")) {
       doctor.email = email;
     }
@@ -286,8 +286,10 @@ const updateDoctor = async (req, res) => {
 
 const getHealthRecord = async (req, res) => {
   try {
-    const doctorID = req.body.doctorID;
+    const doc = await DoctorModel.findOne({user:res.locals.userId})
+    const doctorID = doc._id;
     const patientID = req.body.patientID;
+    
     const appointment = await AppointmentModel.findOne({ doctorId: doctorID, patientId: patientID })
     if (appointment) {
       const Appointment = await AppointmentModel.find({ patientId: patientID }).populate('patientId')
@@ -302,7 +304,8 @@ const getHealthRecord = async (req, res) => {
 }
 const addAvailableTimeSlots = async (req, res) => {
   try {
-    const doctorId = req.body.doctorId;
+    const doc = await DoctorModel.findOne({user:res.locals.userId})
+    const doctorId = doc._id;
     console.log('Doctor ID:', doctorId);
     const doctor = await DoctorModel.findOne({ _id: doctorId });
     console.log('Doctor:', doctor);
@@ -341,7 +344,7 @@ const addHealthRecords = async (req, res) => {
     const patientId = req.body.patientId;
     console.log('Doctor ID:', doctorId);
     console.log('Patient ID:', patientId);
-    const doctor = await DoctorModel.findOne({ _id: doctorId });
+    const doctor = await DoctorModel.findOne({user:res.locals.userId})
     if (!doctor || doctor.status !== 'Accepted') {
       return res.status(403).json({ error: 'Doctor not found or not accepted by the admin' });
     }
@@ -370,7 +373,8 @@ const getWallet = async (req, res) => {
   try {
     const doctorName = req.params.doctorName;
     console.log(doctorName);
-    const doctor = await DoctorModel.findOne({ name: doctorName });
+    await DoctorModel.findOne({user:res.locals.userId})
+    const doctor = await DoctorModel.findOne({user:res.locals.userId})
     console.log(doctor);
 
     if (!doctor) {
@@ -390,7 +394,7 @@ const updateAppointment = async (req, res) => {
   try {
     const { appointmentId, newType } = req.body;
     const doctorName = "helen";
-    const doctor = await DoctorModel.findOne({ name: doctorName });
+    const doctor =  await DoctorModel.findOne({user:res.locals.userId});
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
     }
