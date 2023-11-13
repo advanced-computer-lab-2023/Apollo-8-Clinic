@@ -459,6 +459,26 @@ const cancelSubscription = async (req, res) => {
 }
 
 
+const checkIfLinked =async (req,res)=>{
+try{
+  const patientID = req.params.id;
+  const member1 = await FamilyMemberModel.findOne({"linkageID" : patientID});
+  if(!member1) return ;
+  const parentID = member1.patientID ;
+  const parent = await PatientModel.findById(parentID);
+  console.log("my parent patient that i am linked to"+parent);
+  if(!parent){console.log("wrong linkage id , no patient with this id asln") ;return; };
+  const hp = await HealthPackageModel.find({"name":parent.healthPackageSub});
+  if(!hp){console.log("wrong hp name , no hp with that name") ;return; };
+  //console.log("hp "+hp + hp[0].subDiscount);
+  res.status(200).json(hp[0].subDiscount);
+}catch(error){
+  res.status(400).send(error);
+}
+}
+
+
+
 const unsubscribe = async (req, res) => {
   try {
 
@@ -533,6 +553,6 @@ export default {
   cancelSubscription,
   unsubscribe,
   getHealthRecords,
-  getWallet
-
+  getWallet,
+  checkIfLinked
 }

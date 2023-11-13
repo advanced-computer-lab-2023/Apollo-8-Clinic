@@ -38,6 +38,29 @@ const createAppointment = async (req, res) => {
 };
 
 
+const getPatientAppointments = async (req, res) => {
+  try {
+    const patientID = req.params.id;
+    const appointments1 = await AppointmentModel.find({ "patientId": patientID });
+//     let result = {};
+
+// for(let appointment1 of appointments1) {
+//   let doctor = await DoctorModel.findById(appointment1.doctorId);
+//   let newObj = {
+//     status: appointment1.status,
+//     date: appointment1.date,
+//     doctorName: doctor.name
+//   };
+//   result[appointment1._id] = newObj;
+// }
+//      res.status(200).send(result);
+res.status(200).json(appointments1);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 //test it using http://localhost:8000/doctor/appointmentWithFilter?startDate=2002-1-1&endDate=2003-1-1
 
@@ -111,5 +134,6 @@ export default {
   createAppointment,
   getAppointmentWithFilter,
   getAppointments,
-  patientApp
+  patientApp,
+  getPatientAppointments
 }

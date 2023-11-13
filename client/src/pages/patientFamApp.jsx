@@ -46,48 +46,19 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import BottomBar from "./BottomBar";
+import { useNavigate } from "react-router-dom";
 
-function FamilyMembers(familyMembers) {
-  if (!familyMembers.familyMembers) return;
-  console.log(familyMembers);
-  return (
-    <div style={{ overflow: "auto", height: 440 }}>
-      {familyMembers.familyMembers.map((member) => (
-        <div
-          key={member.id}
-          style={{
-            border: "1px solid black",
-            borderRadius: "20px",
-          }}
-        >
-          <p>
-            <strong>Name:</strong> {member.name}
-          </p>
-          <p>
-            <strong>National ID:</strong> {member.nationalID}
-          </p>
-          <p>
-            <strong>Age:</strong> {member.age}
-          </p>
-          <p>
-            <strong>Gender:</strong> {member.gender}
-          </p>
-          <p>
-            <strong>Relation:</strong> {member.relation}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-const Appointments = () => {
+const Appointments = (patientID) => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
     axios
-      .post("http://localhost:8000/patient/appointmentWithFilter", {})
+      .get(
+        "http://localhost:8000/appointment/getPatientAppointments/" +
+          patientID.patientID
+      )
       .then((response) => {
+        console.log(response.data);
         setAppointments(response.data);
       })
       .catch((error) => {
@@ -108,36 +79,19 @@ const Appointments = () => {
           <p>
             <strong>Doctor ID:</strong> {member.doctorId}
           </p>
-          <p>
-            <strong>patient ID:</strong> {member.patientId}
-          </p>
+
           <p>
             <strong>Date:</strong> {member.date}
           </p>
           <p>
             <strong>status:</strong> {member.status}
           </p>
-          <p>
-            <button
-              className="btn btn-success m-3 btn-sm"
-              onClick={handleWalletPayment}
-            >
-              Pay using wallet
-            </button>
-            <form
-              action="http://localhost:8000/AppointmentCheckout"
-              method="POST"
-            >
-              <button className="btn btn-success m-3 btn-sm">
-                Pay using credit card
-              </button>
-            </form>
-          </p>
         </div>
       ))}
     </div>
   );
 };
+
 function handleWalletPayment() {
   window.location.href = "/appointmentWalletPayment";
 }
@@ -166,31 +120,13 @@ const AppointmentFilterPage = ({ appointments }) => {
           <p>
             <strong>Doctor ID:</strong> {member.doctorId}
           </p>
-          <p>
-            <strong>patient ID:</strong> {member.patientId}
-          </p>
+
           <p>
             <strong>Date:</strong> {member.date}
           </p>
           <p>
             <strong>status:</strong> {member.status}
           </p>
-          <div>
-            <button
-              className="btn btn-success m-3 btn-sm"
-              onClick={handleWalletPayment}
-            >
-              Pay using wallet
-            </button>
-            <form
-              action="http://localhost:8000/AppointmentCheckout"
-              method="POST"
-            >
-              <button className="btn btn-success m-3 btn-sm">
-                Pay using credit card
-              </button>
-            </form>
-          </div>
         </div>
       ))}
     </div>
@@ -223,26 +159,15 @@ const Sidebar1 = ({
   setShowForm,
   showHello,
   setShowHello,
+  id,
 }) => {
   const [TakenID, setTakenID] = useState("");
   const [familyMembers, setFamilyMembers] = useState([]);
-  const fn = () => {
-    if (TakenID !== "") {
-      axios
-        .get("http://localhost:8000/patient/Family/" + TakenID)
-        .then((response) => {
-          setFamilyMembers(response.data);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-      changeContent(<FamilyMembers familyMembers={familyMembers} />);
-    }
-  };
+
   return (
     <div
       style={{
-        width: "20%",
+        width: "30%",
         height: "calc(100vh - 100px)",
         border: "1px solid black",
         borderRadius: "20px",
@@ -253,62 +178,16 @@ const Sidebar1 = ({
         style={{
           width: "100%",
           height: 40,
-          marginBottom: "5%",
           backgroundColor: " rgb(65, 105, 225)",
           borderRadius: "20px",
         }}
         onClick={() => {
-          fn();
-          setShowForm(true);
-          setShowHello(false);
-        }}
-      >
-        Family Members{" "}
-      </button>
-
-      <button
-        className="btn btn-success w-100"
-        style={{
-          width: "100%",
-          height: 40,
-          backgroundColor: " rgb(65, 105, 225)",
-          borderRadius: "20px",
-        }}
-        onClick={() => {
-          changeContent(<Appointments />);
+          changeContent(<Appointments patientID={id} />);
           setShowForm(false);
           setShowHello(true);
         }}
       >
         Appointments
-      </button>
-      <label
-        style={{
-          display: "block",
-          borderWidth: "4px",
-          borderColor: "black",
-          marginTop: "10%",
-        }}
-      >
-        patient id:
-        <input
-          style={{
-            border: "1px solid black",
-            borderRadius: "20px",
-            height: "40px",
-          }}
-          type="text"
-          placeholder="  Paitient ID"
-          value={TakenID}
-          onChange={(e) => setTakenID(e.target.value)}
-        />
-      </label>
-      <button
-        className="btn btn-success w-100"
-        style={{ marginTop: "3%" }}
-        onClick={fn}
-      >
-        view my family
       </button>
     </div>
   );
@@ -364,21 +243,13 @@ const AppPatient = () => {
   const [gender, setGender] = useState("");
   const [relation, setRelation] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const familyMember = { name, nationalID, age, gender, relation };
-    axios
-      .post(
-        "http://localhost:8000/patient/AddFamilyMember/" + TakenID,
-        familyMember
-      )
-      .then((res) => console.log(res.data));
-  };
   //search appointments
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState("");
-  const patientId = "6523ba9cd72b2eb0e39cb137";
+
+  ///////////
+  const patientId = "6522b24e238a2bbfc0ceeb6e";
 
   const searchApp = (event) => {
     event.preventDefault();
@@ -432,7 +303,7 @@ const AppPatient = () => {
           </div>
           <div
             className="card m-3 col-12"
-            style={{ width: "80%", left: "8%", borderRadius: "20px" }}
+            style={{ width: "90%", left: "3%", borderRadius: "20px" }}
           >
             <Header />
             <div
@@ -448,134 +319,17 @@ const AppPatient = () => {
                 setShowForm={setShowForm}
                 showHello={showHello}
                 setShowHello={setShowHello}
+                id={patientId}
               />
               <MainContent content={content} />
               <div
                 style={{
-                  width: "20%",
+                  width: "30%",
                   height: "calc(100vh - 100px)",
                   border: "1px solid black",
                   borderRadius: "20px",
                 }}
               >
-                {showForm && (
-                  <form
-                    style={{ display: "flex", flexDirection: "column" }}
-                    onSubmit={handleSubmit}
-                  >
-                    <h2
-                      style={{
-                        backgroundColor: " rgb(65, 105, 225)",
-                        color: "white",
-                        marginBottom: "20px",
-                        height: "90px",
-                        borderRadius: "20px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {" "}
-                      Family Memebers
-                    </h2>
-                    <label style={{ marginBottom: "10px" }}>
-                      Name:
-                      <input
-                        style={{
-                          border: "1px solid black",
-                          borderRadius: "10px",
-                          height: "40px",
-                        }}
-                        placeholder="  Name"
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </label>
-                    <label style={{ marginBottom: "10px" }}>
-                      National ID:
-                      <input
-                        style={{
-                          border: "1px solid black",
-                          borderRadius: "10px",
-                          height: "40px",
-                          width: "12",
-                        }}
-                        placeholder="  National ID"
-                        type="text"
-                        value={nationalID}
-                        onChange={(e) => setNationalID(e.target.value)}
-                      />
-                    </label>
-                    <label style={{ marginBottom: "10px" }}>
-                      Age:
-                      <input
-                        style={{
-                          border: "1px solid black",
-                          borderRadius: "10px",
-                          height: "40px",
-                        }}
-                        placeholder="  Age"
-                        type="text"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                      />
-                    </label>
-                    <label style={{ marginBottom: "10px" }}>
-                      Gender:
-                      <input
-                        style={{
-                          border: "1px solid black",
-                          borderRadius: "10px",
-                          height: "40px",
-                        }}
-                        placeholder="  Example: Female"
-                        type="text"
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value)}
-                      />
-                    </label>
-                    <label style={{ marginBottom: "10px" }}>
-                      Relation:
-                      <input
-                        style={{
-                          border: "1px solid black",
-                          borderRadius: "10px",
-                          height: "40px",
-                        }}
-                        placeholder="  Example: Father"
-                        type="text"
-                        value={relation}
-                        onChange={(e) => setRelation(e.target.value)}
-                      />
-                    </label>
-                    <label style={{ marginBottom: "10px" }}>
-                      patient id:
-                      <input
-                        style={{
-                          border: "1px solid black",
-                          borderRadius: "10px",
-                          height: "40px",
-                        }}
-                        placeholder="  Patient ID"
-                        type="text"
-                        value={TakenID}
-                        onChange={(e) => setTakenID(e.target.value)}
-                      />
-                    </label>
-                    <button
-                      style={{
-                        display: "block",
-                        marginTop: "5%",
-                        height: "40px",
-                        fontSize: "16px",
-                      }}
-                      className="btn btn-success m-3 btn-sm"
-                      type="submit"
-                    >
-                      Submit
-                    </button>
-                  </form>
-                )}
-
                 {showHello && (
                   <form>
                     <h2
@@ -639,7 +393,6 @@ const AppPatient = () => {
                       style={{
                         marginTop: "5%",
                         width: "50%",
-                        height: "40px",
                         fontSize: "16px",
                       }}
                       onClick={searchApp}
@@ -650,7 +403,6 @@ const AppPatient = () => {
                 )}
               </div>
             </div>
-            <Footer />
           </div>
           <BottomBar />
         </AppBar>
