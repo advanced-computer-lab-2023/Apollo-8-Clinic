@@ -22,6 +22,8 @@ const createPatient = async (req, res) => {
     emergencyRel,
     adresses,
     status,
+    wallet,
+    health_records,
   } = req.body;
 
   try {
@@ -55,6 +57,8 @@ const createPatient = async (req, res) => {
           emergencyRel,
           adresses,
           status,
+          wallet,
+          health_records
         });
         await patient.save();
         console.log(patient);
@@ -81,6 +85,7 @@ const getPatients = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 };
+
 const getMyPatients = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
   const doctorId = req.params.id;
@@ -296,6 +301,25 @@ const filterPres = async (req, res) => {
   }
 };
 
+// const PayAppointmentByWallet = async (req, res) => {
+//   try {
+//     const patientID = req.body.id;
+//     const discount = await getSessDiscount(patientID);
+//     const sessionPrice = 200;
+//     const discountedAmount = (discount / 100) * sessionPrice;
+//     const patient = await PatientModel.findById(patientID);
+//     if (!patient) {
+//       throw new Error('Patient not found');
+//     }
+//     patient.wallet -= discountedAmount;
+//     await patient.save();
+
+//     res.status(200).send({ "discount": discount, "deductedAmount": discountedAmount });
+//   } catch (e) {
+//     res.status(400).send(e);
+//   }
+// }
+
 const getPres = async (req, res) => {
   try {
     const presID = req.params.id
@@ -325,6 +349,176 @@ const getSessDiscount = async (req, res) => {
 }
 
 
+const updateWallet = async (req, res) => {
+  try {
+    const { patientId , paymentAmount } = req.body;
+    const patient = await PatientModel.findById(patientId);
+    console.log(patient);
+    patient.wallet += paymentAmount;
+    const updatedPatient = await patient.save();
+    res.status(200).json({ updatedWallet: updatedPatient.wallet });
+  } catch (error) {
+    console.error('Error updating wallet:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+import FamilyMemberModel from "../models/familyMember.js"
+
+// req.params -->  current user ID
+//req.body --> email , relation 
+const linkPatient = async (req, res) => {
+
+  try {
+    const mailORnumber = req.body.input;
+    let patient1 = "";
+    var number = Number(mailORnumber);
+    if (!isNaN(number)) {
+      //Input is a number
+      patient1 = await PatientModel.findOne({ "phone": number });
+    } else {
+      //Input is an email
+      patient1 = await PatientModel.findOne({ "email": mailORnumber });
+    }
+    if (patient1 === null)
+      {res.status(200).send("incorrect email or number , patient not found") ; return ;}
+
+    console.log(patient1);
+    const patientID = req.params.patientID;
+    const rel = req.body.relation;
+    //const patient1 = await PatientModel.findOne({"email": mail });
+    const age = (new Date()).getFullYear() - patient1.birthDate.getFullYear() + 1;
+    const newFamMember = new FamilyMemberModel({ "patientID": patientID, "name": patient1.name, "age": age, "gender": patient1.gender, "relation": rel, "linkageID": patient1._id, "healthPackageSub": "", "DateOfSubscribtion": null, "subscriptionStatus": "unsubscribed" });
+    newFamMember.save();
+    res.status(200).send("Added Successfully");
+    console.log(newFamMember);
+
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+
+}
+
+// req.params --> current user ID
+//req.body --> number , relation 
+// const linkPatientByNumber= async (req, res)=>{
+//   try{  
+//     const no = req.body.number;
+//     const patientID = req.params.patientID ;
+//     const rel = req.body.relation ;
+//     const patient1 = await PatientModel.findOne({"phone": no });
+//     const age = (new Date()).getFullYear() - patient1.birthDate.getFullYear()+1;
+//     const newFamMember = new FamilyMemberModel({"patientID":patientID, "name":patient1.name , "age":age , "gender":patient1.gender,"relation":rel,"linkageID":patient1._id });
+//     await newFamMember.save();
+//     //res.status(200).send(" "+ (new Date()).getFullYear() +"-"+ patient1.birthDate.getFullYear() +" = "+age);
+//     res.status(200).json(newFamMember);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message })
+//     }
+
+// }
+
+// NEED TO update healthpackage subsc. if it is expired (duration 1 year)
+// let subDate = patient1.DateOfSubscribtion ;
+//   let currentDate = new Date();
+//   let differenceInTime = currentDate.getTime() - subDate.getTime();
+//   let differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+// if(differenceInDays > 365){
+//     //the subscribtion has expired , remove it and display a message for the patient
+// }else{
+
+// }
+
+//req.params --> patientID
+const patientDetails = async (req, res) => {
+  try {
+    const patientID = req.params.patientID;
+    const patient1 = await PatientModel.findById(patientID);
+    console.log(patient1);
+    res.status(200).json(patient1);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//req.params --> id
+const cancelSubscription = async (req, res) => {
+  try {
+    const patientID = req.params.id;
+    const patient1 = await PatientModel.findById(patientID);
+    if(patient1.healthPackageSub==="")
+    {
+      res.status(200).send("you are not subscribed to any Health Package");
+      return ;
+    }
+    patient1.subscriptionStatus = "cancelled with end date";
+    patient1.save();
+    res.status(200).send("Done");
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+
+const unsubscribe = async (req, res) => {
+  try {
+
+    const patientID = req.params.id;
+    const patient1 = await PatientModel.findById(patientID);
+    console.log("MY CONSOLE FOR UNSUBSCRIBE FOR ME"+patient1);
+    if(patient1.healthPackageSub==="")
+    {
+      res.status(200).send("you are not subscribed to any Health Package");
+      return ;
+    }
+    if (patient1.subscriptionStatus === "unsubscribed") { res.status(200).send("already unsubscribed"); return; }
+    patient1.subscriptionStatus = "unsubscribed";
+    patient1.healthPackageSub = "";
+    patient1.DateOfSubscribtion="";
+    patient1.save();
+    res.status(200).send("Done");
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+
+
+const getHealthRecords = async (req, res) => {
+  try {
+    const patientId = req.params.patientId;
+    const patient = await PatientModel.findById({ _id: patientId });
+
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    const patientRecords = patient.health_records;
+    res.status(200).json(patientRecords);
+  } catch (error) {
+    console.error('Error in getHealthRecords:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const getWallet = async (req, res) => {
+  try {
+    const patientName = req.params.patientName;
+    console.log(patientName);
+    const patient = await PatientModel.findOne({ name: patientName });
+    console.log(patient);
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    const patientWallet = patient.wallet;
+    res.status(200).json(patientWallet);
+  } catch (error) {
+    console.error('Error in getwallet:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 export default {
   createPatient,
   getPatients,
@@ -334,6 +528,14 @@ export default {
   upcomingApp,
   getPrescriptions,
   filterPres,
-  getPres,
-  getSessDiscount
+  getPres, 
+  updateWallet,
+  getSessDiscount,
+  linkPatient,
+  patientDetails,
+  cancelSubscription,
+  unsubscribe,
+  getHealthRecords,
+  getWallet
+
 }

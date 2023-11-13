@@ -3,9 +3,8 @@ import "../App.css";
 function Sidebar() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    sessionStorage.removeItem('token');
-    window.location.pathname = '/';
-      
+    sessionStorage.removeItem("token");
+    window.location.pathname = "/";
   };
 
   return (
@@ -26,6 +25,12 @@ function Sidebar() {
         </li>
         <li style={{ margin: "20px" }}>
           <a href="/patientFamilyAppointments"> View Appointments </a>
+        </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/PatientHealthRecords/:patientId"> View Health records </a>
+        </li>
+        <li style={{ margin: "20px" }}>
+          <a href="/PatientWallet/:patientName"> My wallet </a>
         </li>
         <li style={{ margin: "20px" }}>
           <a href="/changePassPat">Change Password</a>

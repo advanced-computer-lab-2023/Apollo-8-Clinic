@@ -1,19 +1,63 @@
 import ReactDOM from "react-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "../components/SidebarDoctor";
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import TextField from '@mui/material/TextField';
+import "../App.css";
+
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+import ShoppingBasketSharpIcon from '@mui/icons-material/ShoppingBasketSharp';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useNavigate } from "react-router-dom";
+import { height } from '@mui/system';
+import imgSrc from "../images/back.jpg"
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import HomeIcon from '@mui/icons-material/Home';
+import Stack from '@mui/material/Stack';
+import Pagination from '@mui/material/Pagination';
+
+import ResponsiveAppBar from './TopBarDoc';
+import Ads from './Ads';
+
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import BottomBar from './BottomBar';
+
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/patient/appointmentWithFilter")
-      .then((response) => {
+    axios.post('http://localhost:8000/patient/appointmentWithFilter')
+      .then(response => {
         setAppointments(response.data);
       })
-      .catch((error) => {
-        console.error("There was an error!", error);
+      .catch(error => {
+        console.error('There was an error!', error);
       });
   }, []);
 
@@ -70,11 +114,7 @@ const AppointmentFilterPage = ({ appointments }) => {
 };
 
 const Header = () => (
-  <div
-    style={{ width: "100%", border: "1px solid black", textAlign: "center" }}
-  >
-    <h1>MY CLINIC</h1>
-  </div>
+  <div></div>
 );
 
 //<button style={{width: '100%', height:40}} onClick={() => {changeContent(<Buttons />);setShowForm(false);}}>Health Packages</button>
@@ -90,22 +130,26 @@ const Sidebar1 = ({
       width: "20%",
       height: "calc(100vh - 100px)",
       border: "1px solid black",
+      borderRadius: '20px'
     }}
   >
     <div
       id="welcomeTitle"
       style={{
         border: "1px solid black",
-        height: 80,
+        backgroundColor: " rgb(65, 105, 225)",
+        color: 'white',
+        height: 60,
         fontSize: 25,
-        borderRadius: 10,
+        borderRadius: '20px',
         textAlign: "center",
       }}
     >
       Welcome Doctor
     </div>
     <button
-      style={{ width: "100%", height: 40 }}
+      className="btn btn-success"
+      style={{ width: "100%", height: 40, marginTop: '10%', borderRadius: '20px', }}
       onClick={() => {
         changeContent(<Appointments />);
         setShowHello(true);
@@ -122,6 +166,8 @@ const MainContent = ({ content }) => (
       width: "60%",
       height: "calc(100vh - 100px)",
       border: "1px solid black",
+      borderRadius: '20px'
+
     }}
   >
     {content}
@@ -130,7 +176,9 @@ const MainContent = ({ content }) => (
 
 const Footer = () => (
   <div
-    style={{ width: "100%", border: "1px solid black", textAlign: "center" }}
+    style={{
+      width: "100%", border: "1px solid black", textAlign: "center", borderRadius: '20px'
+    }}
   >
     <p>Contact us on (+100)123456788 or by email clinic@gmail.com</p>
   </div>
@@ -142,6 +190,8 @@ const RightSidebar = ({ showForm, showHello }) => (
       width: "20%",
       height: "calc(100vh - 100px)",
       border: "1px solid black",
+      borderRadius: '20px'
+
     }}
   ></div>
 );
@@ -177,69 +227,86 @@ const MainDoctor = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-center align-itelms-center vh-100 bg-light">
-        <Sidebar />
+      <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
+        <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto" }}>
 
-        <div className="card m-3 col-12" style={{ width: "80%" }}>
-          <Header />
+          <ResponsiveAppBar />
+          <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
+            <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+              Welcome Doctor</h1>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              height: "calc(100vh - 100px)",
-            }}
-          >
-            <Sidebar1
-              changeContent={setContent}
-              showHello={showHello}
-              setShowHello={setShowHello}
-            />
-            <MainContent content={content} />
+          </div>
+          <div className="card m-3 col-12" style={{ width: "80%", borderRadius: '20px', left: '8%' }}>
+            <Header />
+
             <div
               style={{
-                width: "20%",
+                display: "flex",
+                justifyContent: "space-between",
                 height: "calc(100vh - 100px)",
-                border: "1px solid black",
               }}
             >
-              {showHello && (
-                <form>
-                  <h2>Appointments</h2>
-                  <label>
-                    Start Date:
-                    <input
-                      type="text"
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                    />
-                  </label>
-                  <label>
-                    End Date:
-                    <input
-                      type="text"
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                    />
-                  </label>
-                  <label>
-                    Status:
-                    <input
-                      type="text"
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                    />
-                  </label>
-                  <button type="button" onClick={searchApp}>
-                    Apply Filter
-                  </button>
-                </form>
-              )}
+              <Sidebar1
+                changeContent={setContent}
+                showHello={showHello}
+                setShowHello={setShowHello}
+              />
+              <MainContent content={content} />
+              <div
+                style={{
+                  width: "20%",
+                  height: "calc(100vh - 100px)",
+                  border: "1px solid black",
+                  borderRadius: '20px'
+
+                }}
+              >
+                {showHello && (
+                  <form>
+                    <h2 style={{ backgroundColor: " rgb(65, 105, 225)", color: 'white', marginBottom: '20px', height: '50px', borderRadius: '20px', textAlign: "center" }}>    Appointments</h2>
+                    <label style={{ marginBottom: '10px' }}>
+                      Start Date:
+                      <input
+                        style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
+                        placeholder="  Start Date"
+                        type="text"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                      />
+                    </label>
+                    <label style={{ marginBottom: '10px' }}>
+                      End Date:
+                      <input
+                        style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
+                        placeholder="  End Date"
+                        type="text"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                      />
+                    </label>
+                    <label style={{ marginBottom: '10px' }}>
+                      Status:
+                      <input
+                        style={{ border: "1px solid black", borderRadius: '10px', height: '40px' }}
+                        placeholder="  Example: Accepted"
+                        type="text"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                      />
+                    </label>
+                    <button type="button" className="btn btn-success m-3 btn-sm" style={{ marginTop: '5%', width: '50%', height: '40px', fontSize: '16px' }} onClick={searchApp}>
+                      Apply Filter
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+          <BottomBar />
 
+        </AppBar >
+
+      </div >
       <Footer />
     </>
   );
