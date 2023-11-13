@@ -77,6 +77,12 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const handleLogout = (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem("token");
+    window.location.pathname = "/";
+  }
+
   return (
     <AppBar
       style={{
@@ -254,10 +260,10 @@ function ResponsiveAppBar() {
                 <WalletIcon fontSize="large" sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Open Your Profile">
+            <Tooltip title="Logout">
               <IconButton
                 style={{ paddingLeft: "20px" }}
-                onClick={"/cart"}
+                onClick={handleLogout}
                 sx={{ p: 0 }}
               >
                 <AccountCircleIcon fontSize="large" sx={{ color: "white" }} />
