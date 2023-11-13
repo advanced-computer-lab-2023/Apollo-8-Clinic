@@ -150,7 +150,6 @@ function App() {
 
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
-        <Route path="/allDoctors" element={<AllDoctors />} />
         <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
 
         <Route path="/doctorInfo/:id" element={<DoctorInfo />} />
@@ -160,22 +159,17 @@ function App() {
 
         <Route path="/viewMyPatients" element={<MyPatientsList />} />
         <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
-        <Route path="/addAdministrator" element={<AddAdmin />} />
-        <Route path="/removeUser" element={<RemoveUser />} />
-        <Route path="/pendingDoctors" element={<PendingDoctors />} />
+        
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/doctorAppointments" element={<MainDoctor />} />
         <Route path="/patientFamilyAppointments" element={<AppPatient />} />
-        <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
-        <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
         <Route path="/DoctorLogin" element={<Doctorlogin />} />
         <Route path="/AdminLogin" element={<Adminlogin />} />
         <Route path="/PatientLogin" element={<Patientlogin />} />
         <Route path="/ForgetPassword" element={<Forget />} />
-        <Route path="/changePassPat" element={<ChangePass />} />
         <Route path="/changePassDoc" element={<ChangePassDoc />} />
-        <Route path="/changePassAdm" element={<ChangePassAdm />} />
+        
       </Routes>
     );
   } else if (type === "Admin") {
@@ -183,33 +177,19 @@ function App() {
       <Routes>
         <Route path="/registerDoctor" element={<DoctorSignup />} />
         <Route path="/registerPatient" element={<PatientSignup />} />
-        <Route path="/prescriptionsList" element={<PrescriptionsList />} />
-        <Route path="/prescriptions/:id" element={<PrescriptionsDetails />} />
-        <Route path="/editDoctor" element={<EditDoctor />} />
+        
         <Route path="/" element={<Home />} />
-        <Route path="/allDoctors" element={<AllDoctors />} />
-        <Route path="/doctorInfo/:id" element={<DoctorInfo />} />
-        <Route path="/viewDoctor/:id" element={<ViewDoctor />} />
-        <Route path="/filter" element={<FilterDoctor />} />
-        <Route path="/viewMyPatients" element={<MyPatientsList />} />
-        <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
         <Route path="/addAdministrator" element={<AddAdmin />} />
         <Route path="/removeUser" element={<RemoveUser />} />
         <Route path="/pendingDoctors" element={<PendingDoctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
-        <Route path="/doctorAppointments" element={<MainDoctor />} />
-        <Route path="/patientFamilyAppointments" element={<AppPatient />} />
         <Route path="/adminHealthPackage" element={<App1 />} />
-        <Route path="/viewHealth/:patientID" element={<Health />} />
-        <Route path="/DoctorsWithDiscount" element={<DoctorsWithDiscount />} />
         <Route path="/DoctorLogin" element={<Doctorlogin />} />
         <Route path="/AdminLogin" element={<Adminlogin />} />
         <Route path="/PatientLogin" element={<Patientlogin />} />
         <Route path="/ForgetPassword" element={<Forget />} />
         <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
 
-        <Route path="/changePassPat" element={<ChangePass />} />
-        <Route path="/changePassDoc" element={<ChangePassDoc />} />
         <Route path="/changePassAdm" element={<ChangePassAdm />} />
       </Routes>
     );
