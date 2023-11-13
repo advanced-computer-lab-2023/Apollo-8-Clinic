@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ResponsiveAppBar from './TopBar';
-import { AppBar } from '@mui/material';
-import BottomBar from './BottomBar';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ResponsiveAppBar from "./TopBar";
+import { AppBar } from "@mui/material";
+import BottomBar from "./BottomBar";
 import {
   Typography,
   Card,
@@ -26,28 +26,36 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-} from '@mui/material';
-const doctorId = "654d8a73bb465e1aaf27c508";
-const patientID = "651fd358364267c68b56ba41";
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+//const id = "654d8a73bb465e1aaf27c508";
+const patientID = "6523ba9cd72b2eb0e39cb137";
 const AvailableAppointments = () => {
   const [doctor, setDoctor] = useState(null);
   const [slots, setSlots] = useState([]);
   const [options, setOptions] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
+  const { id } = useParams();
 
   const formatDate = (dateTime) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dateTime).toLocaleDateString('en-GB', options);
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateTime).toLocaleDateString("en-GB", options);
   };
   const formatTime = (time) => {
-    return new Date(time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    return new Date(time).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
   };
 
   useEffect(() => {
+    console.log(`http://localhost:8000/doctor/${id}`);
     // Fetch doctor information
-    axios.get(`http://localhost:8000/doctor/${doctorId}`)
+    axios
+      .get(`http://localhost:8000/doctor/${id}`)
       .then((response) => {
         setDoctor(response.data);
         setSlots(response.data.availableSlots);
@@ -55,18 +63,19 @@ const AvailableAppointments = () => {
         console.log(doctor);
       })
       .catch((error) => {
-        console.error('Failed to fetch doctor:', error);
+        console.error("Failed to fetch doctor:", error);
       });
-    axios.get('http://localhost:8000/patient/NotlinkedFamily/' + patientID)
+    axios
+      .get("http://localhost:8000/patient/NotlinkedFamily/" + patientID)
       .then((res) => {
         setOptions(res.data);
         console.log(res.data);
         console.log(options);
       })
       .catch((error) => {
-        console.error('Failed to family members', error);
+        console.error("Failed to family members", error);
       });
-  }, [doctorId, patientID]);
+  }, [id, patientID]);
 
   // Organize slots by date
   const slotsByDate = {};
@@ -93,31 +102,44 @@ const AvailableAppointments = () => {
   const confirmReservation = async () => {
     // Implement your reservation logic here
     const reqBody = {
-      doctorId: doctorId,
+      doctorId: id,
       patientId: patientID,
       date: selectedSlot,
-      status: "upcoming"
+      status: "upcoming",
     };
-    const newApp = await axios.post('http://localhost:8000/appointment/', reqBody);
+    const newApp = await axios.post(
+      "http://localhost:8000/appointment/",
+      reqBody
+    );
     console.log(selectedSlot);
-    console.log(`Slot reserved: ${formatTime(selectedSlot)} - Option: ${selectedOption}`);
+    console.log(
+      `Slot reserved: ${formatTime(selectedSlot)} - Option: ${selectedOption}`
+    );
     setDialogOpen(false);
     setSelectedSlot(null);
-    setSelectedOption('');
+    setSelectedOption("");
   };
 
   // Function to handle closing the dialog
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setSelectedSlot(null);
-    setSelectedOption('');
+    setSelectedOption("");
   };
 
   return (
-    <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
-      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
+    <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
+      <AppBar
+        style={{
+          height: "100%",
+          backgroundColor: "#F0F0F0",
+          overflowY: "auto",
+        }}
+      >
         <ResponsiveAppBar />
-        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>      <Typography variant="h4">{doctor?.name}</Typography>
+        <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
+          {" "}
+          <Typography variant="h4">{doctor?.name}</Typography>
           <Card>
             <CardContent>
               <Typography variant="h6">{doctor?.speciality}</Typography>
@@ -134,13 +156,17 @@ const AvailableAppointments = () => {
               <TableBody>
                 {Object.keys(slotsByDate).map((date) => (
                   <TableRow key={date}>
-                    <TableCell style={{ fontSize: '18px' }}>{date}</TableCell>
+                    <TableCell style={{ fontSize: "18px" }}>{date}</TableCell>
                     <TableCell>
                       <List>
                         {slotsByDate[date].map((slot) => (
                           <ListItem key={slot._id}>
                             <ListItemText primary={formatTime(slot)} />
-                            <Button variant="contained" color="primary" onClick={() => reserveSlot(slot)}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => reserveSlot(slot)}
+                            >
                               Reserve
                             </Button>
                           </ListItem>
@@ -152,7 +178,6 @@ const AvailableAppointments = () => {
               </TableBody>
             </Table>
           </TableContainer>
-
           {/* Reservation Dialog */}
           <Dialog open={dialogOpen} onClose={handleCloseDialog}>
             <DialogTitle>Reserve for..</DialogTitle>
@@ -185,8 +210,8 @@ const AvailableAppointments = () => {
           </Dialog>
         </div>
         <BottomBar />
-      </AppBar >
-    </div >
+      </AppBar>
+    </div>
   );
 };
 

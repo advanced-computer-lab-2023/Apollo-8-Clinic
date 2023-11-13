@@ -52,15 +52,15 @@ const doctorSchema = new mongoose.Schema({
   //sss
   idFile: {
     type: String,
-    required: true,
+    //required: true,
   },
   degreeFile: {
     type: String,
-    required: true,
+    //required: true,
   },
   licenseFile: {
     type: String,
-    required: true,
+    //required: true,
   },
 });
 

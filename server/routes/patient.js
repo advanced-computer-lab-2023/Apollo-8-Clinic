@@ -2,6 +2,9 @@ import express from "express";
 import controllers from "../controllers/patient.js";
 import doctor from "../controllers/doctor.js";
 import healthPackageController from "../controllers/healthPackageController.js";
+import Auth from "../Authentication/login.js"
+import Middle from "../Authentication/Middleware.js";
+
 const router = express.Router();
 
 // DELETE THESE COMMENTS AFTER YOU READ THEM :)
@@ -12,6 +15,7 @@ router.get("/getPatientHealthPackage/:id", controllers.getPatientHealthPackage);
 router.get("/getPerscriptions", controllers.getPrescriptions)
 router.post("/filterPerscriptions", controllers.filterPres)
 router.get("/getPerscription/:id", controllers.getPres)
+router.post("/patientLogin", Auth.loginPatient)
 
 //view all the health packages 
 //when testing it on postman, make sure to send the request with an empty body {} 
@@ -34,7 +38,7 @@ router.post('/unsubscribeForMember/:id', FamilyMemberController.unsubscribe);
 //display patient's detials including HP subscription
 // do we need to update healthpackage subsc. if it is expired (duration 1 year)
 router.get('/patientdetails/:patientID', patient.patientDetails);
-router.get("/getWallet/:patientName", controllers.getWallet)
+router.get("/getWallet/:patientName", Middle.requireAuthPatient, controllers.getWallet)
 //get or add family members
 import FamilyMemberController from "../controllers/FamilyMemberController.js";
 router.get("/NotlinkedFamily/:patientID", FamilyMemberController.getNotLinkedFamMembers);
@@ -55,7 +59,7 @@ router.put('/updateWallet', controllers.updateWallet);
 
 
 //view all the health packages 
-router.get('/health-records/:patientId', controllers.getHealthRecords);
+router.get('/health-records/:patientId', Middle.requireAuthPatient, controllers.getHealthRecords);
 //view appointments
 import appointmentContoller from "../controllers/appointmentContoller.js";
 import patient from "../controllers/patient.js";
@@ -65,7 +69,7 @@ router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFil
 router.get('/mydiscount/:id',patient.checkIfLinked);
 
 //sss
-router.get("/allDoctors", doctor.getAllDoctors);
+router.get("/allDoctors", Middle.requireAuthPatient, doctor.getAllDoctors);
 router.get("/docInfo/:id", doctor.getDoctorById);
 router.get("/docSearch", doctor.searchByNameOrSpec);
 router.post("/docFilter", doctor.filterBySpecOrAv);
@@ -80,4 +84,4 @@ router.post("/docFilter", doctor.filterBySpecOrAv);
 // lw mesh fahem el "/patient" gat mnen fa e7na 3amlenha fi el index.js file fi el line da (app.use("/patient", patientRoutes);)
 router.post("/myApp", appointmentContoller.patientApp);
 
-export default router;
+export default router; 
