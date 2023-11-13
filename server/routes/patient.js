@@ -61,6 +61,9 @@ import appointmentContoller from "../controllers/appointmentContoller.js";
 import patient from "../controllers/patient.js";
 router.post("/appointmentWithFilter", appointmentContoller.getAppointmentWithFilter);
 
+
+router.get('/mydiscount/:id',patient.checkIfLinked);
+
 //sss
 router.get("/allDoctors", doctor.getAllDoctors);
 router.get("/docInfo/:id", doctor.getDoctorById);

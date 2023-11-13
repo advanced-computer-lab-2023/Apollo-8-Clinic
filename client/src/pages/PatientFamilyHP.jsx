@@ -80,7 +80,7 @@ const PatientHP_FM = () => {
   const [whom,setWhom]=useState(0);
   const [Fammember,setFammember]= useState("");
   const[wallet,setWallet]=useState("");
-
+  const [mydiscount,setmydiscount] = useState(0);
   const fn1 = () => {
     setmainshow(false);
     setfamilyshow(true);
@@ -208,6 +208,19 @@ const PatientHP_FM = () => {
       console.error('There was an error!', error);
     });
 
+//get my discount
+//if i am a linked patient for a patient, get him , get his subscription , get discount , setmydisocunt()
+axios.get(`http://localhost:8000/patient/mydiscount/${patientID}`).then(
+  (res) => { 
+      setmydiscount(res.data);  
+      console.log("my discount"+res.data);   
+  }
+   ).catch(error => {
+      res.status(400).send(error);
+      console.error("Error fetching data:", error);
+   });
+
+
   }
 
 
@@ -264,26 +277,27 @@ const PatientHP_FM = () => {
 
 
   const handleWalletPayment = async (price,packageName) => {
-    //payment
-    try {
-      // Make a request to your backend to update the wallet
-      const response = await axios.put(`http://localhost:8000/patient/updateWallet`, {
-        patientId: patientID,
-        paymentAmount: -price,
-      });
-      // Update the wallet state with the updated value from the response
-      console.log('walletUpdated');
-      setWallet(response.data.updatedWallet);
-    } catch (error) {
-      console.error('Error updating wallet:', error);
-    }
-    //subscription
+    
+    //subscription , for me 
     if(whom===1){
       axios.post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, { "HPname": packageName }).then(
         (res) => {
           alert(res.data);
           setSelectedPackageId("");
           setWhom(0);
+          //payment
+    try {
+      // Make a request to your backend to update the wallet
+      const response = axios.put(`http://localhost:8000/patient/updateWallet`, {
+        patientId: patientID,
+        paymentAmount: -(price - price*mydiscount/100),
+      });
+      // Update the wallet state with the updated value from the response
+      console.log('walletUpdated');
+      //setWallet(response.data.updatedWallet);
+    } catch (error) {
+      console.error('Error updating wallet:', error);
+    }
         }
       ).catch(error => {
         res.status(400).send(error);
@@ -294,6 +308,18 @@ if(whom===2 && Fammember!=""){
   axios.post(`http://localhost:8000/patient/subscribeForFam/${Fammember}`, { "HPname": packageName }).then(
     (res) => {
       alert(res.data);
+      try {
+        // Make a request to your backend to update the wallet
+        const response = axios.put(`http://localhost:8000/patient/updateWallet`, {
+          patientId: patientID,
+          paymentAmount: -(price - price*discount/100),
+        });
+        // Update the wallet state with the updated value from the response
+        console.log('walletUpdated');
+        //setWallet(response.data.updatedWallet);
+      } catch (error) {
+        console.error('Error updating wallet:', error);
+      }
     }
   ).catch(error => {
     res.status(400).send(error);
@@ -524,8 +550,11 @@ const unsubscribeForMe = ()=>{
                     <p><strong>family subscribtion discount:</strong> {package1.subDiscount + "%"}</p>
                     <Button1 href="#id" style={{ "margin-right": 15, "margin-bottom": 5 }} onClick={ ()=>{subscribeforMe(package1._id)}}>subscribe for myself</Button1>
                     <Button1 style={{ "margin-bottom": 5 }} onClick={()=>{ handleFMSubsc(package1._id)}}>subscribe for a family member</Button1>
-                    <Badge  bg="secondary">{discount} % Offer</Badge>
-                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary" onClick={() => {handleWalletPayment(package1.price,package1.name)}} >Pay by wallet</Button1> <Button1 variant="outline-primary" onClick={() => {handleCreditCardPayment(package1.price,package1.name)}}>Pay by credit card</Button1>  </div>) : null}
+                    <div>
+                    <Badge  bg="secondary">{mydiscount} % Offer for you </Badge>{' '}
+                    <Badge  bg="secondary">{discount} % Offer for any member</Badge>
+                    </div>
+                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary" onClick={() => {handleWalletPayment(package1.price,package1.name)}} >Pay using wallet</Button1> <Button1 variant="outline-primary" onClick={() => {handleCreditCardPayment(package1.price,package1.name)}}>Pay using credit card</Button1>  </div>) : null}
                     {selectedPackageId === package1._id && dropdownFam ? (
                       <div>
                         <h3 style={{ "margin-up": 10 }}>Choose a member</h3>
