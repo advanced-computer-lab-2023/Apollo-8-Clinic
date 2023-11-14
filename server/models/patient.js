@@ -28,7 +28,7 @@ const patientSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      unique:true,
+      unique: true,
       required: true,
     },
     emergencyName: {
@@ -57,22 +57,22 @@ const patientSchema = new mongoose.Schema(
     },
     health_records: {
       records: [
-          {
-              description: { type: String },
-              image_url: { type: String },
-              date: { type: Date }
-          }
+        {
+          description: { type: String },
+          image: { type: String },
+          date: { type: Date }
+        }
       ]
-  },
-    healthPackageSub:{
-      type:String,
-      default:""
     },
-    DateOfSubscribtion:{
-      type:Date,
-      required:false
+    healthPackageSub: {
+      type: String,
+      default: ""
     },
-    subscriptionStatus:{
+    DateOfSubscribtion: {
+      type: Date,
+      required: false
+    },
+    subscriptionStatus: {
       type: String,
       enum: ["cancelled with end date", "subscribed with renewal date", "unsubscribed"],
     },

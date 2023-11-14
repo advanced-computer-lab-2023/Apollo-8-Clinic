@@ -88,7 +88,7 @@ const getPatients = async (req, res) => {
 
 const getMyPatients = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
-  const doc=await DocModel.findOne({user:res.locals.userId})
+  const doc = await DocModel.findOne({ user: res.locals.userId })
   const doctorId = doc._id;
   console.log(req.query.id);
   const myPatients = [];
@@ -207,7 +207,7 @@ const getPatientByName = async (req, res) => {
 const upcomingApp = async (req, res) => {
   console.log("YARABBBBB")
   //retrieve patients that have an appointmen wth this dr from the database
-  const doc=await DocModel.findOne({user:res.locals.userId})
+  const doc = await DocModel.findOne({ user: res.locals.userId })
   const doctorId = doc._id;
   console.log(doctorId);
 
@@ -524,6 +524,66 @@ const getHealthRecords = async (req, res) => {
   }
 };
 
+const addHealthRecord = async (req, res) => {
+  try {
+    const patientId = req.params.patientId;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    const healthRecord = {
+      date: req.body.date,
+      description: req.body.description,
+      image: req.files[0].filename
+    }
+    if (!patient.health_records) {
+      patient.health_records = { records: [] };
+    }
+    if (Array.isArray(healthRecord)) {
+      patient.health_records.records.push(...healthRecord);
+    } else {
+      patient.health_records.records.push(healthRecord);
+    }
+    await patient.save();
+    console.log('Patient after saving health records:', patient);
+    res.status(200).json(patient);
+  } catch (error) {
+    console.error('Error in getHealthRecords:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const removeHealthRecord = async (req, res) => {
+  try {
+    const patientId = req.params.patientId;
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    const records = []
+
+    if (patient.health_records && patient.health_records.records.length > 0) {
+      patient.health_records.records.forEach(r => {
+        if (r._id != req.body.id) {
+          records.push(r)
+        }
+      })
+    }
+
+    patient.health_records.records = records
+    await patient.save();
+    console.log('Patient after saving health records:', patient);
+    res.status(200).json(patient);
+  } catch (error) {
+    console.error('Error in getHealthRecords:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const getWallet = async (req, res) => {
   try {
     const patientName = req.params.patientName;
@@ -558,6 +618,8 @@ export default {
   cancelSubscription,
   unsubscribe,
   getHealthRecords,
+  addHealthRecord,
+  removeHealthRecord,
   getWallet,
   checkIfLinked
 }

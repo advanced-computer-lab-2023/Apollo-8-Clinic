@@ -7,6 +7,7 @@ import appointmentContoller from "../controllers/appointmentContoller.js";
 import patient from "../controllers/patient.js";
 import Auth from "../Authentication/login.js"
 import Middle from "../Authentication/Middleware.js";
+import uploadMiddleware from "../middlewares/uploadmiddleware.js";
 
 const router = express.Router();
 
@@ -61,8 +62,10 @@ router.put('/updateWallet', Middle.requireAuthPatient, controllers.updateWallet)
 
 //view all the health packages 
 router.get('/health-records/:patientId', Middle.requireAuthPatient, controllers.getHealthRecords);
+router.put('/health-records', Middle.requireAuthPatient, uploadMiddleware, controllers.addHealthRecord);
+router.put('/remove-health-records', Middle.requireAuthPatient, controllers.removeHealthRecord);
 //view appointments
-router.post("/appointmentWithFilter", Middle.requireAuthPatient, appointmentContoller.getAppointmentWithFilter);
+router.post("/appointmentWithFilter", Middle.requireAuth, appointmentContoller.getAppointmentWithFilter);
 
 
 router.get('/mydiscount/:id', Middle.requireAuthPatient, patient.checkIfLinked);

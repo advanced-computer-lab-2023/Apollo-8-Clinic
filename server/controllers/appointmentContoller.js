@@ -4,13 +4,13 @@ import PatientModel from "../models/patient.js";
 //filtering options:(date) (status) (date&status) (no filter)
 import { constants } from 'crypto';
 import AppointmentModel from '../models/appointment.js';
-import PatientModel from "../models/patient.js";
 
 
 const createAppointment = async (req, res) => {
+  const patient1 = await PatientModel.findOne({ user: res.locals.userId });
+  const patientId = patient1._id;
   const {
     doctorId,
-    patientId,
     date,
     status,
     type
@@ -42,7 +42,8 @@ const createAppointment = async (req, res) => {
 
 const getPatientAppointments = async (req, res) => {
   try {
-    const patientID = req.params.id;
+    const patient1 = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient1._id;
     const appointments1 = await AppointmentModel.find({ "patientId": patientID });
     //     let result = {};
 
@@ -110,9 +111,10 @@ const getAppointmentWithFilter = async (req, res) => {
 };
 const getAppointments = async (req, res) => {
   try {
-    const doctorName = req.params.doctorName;
-    console.log("doctorname" + doctorName);
-    const doctor = await DoctorModel.findOne({ name: doctorName });
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    // const doctorName = req.params.doctorName;
+    // console.log("doctorname" + doctorName);
+    // const doctor = await DoctorModel.findOne({ name: doctorName });
     console.log("doctor" + doctor);
 
     if (!doctor) {

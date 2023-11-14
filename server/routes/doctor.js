@@ -12,25 +12,27 @@ const router = express.Router();
 //no middlewaree
 router.post("/", uploadMiddleware, controllers.createDoctor);
 //
-router.get("/",Middle.requireAuthAdmin ,controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
-router.get("/getAcceptedDoctors",Middle.requireAuth ,controllers.getAcceptedDoctors);//for doctors and patients in the sys
-router.get("/:id",Middle.requireAuthPatient ,controllers.getDoctorById);
-router.put("/accept/:id",Middle.requireAuthAdmin ,controllers.acceptDoctor);
-router.put("/reject/:id",Middle.requireAuthAdmin ,controllers.rejectDoctor);
-router.get("/viewPatients/:id",Middle.requireAuthDoctor, patient.getMyPatients);
+router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctorContract);
+router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
+router.get("/", Middle.requireAuthAdmin, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
+router.get("/getAcceptedDoctors", Middle.requireAuth, controllers.getAcceptedDoctors);//for doctors and patients in the sys
+router.get("/:id", Middle.requireAuthPatient, controllers.getDoctorById);
+router.put("/accept/:id", Middle.requireAuthAdmin, controllers.acceptDoctor);
+router.put("/reject/:id", Middle.requireAuthAdmin, controllers.rejectDoctor);
+router.get("/viewPatients/:id", Middle.requireAuthDoctor, patient.getMyPatients);
 //not called any where
-router.get("/viewPatientsByName",patient.getPatientByName);
-router.get("/futureAppointmentPatients/:id",Middle.requireAuthDoctor, patient.upcomingApp);
-router.post("/UpdateDoctor",Middle.requireAuthDoctor, controllers.updateDoctor);
-router.post("/getHealthRecord",Middle.requireAuthDoctor, controllers.getHealthRecord);
-router.post('/add-available-time-slot',Middle.requireAuthDoctor, controllers.addAvailableTimeSlots);
-router.post('/addHealthRecords',Middle.requireAuthDoctor, controllers.addHealthRecords);
-router.get("/getWallet/:doctorName",Middle.requireAuthDoctor, controllers.getWallet);
-router.put("/updateAppointment/:doctorName",Middle.requireAuthDoctor, controllers.updateAppointment)
+router.get("/viewPatientsByName", patient.getPatientByName);
+router.get("/futureAppointmentPatients/:id", Middle.requireAuthDoctor, patient.upcomingApp);
+router.post("/UpdateDoctor", Middle.requireAuthDoctor, controllers.updateDoctor);
+router.post("/getHealthRecord", Middle.requireAuthDoctor, controllers.getHealthRecord);
+router.post('/add-available-time-slot', Middle.requireAuthDoctor, controllers.addAvailableTimeSlots);
+router.post('/addHealthRecords', Middle.requireAuthDoctor, controllers.addHealthRecords);
+router.get("/getWallet/:doctorName", Middle.requireAuthDoctor, controllers.getWallet);
+router.put("/updateAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updateAppointment)
 //no need
 router.post("/doctorLogin", Auth.loginDoctor)
 //view appointments chekkkk whattttt is thattt???
 import appointmentContoller from "../controllers/appointmentContoller.js";
-router.post("/appointmentWithFilter",Middle.requireAuth ,appointmentContoller.getAppointmentWithFilter);
+router.post("/appointmentWithFilter", Middle.requireAuth, appointmentContoller.getAppointmentWithFilter);
 
 export default router;

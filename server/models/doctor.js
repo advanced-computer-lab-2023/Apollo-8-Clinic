@@ -32,7 +32,7 @@ const doctorSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Pending", "Accepted", "Rejected"],
+    enum: ["Pending", "PendingContract", "Accepted", "Rejected"],
     required: true,
     default: "Pending",
   },
@@ -52,15 +52,15 @@ const doctorSchema = new mongoose.Schema({
   //sss
   idFile: {
     type: String,
-    //required: true,
+    required: true,
   },
   degreeFile: {
     type: String,
-    //required: true,
+    required: true,
   },
   licenseFile: {
     type: String,
-    //required: true,
+    required: true,
   },
 });
 

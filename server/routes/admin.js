@@ -13,21 +13,18 @@ router.post("/chanePass", changePass.changePass)
 router.get("/getType", Middle.getType)
 
 
-
-
-
 // to test this send a post request to this route: http://localhost:8000/doctor
 router.post("/createUser", controllers.createUser);
-router.get("/getUsers", controllers.getUsers);
+router.get("/getUsers", Middle.requireAuthAdmin, controllers.getUsers);
 router.post("/addAdministrator", Middle.requireAuthAdmin, controllers.addAdministrator);
-router.delete("/removeUser", controllers.removeUser);
+router.delete("/removeUser", Middle.requireAuthAdmin, controllers.removeUser);
 router.post("/adminLogin", Auth.loginAdmin)
 
 //health packages (view,add,update,delete)
 import HealthPackageController from '../controllers/healthPackageController.js';
-router.get('/healthPackage', HealthPackageController.getAllHealthPackages);
-router.post('/healthPackage', HealthPackageController.createHealthPackage);
-router.put('/healthPackage/:id', HealthPackageController.updateHealthPackage);
-router.delete('/healthPackage/:id', HealthPackageController.deleteHealthPackage);
+router.get('/healthPackage', Middle.requireAuthAdmin, HealthPackageController.getAllHealthPackages);
+router.post('/healthPackage', Middle.requireAuthAdmin, HealthPackageController.createHealthPackage);
+router.put('/healthPackage/:id', Middle.requireAuthAdmin, HealthPackageController.updateHealthPackage);
+router.delete('/healthPackage/:id', Middle.requireAuthAdmin, HealthPackageController.deleteHealthPackage);
 
 export default router;
