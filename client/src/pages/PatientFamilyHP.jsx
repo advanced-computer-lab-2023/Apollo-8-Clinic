@@ -290,7 +290,7 @@ axios.get(`http://localhost:8000/patient/mydiscount/${patientID}`).then(
       // Make a request to your backend to update the wallet
       const response = axios.put(`http://localhost:8000/patient/updateWallet`, {
         patientId: patientID,
-        paymentAmount: -(price - price*mydiscount/100),
+        paymentAmount: -(price - price*mydiscount),
       });
       // Update the wallet state with the updated value from the response
       console.log('walletUpdated');
@@ -312,7 +312,7 @@ if(whom===2 && Fammember!=""){
         // Make a request to your backend to update the wallet
         const response = axios.put(`http://localhost:8000/patient/updateWallet`, {
           patientId: patientID,
-          paymentAmount: -(price - price*discount/100),
+          paymentAmount: -(price - price*discount),
         });
         // Update the wallet state with the updated value from the response
         console.log('walletUpdated');
@@ -336,7 +336,8 @@ if(whom===2 && Fammember!=""){
   const handleCreditCardPayment = (packageName) => {
     axios.post("http://localhost:8000/PackageCheckout").then((response) => {}).catch((error) => {
       console.error("Error fetching data:", error);});
-    
+
+    console.log("i am here");
      //subscription
      if(whom===1){
       axios.post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, { "HPname": packageName }).then(
@@ -545,16 +546,16 @@ const unsubscribeForMe = ()=>{
                   <div key={package1._id} style={{ border: '1px solid black', "text-align": "center", "margin-bottom": "10px", width: 500, borderRadius: 5 }}>
                     <p><strong>Name:</strong> {package1.name}</p>
                     <p><strong>Price:</strong> {package1.price + " L.E."}</p>
-                    <p><strong>doctor's session price discount:</strong> {package1.sessDiscount + "%"}</p>
-                    <p><strong>medicin discount:</strong> {package1.medDiscount + "%"}</p>
-                    <p><strong>family subscribtion discount:</strong> {package1.subDiscount + "%"}</p>
+                    <p><strong>doctor's session price discount:</strong> {package1.sessDiscount*100 + "%"}</p>
+                    <p><strong>medicin discount:</strong> {package1.medDiscount*100 + "%"}</p>
+                    <p><strong>family subscribtion discount:</strong> {package1.subDiscount*100 + "%"}</p>
                     <Button1 href="#id" style={{ "margin-right": 15, "margin-bottom": 5 }} onClick={ ()=>{subscribeforMe(package1._id)}}>subscribe for myself</Button1>
                     <Button1 style={{ "margin-bottom": 5 }} onClick={()=>{ handleFMSubsc(package1._id)}}>subscribe for a family member</Button1>
                     <div>
-                    <Badge  bg="secondary">{mydiscount} % Offer for you </Badge>{' '}
-                    <Badge  bg="secondary">{discount} % Offer for any member</Badge>
+                    <Badge  bg="secondary">{mydiscount*100} % Offer for you </Badge>{' '}
+                    <Badge  bg="secondary">{discount*100} % Offer for any member</Badge>
                     </div>
-                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary" onClick={() => {handleWalletPayment(package1.price,package1.name)}} >Pay using wallet</Button1> <Button1 variant="outline-primary" onClick={() => {handleCreditCardPayment(package1.price,package1.name)}}>Pay using credit card</Button1>  </div>) : null}
+                    {selectedPackageId === package1._id ? (<div> <Button1 variant="outline-primary" onClick={() => {handleWalletPayment(package1.price,package1.name)}} >Pay using wallet</Button1> <Button1 variant="outline-primary" onClick={() => {handleCreditCardPayment(package1.name)}}>Pay using credit card</Button1>  </div>) : null}
                     {selectedPackageId === package1._id && dropdownFam ? (
                       <div>
                         <h3 style={{ "margin-up": 10 }}>Choose a member</h3>

@@ -66,6 +66,20 @@ const Appointments = (patientID) => {
       });
   }, []);
 
+
+  function handleWalletPayment() {
+    window.location.href = "/appointmentWalletPayment";
+  }
+  const handleCreditCardPayment = () => {
+    //window.location.href = '/appointmentCreditCardPayment' ;
+    axios
+      .post("http://localhost:8000/AppointmentCheckout")
+      .then((response) => {})
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
   return (
     <div style={{ overflow: "auto", height: 440 }}>
       {appointments.map((member) => (
@@ -86,15 +100,40 @@ const Appointments = (patientID) => {
           <p>
             <strong>status:</strong> {member.status}
           </p>
+          <p>
+            <button
+              className="btn btn-success m-3 btn-sm"
+              onClick={handleWalletPayment}
+            >
+              Pay using wallet
+            </button>
+            <form
+              action="http://localhost:8000/AppointmentCheckout"
+              method="POST"
+            >
+              <button className="btn btn-success m-3 btn-sm">
+                Pay using credit card
+              </button>
+            </form>
+          </p>
+
         </div>
       ))}
     </div>
   );
 };
 
+
+
+
 function handleWalletPayment() {
   window.location.href = "/appointmentWalletPayment";
 }
+
+
+
+
+
 const handleCreditCardPayment = () => {
   //window.location.href = '/appointmentCreditCardPayment' ;
   axios
@@ -104,6 +143,10 @@ const handleCreditCardPayment = () => {
       console.error("Error fetching data:", error);
     });
 };
+
+
+
+
 const AppointmentFilterPage = ({ appointments }) => {
   const navigate = useNavigate();
   console.log(appointments);
@@ -126,6 +169,22 @@ const AppointmentFilterPage = ({ appointments }) => {
           </p>
           <p>
             <strong>status:</strong> {member.status}
+          </p>
+          <p>
+            <button
+              className="btn btn-success m-3 btn-sm"
+              onClick={handleWalletPayment}
+            >
+              Pay using wallet
+            </button>
+            <form
+              action="http://localhost:8000/AppointmentCheckout"
+              method="POST"
+            >
+              <button className="btn btn-success m-3 btn-sm">
+                Pay using credit card
+              </button>
+            </form>
           </p>
         </div>
       ))}
