@@ -5,52 +5,52 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../components/SidebarPatient";
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import TextField from '@mui/material/TextField';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import TextField from "@mui/material/TextField";
 import "../App.css";
 
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import ShoppingBasketSharpIcon from '@mui/icons-material/ShoppingBasketSharp';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { height } from '@mui/system';
-import imgSrc from "../images/photo.png"
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import HomeIcon from '@mui/icons-material/Home';
-import Stack from '@mui/material/Stack';
-import Pagination from '@mui/material/Pagination';
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import ShoppingBasketSharpIcon from "@mui/icons-material/ShoppingBasketSharp";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { height } from "@mui/system";
+import imgSrc from "../images/photo.png";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import InboxIcon from "@mui/icons-material/Inbox";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import HomeIcon from "@mui/icons-material/Home";
+import Stack from "@mui/material/Stack";
+import Pagination from "@mui/material/Pagination";
 import { Alert } from "@mui/material";
 
-import ResponsiveAppBar from './TopBarDoc';
-import Ads from './Ads';
+import ResponsiveAppBar from "./TopBarDoc";
+import Ads from "./Ads";
 
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import BottomBar from "./BottomBar";
-
+import config from "../config/config";
 
 function Health() {
   const [data, setData] = useState([]);
@@ -94,7 +94,6 @@ function Health() {
     console.log(user);
     return (
       <div
-
         key={i}
         className="card"
         style={{
@@ -134,13 +133,12 @@ function Health() {
       >
         <img
           style={{ height: 200, width: 200 }}
-          src="https://img.freepik.com/free-vector/human-bones-realistic-x-ray-shots_1284-29690.jpg"
+          src={config.STORAGE_URL + user.image}
           className="card-img-top"
-          alt="no image"
         />
         <div className="card-body">
           <h5 className="card-title">Record : {i + 1}</h5>
-          <p className="card-text">decription : {user.decription}</p>
+          <p className="card-text">decription : {user.description}</p>
           <p className="card-text">date : {user.date}</p>
         </div>
       </div>
@@ -148,15 +146,36 @@ function Health() {
   });
 
   return (
-    <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
-      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
+    <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
+      <AppBar
+        style={{
+          height: "100%",
+          backgroundColor: "#F0F0F0",
+          overflowY: "auto",
+        }}
+      >
         <ResponsiveAppBar />
-        <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
-          <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
-            Health Records</h1>
-
+        <div
+          style={{
+            backgroundColor: " rgb(65, 105, 225)",
+            borderRadius: "50px",
+            margin: "10px",
+            width: "40%",
+            marginLeft: "30%",
+          }}
+        >
+          <h1
+            style={{
+              font: "Arial",
+              fontWeight: "bold",
+              color: "white",
+              margin: "10px",
+            }}
+          >
+            Health Records
+          </h1>
         </div>
-        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>
+        <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
           {/*fofaaaaaa
       
       */}
@@ -191,8 +210,8 @@ function Health() {
           </div>
         </div>
         <BottomBar />
-      </AppBar >
-    </div >
+      </AppBar>
+    </div>
   );
 }
 

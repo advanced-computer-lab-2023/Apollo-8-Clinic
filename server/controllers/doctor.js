@@ -344,7 +344,7 @@ const addAvailableTimeSlots = async (req, res) => {
     }
 
     if (doctor.status !== 'Accepted') {
-      return res.status(403).json({ error: 'Doctor is not accepted by the admin' });
+      return res.status(403).json({ error: 'Doctor is not accepted yet' });
     }
     console.log('Doctor status:', doctor.status);
     console.log('Request Body:', req.body);
@@ -382,20 +382,24 @@ const addHealthRecords = async (req, res) => {
     if (!patient) {
       return res.status(404).json({ error: 'Patient not found' });
     }
-    const { records } = req.body.health_records;
+    const healthRecord = {
+      date: req.body.date,
+      description: req.body.description,
+      image: req.files[0].filename
+    }
     if (!patient.health_records) {
       patient.health_records = { records: [] };
     }
-    if (Array.isArray(records)) {
-      patient.health_records.records.push(...records);
+    if (Array.isArray(healthRecord)) {
+      patient.health_records.records.push(...healthRecord);
     } else {
-      patient.health_records.records.push(records);
+      patient.health_records.records.push(healthRecord);
     }
     await patient.save();
     console.log('Patient after saving health records:', patient);
     res.status(200).json(patient);
   } catch (error) {
-    console.error('Error in addHealthRecords:', error);
+    console.error('Error in getHealthRecords:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

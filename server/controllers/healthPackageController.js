@@ -62,9 +62,10 @@ const deleteHealthPackage = async (req, res) => {
 //  /:id
 const subscribeForPatient = async (req, res) => {
   try {
-    const patientID = req.params.id;
+    //const patientID = req.params.id;
     const healthPackageName = req.body.HPname;
     const patient1 = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient1._id;
     console.log(patient1);
     if (patient1.healthPackageSub == "") {
       const updatedPatient = await PatientModel.findByIdAndUpdate(patientID, {

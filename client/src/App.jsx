@@ -125,7 +125,7 @@ function App() {
       <Routes>
         <Route path="/editDoctor" element={<EditDoctor />} />
         <Route path="/" element={<Home />} />
-        <Route path="/AddHealthRecords" element={<AddHealthRecords />} />
+        <Route path="/AddHealthRecords/:id" element={<AddHealthRecords />} />
 
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />

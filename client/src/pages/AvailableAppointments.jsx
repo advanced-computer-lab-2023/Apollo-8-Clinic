@@ -106,6 +106,7 @@ const AvailableAppointments = () => {
       patientId: patientID,
       date: selectedSlot,
       status: "upcoming",
+      type: "regular",
     };
     const newApp = await axios.post(
       "http://localhost:8000/appointment/",

@@ -16,7 +16,7 @@ router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctor
 router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
 router.get("/", Middle.requireAuthAdmin, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
 router.get("/getAcceptedDoctors", Middle.requireAuth, controllers.getAcceptedDoctors);//for doctors and patients in the sys
-router.get("/:id", Middle.requireAuthPatient, controllers.getDoctorById);
+router.get("/:id", Middle.requireAuth, controllers.getDoctorById);
 router.put("/accept/:id", Middle.requireAuthAdmin, controllers.acceptDoctor);
 router.put("/reject/:id", Middle.requireAuthAdmin, controllers.rejectDoctor);
 router.get("/viewPatients/:id", Middle.requireAuthDoctor, patient.getMyPatients);
@@ -26,7 +26,7 @@ router.get("/futureAppointmentPatients/:id", Middle.requireAuthDoctor, patient.u
 router.post("/UpdateDoctor", Middle.requireAuthDoctor, controllers.updateDoctor);
 router.post("/getHealthRecord", Middle.requireAuthDoctor, controllers.getHealthRecord);
 router.post('/add-available-time-slot', Middle.requireAuthDoctor, controllers.addAvailableTimeSlots);
-router.post('/addHealthRecords', Middle.requireAuthDoctor, controllers.addHealthRecords);
+router.post('/addHealthRecords', Middle.requireAuthDoctor, uploadMiddleware, controllers.addHealthRecords);
 router.get("/getWallet/:doctorName", Middle.requireAuthDoctor, controllers.getWallet);
 router.put("/updateAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updateAppointment)
 //no need

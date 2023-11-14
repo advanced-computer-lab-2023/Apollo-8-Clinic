@@ -1,5 +1,6 @@
 import FamilyMemberModel from '../models/familyMember.js';
 import FamilyMember from '../models/familyMember.js';
+import PatientModel from '../models/patient.js';
 
 //req.params-->memID
 const memberDetails = async (req, res) => {
