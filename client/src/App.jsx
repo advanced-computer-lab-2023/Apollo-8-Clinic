@@ -3,50 +3,50 @@ import { Routes, Route } from "react-router-dom";
 import DoctorSignup from "./pages/DoctorSignup";
 import PatientSignup from "./pages/PatientSignup";
 import Home from "./pages/Home";
-import PrescriptionsList from "./pages/PrescriptionsList";
-import EditDoctor from "./pages/EditDoctor";
-import AllDoctors from "./pages/AllDoctors";
-import DoctorInfo from "./pages/DoctorInfo";
-import ViewDoctor from "./pages/ViewDoctor";
-import FilterDoctor from "./pages/FilterDoctor";
+import PrescriptionsList from "./pages/patient/PrescriptionsList";
+import EditDoctor from "./pages/doctor/EditDoctor";
+import AllDoctors from "./pages/patient/AllDoctors";
+import DoctorInfo from "./pages/patient/DoctorInfo";
+import ViewDoctor from "./pages/patient/ViewDoctor";
+import FilterDoctor from "./pages/patient/FilterDoctor";
 //youhanna milestone 2222
 import Doctorlogin from "./pages/DoctorLogin";
 import Adminlogin from "./pages/AdminLogin";
 import Patientlogin from "./pages/PatientLogin";
 import Forget from "./pages/ForgetPassword";
-import ChangePass from "./pages/chnagePass";
-import ChangePassDoc from "./pages/changePassDoc";
-import ChangePassAdm from "./pages/changePassAdm";
+import ChangePass from "./pages/patient/chnagePass";
+import ChangePassDoc from "./pages/doctor/changePassDoc";
+import ChangePassAdm from "./pages/admin/changePassAdm";
 
-import AppPatient from "./pages/patientFamApp";
-import MyPatientsList from "./pages/MyPatientsList";
-import UpcomingAppointments from "./pages/UpcomingAppointments";
-import AddAdmin from "./pages/AddAdmin";
-import RemoveUser from "./pages/RemoveUser";
-import PendingDoctors from "./pages/PendingDoctors";
-import DoctorDetails from "./pages/DoctorDetails";
-import Health from "./pages/ViewHealthRecords";
-import AddTimeSlots from "./pages/AddTimeSlots";
-import AddHealthRecords from "./pages/AddHealthRecords";
-import PatientHealthRecords from "./pages/PatientHealthRecords";
-import MainDoctor from "./pages/DoctorAppointments";
-import App1 from "./pages/adminHealthP";
-import PrescriptionsDetails from "./pages/PrescriptionDetails";
+import AppPatient from "./pages/patient/patientFamApp";
+import MyPatientsList from "./pages/doctor/MyPatientsList";
+import UpcomingAppointments from "./pages/doctor/UpcomingAppointments";
+import AddAdmin from "./pages/admin/AddAdmin";
+import RemoveUser from "./pages/admin/RemoveUser";
+import PendingDoctors from "./pages/admin/PendingDoctors";
+import DoctorDetails from "./pages/admin/DoctorDetails";
+import Health from "./pages/doctor/ViewHealthRecords";
+import AddTimeSlots from "./pages/doctor/AddTimeSlots";
+import AddHealthRecords from "./pages/doctor/AddHealthRecords";
+import PatientHealthRecords from "./pages/patient/PatientHealthRecords";
+import MainDoctor from "./pages/doctor/DoctorAppointments";
+import App1 from "./pages/admin/adminHealthP";
+import PrescriptionsDetails from "./pages/patient/PrescriptionDetails";
 //apply sessDiscount for patients
-import DoctorsWithDiscount from "./pages/DoctorsWithDiscount";
-import AppointmentWalletPayment from "./pages/AppointmentWalletPayment";
-import PatientWallet from "./pages/PatientWallet";
-import DoctorWallet from "./pages/DoctorWallet";
-import FollowUP from "./pages/FollowUP";
-import HomePage from "./pages/HomePage";
-import HomePageDoc from "./pages/HomePageDoc";
-import PatientHP_FM from "./pages/PatientFamilyHP";
+import DoctorsWithDiscount from "./pages/patient/DoctorsWithDiscount";
+import AppointmentWalletPayment from "./pages/patient/AppointmentWalletPayment";
+import PatientWallet from "./pages/patient/PatientWallet";
+import DoctorWallet from "./pages/doctor/DoctorWallet";
+import FollowUP from "./pages/doctor/FollowUP";
+import HomePage from "./pages/patient/HomePage";
+import HomePageDoc from "./pages/doctor/HomePageDoc";
+import PatientHP_FM from "./pages/patient/PatientFamilyHP";
 import PatientAppointments from "./pages/PatientAppointments";
-import AvailableAppointments from "./pages/AvailableAppointments";
-import HomePageAdmin from "./pages/HomePageAdmin";
+import AvailableAppointments from "./pages/patient/AvailableAppointments";
+import HomePageAdmin from "./pages/admin/HomePageAdmin";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import DoctorContract from "./pages/DoctorContract";
+import DoctorContract from "./pages/doctor/DoctorContract";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
@@ -91,6 +91,7 @@ function App() {
           <Route path="/viewDoctor/:id" element={<ViewDoctor />} />
           <Route path="/filter" element={<FilterDoctor />} />
           <Route path="/doctors/:id" element={<DoctorDetails />} />
+          {/* this doctor details is in admin */}
           <Route path="/patientFamilyAppointments" element={<AppPatient />} />
           <Route
             path="/DoctorsWithDiscount"

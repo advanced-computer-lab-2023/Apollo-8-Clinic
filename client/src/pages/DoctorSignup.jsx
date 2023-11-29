@@ -45,7 +45,7 @@ import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import { Alert } from "@mui/material";
 
-import ResponsiveAppBar from "./TopBarHome";
+import ResponsiveAppBar from "../components/TopBarHome";
 import Ads from "./Ads";
 
 import Card from "@mui/material/Card";
@@ -56,7 +56,7 @@ import CardMedia from "@mui/material/CardMedia";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import BottomBar from "./BottomBar";
+import BottomBar from "../components/BottomBar";
 
 function DoctorSignup() {
   const [name, setName] = useState();

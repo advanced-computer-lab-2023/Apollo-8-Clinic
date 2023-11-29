@@ -1,71 +1,38 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "../components/SidebarPatient";
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import TextField from '@mui/material/TextField';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import "../App.css";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import ResponsiveAppBar from "../components/TopBar";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import BottomBar from "../components/BottomBar";
 
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import ShoppingBasketSharpIcon from '@mui/icons-material/ShoppingBasketSharp';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useNavigate } from "react-router-dom";
-import { height } from '@mui/system';
-import imgSrc from "../images/photo.png"
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import HomeIcon from '@mui/icons-material/Home';
-import Stack from '@mui/material/Stack';
-import Pagination from '@mui/material/Pagination';
-import { Alert } from "@mui/material";
-
-import ResponsiveAppBar from './TopBar';
-import Ads from './Ads';
-
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import BottomBar from "./BottomBar";
-
-
+// THIS PAGE IS NOT USED BECAUSE WE DISCOVERED THAT IT WAS ALREADY IMPLEMENTED
 
 const requestData = {
-  patientId: '651fd358364267c68b56ba41',
+  patientId: "651fd358364267c68b56ba41",
   // Add more data as needed
 };
 
 const formatDate = (dateTime) => {
-  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-  const dateStr = new Date(dateTime).toLocaleDateString('en-GB', options);
-  const timeStr = new Date(dateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const dateStr = new Date(dateTime).toLocaleDateString("en-GB", options);
+  const timeStr = new Date(dateTime).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
   return `${dateStr} ${timeStr}`;
 };
 
 const PatientAppointments = () => {
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [filteredAppointments, setFilteredAppointments] = useState([]);
@@ -75,7 +42,10 @@ const PatientAppointments = () => {
 
   const getApps = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/patient/appointmentWithFilter', requestData);
+      const response = await axios.post(
+        "http://localhost:8000/patient/appointmentWithFilter",
+        requestData
+      );
       const appointments = response.data;
       console.log(appointments);
       setAppointments(appointments);
@@ -84,7 +54,7 @@ const PatientAppointments = () => {
       // After fetching appointments, fetch doctors
       getDrs(appointments);
     } catch (error) {
-      console.error('Failed to fetch appointments:', error);
+      console.error("Failed to fetch appointments:", error);
     }
   };
 
@@ -93,7 +63,8 @@ const PatientAppointments = () => {
       const doctorId = appointment.doctorId;
 
       // Make a separate Axios call for each doctorId
-      return axios.get(`http://localhost:8000/doctor/${doctorId}`)
+      return axios
+        .get(`http://localhost:8000/doctor/${doctorId}`)
         .then((response) => {
           return response.data;
         })
@@ -104,19 +75,20 @@ const PatientAppointments = () => {
     });
 
     // Wait for all doctor requests to complete
-    Promise.all(doctorPromises)
-      .then((doctorData) => {
-        setDoctors(doctorData);
-      });
+    Promise.all(doctorPromises).then((doctorData) => {
+      setDoctors(doctorData);
+    });
   };
 
   const filterByStatus = (status) => {
-    const filtered = appointments.filter(appointment => appointment.status === status);
+    const filtered = appointments.filter(
+      (appointment) => appointment.status === status
+    );
     setFilteredAppointments(filtered);
   };
 
   const filterByDate = (day, month, year) => {
-    const filtered = appointments.filter(appointment => {
+    const filtered = appointments.filter((appointment) => {
       const appointmentDate = new Date(appointment.date);
       const filterDate = new Date(year, month - 1, day); // Month is 0-indexed in JavaScript
 
@@ -131,61 +103,125 @@ const PatientAppointments = () => {
     setFilteredAppointments(filtered);
   };
 
-
   return (
-
-    <div style={{ marginRight: "-5%", marginLeft: "-5%", }} >
-      <AppBar style={{ height: "100%", backgroundColor: "#F0F0F0", overflowY: "auto", }}>
+    <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
+      <AppBar
+        style={{
+          height: "100%",
+          backgroundColor: "#F0F0F0",
+          overflowY: "auto",
+        }}
+      >
         <ResponsiveAppBar />
-        <div style={{ backgroundColor: " rgb(65, 105, 225)", borderRadius: '50px', margin: '10px', width: '40%', marginLeft: '30%' }}>
-          <h1 style={{ font: "Arial", fontWeight: 'bold', color: "white", margin: "10px" }}>
+        <div
+          style={{
+            backgroundColor: " rgb(65, 105, 225)",
+            borderRadius: "50px",
+            margin: "10px",
+            width: "40%",
+            marginLeft: "30%",
+          }}
+        >
+          <h1
+            style={{
+              font: "Arial",
+              fontWeight: "bold",
+              color: "white",
+              margin: "10px",
+            }}
+          >
             Your Appointments
           </h1>
-
         </div>
-        <div className="card m-3 col-12" style={{ width: "80%", left: '8%' }}>
-
+        <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
           <Box>
-            <Button variant="contained" onClick={getApps} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+            <Button
+              variant="contained"
+              onClick={getApps}
+              margin="normal"
+              padding="normal"
+              style={{ marginRight: "10px" }}
+            >
               All Appointments
             </Button>
-            <Button variant="contained" onClick={() => filterByStatus('Upcoming')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+            <Button
+              variant="contained"
+              onClick={() => filterByStatus("Upcoming")}
+              margin="normal"
+              padding="normal"
+              style={{ marginRight: "10px" }}
+            >
               Upcoming Appointments
             </Button>
-            <Button variant="contained" onClick={() => filterByStatus('Completed')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+            <Button
+              variant="contained"
+              onClick={() => filterByStatus("Completed")}
+              margin="normal"
+              padding="normal"
+              style={{ marginRight: "10px" }}
+            >
               Completed Appointments
             </Button>
-            <Button variant="contained" onClick={() => filterByStatus('Cancelled')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+            <Button
+              variant="contained"
+              onClick={() => filterByStatus("Cancelled")}
+              margin="normal"
+              padding="normal"
+              style={{ marginRight: "10px" }}
+            >
               Cancelled Appointments
             </Button>
-            <Button variant="contained" onClick={() => filterByStatus('Rescheduled')} margin="normal" padding="normal" style={{ marginRight: '10px' }}>
+            <Button
+              variant="contained"
+              onClick={() => filterByStatus("Rescheduled")}
+              margin="normal"
+              padding="normal"
+              style={{ marginRight: "10px" }}
+            >
               Rescheduled Appointments
             </Button>
             <TextField
-              label="DD" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
+              label="DD"
+              variant="outlined"
+              margin="normal"
+              padding="normal"
+              style={{ width: "80px", marginRight: "10px" }}
               value={day}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
+                const value = e.target.value.replace(/\D/g, ""); // Replace any non-digit characters
                 setDay(value);
               }}
-
             />
             <TextField
-              label="MM" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
+              label="MM"
+              variant="outlined"
+              margin="normal"
+              padding="normal"
+              style={{ width: "80px", marginRight: "10px" }}
               value={month}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
+                const value = e.target.value.replace(/\D/g, ""); // Replace any non-digit characters
                 setMonth(value);
               }}
             />
             <TextField
-              label="YYYY" variant="outlined" margin="normal" padding="normal" style={{ width: '80px', marginRight: '10px' }}
+              label="YYYY"
+              variant="outlined"
+              margin="normal"
+              padding="normal"
+              style={{ width: "80px", marginRight: "10px" }}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ''); // Replace any non-digit characters
+                const value = e.target.value.replace(/\D/g, ""); // Replace any non-digit characters
                 setYear(value);
               }}
             />
-            <Button variant="contained" onClick={() => filterByDate(day, month, year)} margin="normal" padding="normal" style={{ width: '100px', marginRight: '10px', marginTop: '15px' }}>
+            <Button
+              variant="contained"
+              onClick={() => filterByDate(day, month, year)}
+              margin="normal"
+              padding="normal"
+              style={{ width: "100px", marginRight: "10px", marginTop: "15px" }}
+            >
               Filter by Date
             </Button>
             {/* You can add more filter buttons as needed */}
@@ -194,13 +230,16 @@ const PatientAppointments = () => {
           <div className="appointment-cards">
             {filteredAppointments.map((appointment) => {
               const doctorId = appointment.doctorId;
-              const doctor = doctors.find(doc => doc._id === doctorId);
+              const doctor = doctors.find((doc) => doc._id === doctorId);
 
               return (
-                <Card key={appointment._id} sx={{ minWidth: 275, marginBottom: 2 }}>
+                <Card
+                  key={appointment._id}
+                  sx={{ minWidth: 275, marginBottom: 2 }}
+                >
                   <CardContent>
                     <Typography variant="h6" component="div">
-                      {doctor ? doctor.name : 'Doctor Not Found'}
+                      {doctor ? doctor.name : "Doctor Not Found"}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Status: {appointment.status}
@@ -215,8 +254,8 @@ const PatientAppointments = () => {
           </div>
         </div>
         <BottomBar />
-      </AppBar >
-    </div >
+      </AppBar>
+    </div>
   );
 };
 
