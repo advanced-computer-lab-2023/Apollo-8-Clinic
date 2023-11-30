@@ -1,7 +1,7 @@
 import AppBar from "@mui/material/AppBar";
 import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBar";
-import Ads from "../Ads";
+import Ads from "../../components/Ads";
 import BottomBar from "../../components/BottomBar";
 
 function homePage() {

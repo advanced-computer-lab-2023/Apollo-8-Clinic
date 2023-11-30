@@ -3,13 +3,13 @@ import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import "../App.css";
+import "../../App.css";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import ResponsiveAppBar from "../components/TopBar";
+import ResponsiveAppBar from "../../components/TopBar";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import BottomBar from "../components/BottomBar";
+import BottomBar from "../../components/BottomBar";
 
 // THIS PAGE IS NOT USED BECAUSE WE DISCOVERED THAT IT WAS ALREADY IMPLEMENTED
 

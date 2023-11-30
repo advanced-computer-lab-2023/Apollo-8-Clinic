@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import axios from "axios";
 import AppBar from "@mui/material/AppBar";
-import "../App.css";
-import ResponsiveAppBar from "../components/TopBarHome";
-import BottomBar from "../components/BottomBar";
+import "../../App.css";
+import ResponsiveAppBar from "../../components/TopBarHome";
+import BottomBar from "../../components/BottomBar";
 
 function Forget() {
   {
