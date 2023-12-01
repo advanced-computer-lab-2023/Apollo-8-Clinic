@@ -63,6 +63,7 @@ const PatientHP_FM = () => {
   //assuming that patient id is in window.location named patientID
   const params = new URLSearchParams(window.location.search);
   let patientID = params.get('patientId');
+  
   /////////////////////REMOVE THAT
   patientID = "6529c70a6be1d55abc0d0114";
   const [mainshow, setmainshow] = useState(true);
@@ -332,11 +333,11 @@ if(whom===2 && Fammember!=""){
 
   }
 
-
-  const handleCreditCardPayment = (packageName) => {
-    axios.post("http://localhost:8000/PackageCheckout").then((response) => {}).catch((error) => {
+  const handleCreditCardPayment =  (packageName) => {
+     axios.post("http://localhost:8000/PackageCheckout").then((response) => {}).catch((error) => {
       console.error("Error fetching data:", error);});
     
+
      //subscription
      if(whom===1){
       axios.post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, { "HPname": packageName }).then(
@@ -350,19 +351,19 @@ if(whom===2 && Fammember!=""){
       });
     }
 
-if(whom===2 && Fammember!=""){
-  axios.post(`http://localhost:8000/patient/subscribeForFam/${Fammember}`, { "HPname": packageName }).then(
-    (res) => {
-      alert(res.data);
+    if(whom===2 && Fammember!=""){
+      axios.post(`http://localhost:8000/patient/subscribeForFam/${Fammember}`, { "HPname": packageName }).then(
+        (res) => {
+          alert(res.data);
+        }
+      ).catch(error => {
+        res.status(400).send(error);
+      });
+      setdropdownFam(false);
+      setSelectedPackageId("");
+      setFammember("");
+      setWhom(0);
     }
-  ).catch(error => {
-    res.status(400).send(error);
-  });
-  setdropdownFam(false);
-  setSelectedPackageId("");
-  setFammember("");
-  setWhom(0);
-}
   
   };
 
