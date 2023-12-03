@@ -65,6 +65,10 @@ function ResponsiveAppBar() {
     setAnchorElNav();
   };
 
+  const handlePending = () => {
+    navigate("/FollowUPPending/:doctorName");
+  };
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -238,6 +242,20 @@ function ResponsiveAppBar() {
             >
               {" "}
               Add Time-Slots{" "}
+            </Button>
+            <Button
+              onClick={handlePending}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: "9px",
+              }}
+            >
+              {" "}
+              Pending Follow Up{" "}
             </Button>
             <Button
               onClick={handleFollowUp}

@@ -6,7 +6,7 @@ import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
 
-function FollowUP() {
+function FollowUPPending() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const doctorName = "fofa";
@@ -46,14 +46,6 @@ function FollowUP() {
     }
   };
 
-  const handlePending = () => {
-    navigate("/FollowUPPending/:doctorName");
-  };
-
-  const handleMyFollowUps = () => {
-    navigate("/FollowUP/:doctorName");
-  };
-
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -81,23 +73,18 @@ function FollowUP() {
               margin: "10px",
             }}
           >
-            Follow Up
+            Pending Follow Ups
           </h1>
-
         </div>
-
         <div
-
           className="card m-3 col-12"
-          style={{ width: "80%", borderRadius: "20px", left: "8%", display: 'flow' }}
+          style={{ width: "80%", borderRadius: "20px", left: "8%" }}
         >
           <div className="card-body">
             {loading ? (
               <p>Loading...</p>
             ) : (
-
               <table className="table table-striped">
-
                 <thead className="table-dark">
                   <tr>
                     <th>Patient Name</th>
@@ -126,7 +113,12 @@ function FollowUP() {
                           >
                             Follow Up
                           </button>
-
+                          <button
+                            className="btn btn-success"
+                            style={{ backgroundColor: 'darkRed', marginLeft: "5%" }}
+                          >
+                            Reject
+                          </button>
                         </td>
                       </tr>
                     ))
@@ -146,4 +138,4 @@ function FollowUP() {
   );
 }
 
-export default FollowUP;
+export default FollowUPPending;
