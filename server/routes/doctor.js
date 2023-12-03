@@ -12,6 +12,7 @@ const router = express.Router();
 //no middlewaree
 router.post("/", uploadMiddleware, controllers.createDoctor);
 //
+
 router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctorContract);
 router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
 router.get("/", Middle.requireAuthAdmin, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
@@ -31,8 +32,15 @@ router.get("/getWallet/:doctorName", Middle.requireAuthDoctor, controllers.getWa
 router.put("/updateAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updateAppointment)
 //no need
 router.post("/doctorLogin", Auth.loginDoctor)
-//view appointments chekkkk whattttt is thattt???
+//view appointments chekkkk whattttt is thattt??? check requirment 23 :|
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", Middle.requireAuth, appointmentContoller.getAppointmentWithFilter);
+
+//prescription
+router.get("/prescriptionPDF/:id",Middle.requireAuthDoctor,controllers.printPresPDF)
+router.post("/addPrescription",Middle.requireAuthDoctor,controllers.addPrescription)
+router.put("/updatePrescription/:id",Middle.requireAuthDoctor,controllers.updatePrescription)
+router.delete("/DeletePres/:id",Middle.requireAuthDoctor,controllers.deletePrescription)
+
 
 export default router;

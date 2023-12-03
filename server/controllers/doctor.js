@@ -5,6 +5,7 @@ import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
 import e from 'express';
+import PrescriptionModel from '../models/prescription.js';
 const saltRounds = 10;
 
 const createDoctor = async (req, res) => {
@@ -461,6 +462,103 @@ const updateAppointment = async (req, res) => {
 };
 
 
+//npm install pdfkit 
+import pdfkit  from 'pdfkit'
+import fs from 'fs'
+const printPresPDF  = async (req,res)=>{
+  
+    const id = req.params.id ;
+    const data = await PrescriptionModel.findById(id) ;
+    if(!data){
+      console.error('pres not found ', error);
+      return ;
+    }
+  try{
+   // Generate a unique filename for the PDF
+   const filename = "output_prescription.pdf";
+
+   // Generate the PDF
+   const doc = new pdfkit();
+   doc.pipe(fs.createWriteStream(filename));
+   doc.text("prescription: \n \n")
+   doc.text("Date : "+data.date.toISOString() +"\n")
+   data.medicine.forEach(function (element) {
+      doc.text("medicine: "+element.name+"  dose: "+element.dose+"\n")
+   });
+   doc.end();
+
+// Send the generated PDF as a response
+res.setHeader('Content-Type', 'application/pdf');
+res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+
+const fileStream = fs.createReadStream(filename);
+fileStream.pipe(res);
+
+fileStream.on('end', () => {
+  // Delete the file after it's streamed or on error
+  fs.unlinkSync(filename);
+});
+
+fileStream.on('error', (err) => {
+  console.error('Error streaming PDF:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+ } catch (error) {
+   console.error('Error generating PDF:', error);
+   res.status(500).json({ error: 'Internal server error' });
+ }
+  
+  }
+
+
+const addPrescription = async(req,res)=>{
+  try{
+  const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+  if(!doctor){res.status(400).send('dr not defined in my db');return;}
+  const {patientId, medicine} = req.body;
+  const state = "unfilled"
+  const date = (new Date());
+   const doctorId = doctor._id;
+  //const doctorId = "656cd127e1d756e79b5fea9f"
+  const newPres = new PrescriptionModel({doctorId, patientId,state, medicine,date});
+  await newPres.save();
+  res.status(200).json(newPres);
+  }
+  catch(error){
+    console.error('Error adding a prescription', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+const updatePrescription = async(req,res)=>{
+  //may need a condition
+  try{
+    const predId = req.params.id ;
+    const prescription = await PrescriptionModel.findById(predId);
+    const  {medicine} = req.body;
+    prescription.medicine = medicine ;
+    await prescription.save();
+    res.status(200).json("updated successfully");
+    }
+    catch(error){
+      console.error('Error updating prescription', error);
+      res.status(500).send('Internal Server Error');
+    }
+
+}
+
+const deletePrescription = async(req,res)=>{
+  //may need a condition 
+  try {
+    const { id } = req.params;
+    await PrescriptionModel.findByIdAndDelete(id);
+    res.sendStatus(204);  //done successfully
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
 export default {
   createDoctor,
   getDoctorById,
@@ -484,5 +582,11 @@ export default {
   getWallet,
 
   updateAppointment,
+
+  printPresPDF,
+  addPrescription,
+  updatePrescription,
+  deletePrescription,
+
 
 }
