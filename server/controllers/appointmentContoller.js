@@ -29,7 +29,13 @@ const createAppointment = async (req, res) => {
       { $pull: { availableSlots: date } },
       { new: true } // To return the updated document
     );
+    const updatedPatient = await PatientModel.findOneAndUpdate(
+      { "_id": patientId },
+      { $inc: { wallet: -50 } },
+      { new: true } // To return the updated document
+    );
     console.log(updatedDoctor.availableSlots);
+    console.log(updatedPatient.wallet);
     await appointment.save();
     console.log(appointment);
     res.status(200).json(appointment);
@@ -39,7 +45,15 @@ const createAppointment = async (req, res) => {
 
 };
 
-
+const getAllAppointments = async (req, res) => {
+  try {
+    const user = await AppointmentModel.find();
+    console.log(user);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
 const getPatientAppointments = async (req, res) => {
   try {
     const patient1 = await PatientModel.findOne({ user: res.locals.userId });
@@ -136,10 +150,106 @@ const patientApp = async (req, res) => {  // to get all appointments for a selec
     res.status(500).json({ error: error.message });
   }
 };
+const rescheduleAppointment = async (req, res) => {
+  try{
+  const { _id,date } = req.body; // Destructure status and dates from query parameters
+    let query = {};
+
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if (patient) {
+      query.patientId = patient._id;
+    }
+
+    if (doctor) {
+      query.doctorId = doctor._id;
+    }
+    if (_id) {
+      query._id = _id;
+    }
+    if (date) {
+      query.date = date;
+    }
+    const updatedApp = await AppointmentModel.findOneAndUpdate(
+      { "_id": _id },
+      { $set: { date: date } },
+      { new: true } // To return the updated document
+    );
+    console.log(updatedApp);
+    res.status(200).json(updatedApp);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+
+};
+const cancelAppointment = async (req, res) => {
+  try{
+  const { _id} = req.body; 
+    let query = {};
+    if (_id) {
+      query._id = _id;
+    }
+    const appointment = await AppointmentModel.findOne({ _id: query._id });
+    const patient = await PatientModel.findOne({ _id: res.locals.userId });
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    console.log(appointment);
+    console.log(patient);
+
+    if (patient) {
+      query.patientId = patient._id;
+      if (appointment) {
+        const twentyFourHoursAgo = new Date();
+        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+      
+        const appointmentDate = new Date(appointment.date);
+      
+        if (appointmentDate < twentyFourHoursAgo) {
+          // The appointment date is less than 24 hours before now
+          console.log("Appointment is less than 24 hours before now.");
+          const updatedPatient = await PatientModel.findOneAndUpdate(
+            { "_id": appointment.patientId },
+            { $inc: { wallet: 50 } },
+            { new: true } // To return the updated document
+          );
+        } else {
+          // The appointment is more than 24 hours away
+          console.log("Appointment is more than 24 hours away.");
+        }
+      } else {
+        // Handle the case where no appointment is found
+        console.log("Appointment not found.");
+      }
+    }
+
+    if (doctor) {
+      query.doctorId = doctor._id;
+      const updatedPatient = await PatientModel.findOneAndUpdate(
+        { "_id": appointment.patientId },
+        { $inc: { wallet: 50 } },
+        { new: true } // To return the updated document
+      );
+    }
+    const updatedDoctor = await DoctorModel.findOneAndUpdate(
+      { "_id": appointment.doctorId },
+      { $push: { availableSlots: appointment.date } },
+      { new: true } // To return the updated document
+    );
+    await AppointmentModel.deleteOne({ _id: query._id });
+    const updatedApp = await AppointmentModel.find();
+    console.log(updatedApp);
+    res.status(200).json(updatedApp);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+
+};
 export default {
   createAppointment,
+  getAllAppointments,
   getAppointmentWithFilter,
   getAppointments,
   patientApp,
-  getPatientAppointments
+  getPatientAppointments,
+  rescheduleAppointment,
+  cancelAppointment
 }
