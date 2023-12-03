@@ -47,6 +47,7 @@ import HomePageAdmin from "./pages/admin/HomePageAdmin";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DoctorContract from "./pages/doctor/DoctorContract";
+import FollowUPPending from "./pages/doctor/FollowUPPending";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
@@ -130,6 +131,7 @@ function App() {
 
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
+        <Route path="FollowUPPending/:doctorName" element={<FollowUPPending />} />
         <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
 
         <Route path="/HomePageDoc" element={<HomePageDoc />} />
