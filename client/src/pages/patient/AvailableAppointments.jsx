@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import * as React from 'react';
+
 import axios from "axios";
 import ResponsiveAppBar from "../../components/TopBar";
 import { AppBar } from "@mui/material";
@@ -28,6 +30,10 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 //const id = "654d8a73bb465e1aaf27c508";
 const patientID = "6523ba9cd72b2eb0e39cb137";
 const AvailableAppointments = () => {
@@ -50,6 +56,13 @@ const AvailableAppointments = () => {
       second: "2-digit",
     });
   };
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const [value, setValue] = React.useState('New Appointment');
+
 
   useEffect(() => {
     console.log(`http://localhost:8000/doctor/${id}`);
@@ -200,6 +213,18 @@ const AvailableAppointments = () => {
                 </Select>
               </FormControl>
             </DialogContent>
+            <FormControl style={{ marginLeft: '10%' }}>
+              <FormLabel id="demo-controlled-radio-buttons-group">Type of Appointment</FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={value}
+                onChange={handleChange}
+              >
+                <FormControlLabel value="female" control={<Radio />} label="New Appointment" />
+                <FormControlLabel value="male" control={<Radio />} label="Follow Up" />
+              </RadioGroup>
+            </FormControl>
             <DialogActions>
               <Button onClick={handleCloseDialog} color="primary">
                 Cancel
