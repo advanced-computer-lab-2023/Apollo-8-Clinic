@@ -48,6 +48,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import DoctorContract from "./pages/doctor/DoctorContract";
 import FollowUPPending from "./pages/doctor/FollowUPPending";
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
@@ -75,7 +78,8 @@ function App() {
   }, [token]);
 
   if (!dataFetched) {
-    return <p>Loading...</p>; // Render nothing until data is fetched
+    return <CircularProgress color="success" />
+      ; // Render nothing until data is fetched
   }
 
   //console.log(type)

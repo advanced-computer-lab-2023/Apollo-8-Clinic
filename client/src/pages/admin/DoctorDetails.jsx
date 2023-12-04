@@ -7,6 +7,8 @@ import ResponsiveAppBar from "../../components/TopBarAdmin";
 import BottomBar from "../../components/BottomBar";
 import axios from "axios";
 import config from "../../config/config";
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function DoctorDetails() {
   const [data, setData] = useState();
@@ -57,7 +59,7 @@ function DoctorDetails() {
           </div>
           <div className="card-body">
             {loading ? (
-              <p>Loading...</p>
+              <CircularProgress color="success" />
             ) : (
               <ul>
                 <li>name: {data.name}</li>
@@ -101,7 +103,7 @@ function DoctorDetails() {
                   </li>
                 )}
                 {data.licenseFile.substr(data.licenseFile.length - 3) ==
-                `pdf` ? (
+                  `pdf` ? (
                   <li>
                     <a
                       href={config.STORAGE_URL + data.licenseFile}

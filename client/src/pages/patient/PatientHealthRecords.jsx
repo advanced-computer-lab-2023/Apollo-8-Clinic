@@ -7,6 +7,9 @@ import axios from "axios";
 import config from "../../config/config.js";
 import img1 from "../../images/photo.png";
 //import img2 from '../images/'
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 function PatientHealthRecords() {
   console.log("Component rendered");
@@ -67,7 +70,7 @@ function PatientHealthRecords() {
       .put(" http://localhost:8000/patient/remove-health-records", {
         id,
       })
-      .then(() => {})
+      .then(() => { })
       .catch((err) => console.log(err));
   };
 
@@ -129,7 +132,7 @@ function PatientHealthRecords() {
               role="alert"
             >
               <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
-                <use xlink:href="#info-fill" />
+                <use xlink: href="#info-fill" />
               </svg>
               <div>health record uploaded successfully!</div>
             </div>
@@ -177,7 +180,7 @@ function PatientHealthRecords() {
           <div className="card-body">
             <div className="image">
               {loading ? (
-                <p>Loading...</p>
+                <CircularProgress color="success" />
               ) : (
                 <div style={{ display: "inline-flex", flexWrap: "wrap" }}>
                   {list}

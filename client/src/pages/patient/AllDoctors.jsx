@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import ResponsiveAppBar from "../../components/TopBar";
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function AllDoctors() {
   const [data, setData] = useState([]);
@@ -92,7 +94,7 @@ function AllDoctors() {
         <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
           <div className="card-body">
             {loading ? (
-              <p>Loading...</p>
+              <CircularProgress color="success" />
             ) : (
               <table className="table table-striped">
                 <thead className="table-dark">
@@ -140,11 +142,11 @@ function AllDoctors() {
                         ? item
                         : searchName.toLowerCase() !== "" &&
                           searchSpec.toLowerCase() !== ""
-                        ? item.speciality.toLowerCase().includes(searchSpec) &&
+                          ? item.speciality.toLowerCase().includes(searchSpec) &&
                           item.name.toLowerCase().includes(searchName)
-                        : searchName.toLowerCase() === ""
-                        ? item.speciality.toLowerCase().includes(searchSpec)
-                        : item.name.toLowerCase().includes(searchName);
+                          : searchName.toLowerCase() === ""
+                            ? item.speciality.toLowerCase().includes(searchSpec)
+                            : item.name.toLowerCase().includes(searchName);
                     })
                     .map((item, index) => (
                       <tr key={index}>

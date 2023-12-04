@@ -141,6 +141,38 @@ const AvailableAppointments = () => {
     setSelectedOption("");
   };
 
+
+
+
+
+
+
+  const UpdateFollowUp = async (appID) => {
+    try {
+      if (!appID) {
+        console.error("Appointment or its ID is undefined.");
+        return;
+      }
+
+      const response = await axios.put(
+        "http://localhost:9000/updateAppointment/:doctorName",
+        {
+          appointmentId: appID,
+          newType: 'follow up'
+        }
+      );
+
+      if (response.data) {
+      }
+    } catch (error) {
+      console.error("Error Updating Appointment Type ", error);
+    }
+  };
+
+
+
+
+
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
