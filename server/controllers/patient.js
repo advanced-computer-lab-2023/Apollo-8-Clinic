@@ -601,6 +601,27 @@ const getWallet = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+const myPrescriptions = async (req, res) => {
+  try {
+    const patientId = res.locals.userId;
+
+    // Check if the patient exists
+    const patient = await PatientModel.findById(patientId);
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    const prescriptions = await PresModel.find({ patientId: patientId });
+    
+    return res.status(200).json({ prescriptions });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 export default {
   createPatient,
   getPatients,
@@ -621,5 +642,6 @@ export default {
   addHealthRecord,
   removeHealthRecord,
   getWallet,
-  checkIfLinked
+  checkIfLinked,
+  myPrescriptions
 }
