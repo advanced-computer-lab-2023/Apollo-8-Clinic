@@ -447,6 +447,7 @@ const updateAppointment = async (req, res) => {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
+    
     // Allow changing from 'regular' to 'follow up'
     if (appointment.type === "regular" && newType === "follow up") {
       appointment.type = newType;
