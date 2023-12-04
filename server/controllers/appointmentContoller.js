@@ -109,6 +109,7 @@ const getAppointmentWithFilter = async (req, res) => {
       }
 
       if (end > start) {
+        end.setDate(end.getDate() + 1);
         query.date = {
           $gte: start,
           $lt: end
@@ -170,9 +171,25 @@ const rescheduleAppointment = async (req, res) => {
     if (date) {
       query.date = date;
     }
+    const appointment = await AppointmentModel.findOne({ _id: query._id });
+    const updatedDoctor = await DoctorModel.findOneAndUpdate(
+      { "_id": appointment.doctorId },
+      { $push: { availableSlots: appointment.date } },
+      { new: true } // To return the updated document
+    );
+    const updatedDoctorAgain = await DoctorModel.findOneAndUpdate(
+      { "_id": appointment.doctorId },
+      { $pull: { availableSlots: query.date } },
+      { new: true } // To return the updated document
+    );
     const updatedApp = await AppointmentModel.findOneAndUpdate(
       { "_id": _id },
-      { $set: { date: date } },
+      { $set: { date: query.date } },
+      { new: true } // To return the updated document
+    );
+    const updatedAppAgain = await AppointmentModel.findOneAndUpdate(
+      { "_id": _id },
+      { $set: { status: "rescheduled" } },
       { new: true } // To return the updated document
     );
     console.log(updatedApp);
@@ -234,8 +251,13 @@ const cancelAppointment = async (req, res) => {
       { $push: { availableSlots: appointment.date } },
       { new: true } // To return the updated document
     );
-    await AppointmentModel.deleteOne({ _id: query._id });
-    const updatedApp = await AppointmentModel.find();
+    //await AppointmentModel.deleteOne({ _id: query._id });
+    //const updatedApp = await AppointmentModel.find();
+    const updatedApp = await AppointmentModel.findOneAndUpdate(
+      { "_id": query._id },
+      { $set: { status: "cancelled" } },
+      { new: true } // To return the updated document
+    );
     console.log(updatedApp);
     res.status(200).json(updatedApp);
   } catch (error) {
