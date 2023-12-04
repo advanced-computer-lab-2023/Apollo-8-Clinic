@@ -2,6 +2,7 @@ import PatientModel from '../models/patient.js';
 import UserModel from '../models/user.js';
 import PresModel from '../models/prescription.js';
 import HealthPackageModel from '../models/healthPackage.js';
+import FollowUpRequestModel from '../models/followUpRequest.js';
 import DocModel from '../models/doctor.js';
 import AppointmentModel from '../models/appointment.js';
 import bcrypt from "bcrypt";
@@ -621,6 +622,33 @@ const myPrescriptions = async (req, res) => {
   }
 };
 
+const requestFollowUp = async (req, res) => {
+  try {
+    const { doctorId, familyMemberId } = req.body;
+
+    // Check if the user is a patient
+    const user = await UserModel.findOne({ _id: res.locals.userId, type: { $regex: /patient/i } });
+    if (!user) {
+      return res.status(401).json({ message: "You have no authorization to request follow-up" });
+    }
+
+    // Create a new follow-up request
+    const followUpRequest = new FollowUpRequestModel({
+      patientId: res.locals.userId,
+      doctorId,
+      familyMemberId,
+      status: "Pending",
+    });
+
+    // Save the follow-up request
+    await followUpRequest.save();
+
+    return res.status(201).json({ message: "Follow-up request created successfully", followUpRequest });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export default {
   createPatient,
@@ -643,5 +671,6 @@ export default {
   removeHealthRecord,
   getWallet,
   checkIfLinked,
-  myPrescriptions
+  myPrescriptions,
+  requestFollowUp
 }

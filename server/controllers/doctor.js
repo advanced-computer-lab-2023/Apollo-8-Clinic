@@ -515,6 +515,40 @@ const myPrescriptions = async (req, res) => {
   }
 };
 
+const handleFollowUpRequest = async (req, res) => {
+  try {
+    const { requestId, action } = req.body;
+
+    // Check if the user is a doctor
+    const user = await UserModel.findOne({ _id: res.locals.userId, type: { $regex: /doctor/i } });
+    if (!user) {
+      return res.status(401).json({ message: "You have no authorization to handle follow-up requests" });
+    }
+
+    // Check if the action is valid
+    if (!["Accept", "Revoke"].includes(action)) {
+      return res.status(400).json({ error: "Invalid action" });
+    }
+
+    // Update the follow-up request status
+    const updatedRequest = await FollowUpRequestModel.findByIdAndUpdate(
+      requestId,
+      { status: action === "Accept" ? "Accepted" : "Revoked" },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res.status(404).json({ error: "Follow-up request not found" });
+    }   
+
+    return res.status(200).json({ message: "Follow-up request handled successfully", updatedRequest });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 export default {
   createDoctor,
   getDoctorById,
@@ -539,6 +573,7 @@ export default {
 
   updateAppointment,
   addPrescription,
-  myPrescriptions
+  myPrescriptions,
+  handleFollowUpRequest
 
 }
