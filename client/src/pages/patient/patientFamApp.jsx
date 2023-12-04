@@ -5,10 +5,24 @@ import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBar";
 import BottomBar from "../../components/BottomBar";
 import { useNavigate } from "react-router-dom";
+import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 
+const formatDate = (dateTime) => {
+  const options = {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true, // Add this option for AM/PM format
+  };
+  return new Date(dateTime).toLocaleDateString("en-US", options);
+};
 const Appointments = (patientID) => {
   const [appointments, setAppointments] = useState([]);
-
+  const [selectedApp, setSelectedApp] = useState(null);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   useEffect(() => {
     axios
       .get(
@@ -36,53 +50,116 @@ const Appointments = (patientID) => {
         console.error("Error fetching data:", error);
       });
   };
-
+  const handleOpenCancelDialog = (appId) => {
+    setSelectedApp(appId);
+    setCancelDialogOpen(true);
+  };
+  
+  const handleCloseCancelDialog = () => {
+    setCancelDialogOpen(false);
+  };
+  
+  const handleConfirmCancel = async () =>  {
+    // Implement your cancellation logic here
+    const reqBody = {
+      _id: selectedApp,
+    };
+    const newApp = await axios.post(
+      "http://localhost:8000/appointment/cancelAppointment/:id",
+      reqBody
+    );
+    // /cancelAppointment/:id
+    handleCloseCancelDialog();
+  };
+  
   return (
     <div style={{ overflow: "auto", height: 440 }}>
-      {appointments.map((member) => (
-        <div
-          key={member.id}
-          style={{
-            border: "1px solid black",
-            borderRadius: "20px",
-          }}
+  {appointments.map((member) => (
+    <div
+      key={member.id}
+      style={{
+        border: "1px solid black",
+        borderRadius: "20px",
+        padding: "10px",
+        marginBottom: "10px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start", // Align items to the start (left)
+      }}
+    >
+      <div>
+        <p>
+          <strong>Doctor ID:</strong> {member.doctorId}
+        </p>
+        <p>
+          <strong>Date:</strong> {formatDate(member.date)}
+        </p>
+        <p>
+          <strong>Status:</strong> {member.status}
+        </p>
+      </div>
+      <div style={{ display: "flex", gap: "10px" }}>
+      {member.status !== 'cancelled' && (
+            <>
+        <button
+          className="btn btn-success m-1"
+          onClick={handleWalletPayment}
         >
-          <p>
-            <strong>Doctor ID:</strong> {member.doctorId}
-          </p>
-
-          <p>
-            <strong>Date:</strong> {member.date}
-          </p>
-          <p>
-            <strong>status:</strong> {member.status}
-          </p>
-          <p>
-            <button
-              className="btn btn-success m-3 btn-sm"
-              onClick={handleWalletPayment}
-            >
-              Pay using wallet
-            </button>
-            <form
-              action="http://localhost:8000/AppointmentCheckout"
-              method="POST"
-            >
-              <button className="btn btn-success m-3 btn-sm">
-                Pay using credit card
+          Pay using wallet
+        </button>
+        <form
+          action="http://localhost:8000/AppointmentCheckout"
+          method="POST"
+        >
+          <button
+            className="btn btn-success m-1"
+          >
+            Pay using credit card
+          </button>
+        </form>
+              <button
+                className="btn btn-success m-1"
+                onClick={() => handleRescheduleApp(member._id, member.doctorId)}
+              >
+                Reschedule Appointment
               </button>
-            </form>
-          </p>
-        </div>
-      ))}
+              <button
+                className="btn btn-success m-1"
+                onClick={() => handleOpenCancelDialog(member._id)}
+              >
+                Cancel Appointment
+              </button>
+            </>
+          )}
+      </div>
     </div>
+  ))}
+  <Dialog open={cancelDialogOpen} onClose={handleCloseCancelDialog}>
+  <DialogTitle>No refunds if time left is less than 24 hours!!.. Are you sure you want to cancel this appointment? 
+  </DialogTitle>
+  <DialogActions>
+    <Button onClick={handleConfirmCancel} color="primary">
+      Yes
+    </Button>
+    <Button onClick={handleCloseCancelDialog} color="primary">
+      No
+    </Button>
+  </DialogActions>
+</Dialog>
+
+  
+</div>
+
+
   );
 };
 
 function handleWalletPayment() {
   window.location.href = "/appointmentWalletPayment";
 }
-
+function handleRescheduleApp(id,drId){
+  window.location.href =(`/RescheduleApp/${id}/${drId}`);
+}
 const handleCreditCardPayment = () => {
   //window.location.href = '/appointmentCreditCardPayment' ;
   axios
@@ -96,44 +173,104 @@ const handleCreditCardPayment = () => {
 const AppointmentFilterPage = ({ appointments }) => {
   const navigate = useNavigate();
   console.log(appointments);
+  const [selectedApp, setSelectedApp] = useState(null);
+const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+
+const handleOpenCancelDialog = (appId) => {
+  setSelectedApp(appId);
+  setCancelDialogOpen(true);
+};
+
+const handleCloseCancelDialog = () => {
+  setCancelDialogOpen(false);
+};
+
+const handleConfirmCancel = async () =>  {
+  // Implement your cancellation logic here
+  const reqBody = {
+    _id: selectedApp,
+  };
+  const newApp = await axios.post(
+    "http://localhost:8000/appointment/cancelAppointment/:id",
+    reqBody
+  );
+  // /cancelAppointment/:id
+  setSelectedApp(null);
+  handleCloseCancelDialog();
+};
   return (
     <div style={{ overflow: "auto", height: 440 }}>
-      {appointments.map((member) => (
-        <div
-          key={member.id}
-          style={{
-            border: "1px solid black",
-            borderRadius: "20px",
-          }}
-        >
+  {appointments.map((member) => (
+    <div
+      key={member.id}
+      style={{
+        border: "1px solid black",
+        borderRadius: "20px",
+        padding: "10px",
+        marginBottom: "10px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start", // Align items to the start (left)
+      }}
+    >
           <p>
             <strong>Doctor ID:</strong> {member.doctorId}
           </p>
 
           <p>
-            <strong>Date:</strong> {member.date}
+            <strong>Date:</strong> {formatDate(member.date)}
           </p>
           <p>
             <strong>status:</strong> {member.status}
           </p>
-          <p>
-            <button
-              className="btn btn-success m-3 btn-sm"
-              onClick={handleWalletPayment}
-            >
-              Pay using wallet
-            </button>
-            <form
-              action="http://localhost:8000/AppointmentCheckout"
-              method="POST"
-            >
-              <button className="btn btn-success m-3 btn-sm">
-                Pay using credit card
+          <div style={{ display: "flex", gap: "10px" }}>
+          {member.status !== 'cancelled' && (
+            <>
+        <button
+          className="btn btn-success m-1"
+          onClick={handleWalletPayment}
+        >
+          Pay using wallet
+        </button>
+        <form
+          action="http://localhost:8000/AppointmentCheckout"
+          method="POST"
+        >
+          <button
+            className="btn btn-success m-1"
+          >
+            Pay using credit card
+          </button>
+        </form>
+              <button
+                className="btn btn-success m-1"
+                onClick={() => handleRescheduleApp(member._id, member.doctorId)}
+              >
+                Reschedule Appointment
               </button>
-            </form>
-          </p>
+              <button
+                className="btn btn-success m-1"
+                onClick={() => handleOpenCancelDialog(member._id)}
+              >
+                Cancel Appointment
+              </button>
+            </>
+          )}
+      </div>
         </div>
       ))}
+      <Dialog open={cancelDialogOpen} onClose={handleCloseCancelDialog}>
+  <DialogTitle>No refunds if time left is less than 24 hours!!.. Are you sure you want to cancel this appointment? 
+  </DialogTitle>
+  <DialogActions>
+    <Button onClick={handleConfirmCancel} color="primary">
+      Yes
+    </Button>
+    <Button onClick={handleCloseCancelDialog} color="primary">
+      No
+    </Button>
+  </DialogActions>
+</Dialog>
     </div>
   );
 };
