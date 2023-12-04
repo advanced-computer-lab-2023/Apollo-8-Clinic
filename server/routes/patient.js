@@ -85,5 +85,7 @@ router.post("/docFilter", Middle.requireAuthPatient, doctor.filterBySpecOrAv);
 
 // lw mesh fahem el "/patient" gat mnen fa e7na 3amlenha fi el index.js file fi el line da (app.use("/patient", patientRoutes);)
 router.post("/myApp", Middle.requireAuthPatient, appointmentContoller.patientApp);
+router.get("/prescriptions", Middle.requireAuthPatient, controllers.myPrescriptions);
+//router.get("/prescriptions", controllers.myPrescriptions);
 
 export default router; 

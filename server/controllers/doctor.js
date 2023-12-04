@@ -1,6 +1,7 @@
 import DoctorModel from '../models/doctor.js';
 import UserModel from '../models/user.js';
 import AppointmentModel from '../models/appointment.js';
+import prescriptionModel from '../models/prescription.js';
 import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
@@ -460,6 +461,59 @@ const updateAppointment = async (req, res) => {
   }
 };
 
+const addPrescription = async (req, res) => {
+  try {
+    const { patientId, doctorId, state, name, dose, date} = req.body;
+
+    // Check if the patient and doctor exist
+    const patient = await PatientModel.findById(patientId);
+    const doctor = await DoctorModel.findById(doctorId);
+
+    if (!patient || !doctor) {
+      return res.status(404).json({ error: "Patient or Doctor not found" });
+    }
+
+    // Create a new prescription
+    const newPrescription = new prescriptionModel({
+      patientId: patientId,
+      doctorId: doctorId,
+      state: state,
+      medicine: [
+        {
+          name: name,
+          dose: dose
+        }
+      ],
+      date: date,
+    });
+
+    // Save the prescription
+    await newPrescription.save();
+
+    return res.status(201).json({ message: "Prescription added successfully", prescription: newPrescription });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const myPrescriptions = async (req, res) => {
+  try {
+    const doctorId = res.locals.userId;
+
+    const doctor = await DoctorModel.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    const prescriptions = await PresModel.find({ doctorId: doctorId });
+    
+    return res.status(200).json({ prescriptions });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export default {
   createDoctor,
@@ -484,5 +538,7 @@ export default {
   getWallet,
 
   updateAppointment,
+  addPrescription,
+  myPrescriptions
 
 }
