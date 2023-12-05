@@ -34,5 +34,7 @@ router.post("/doctorLogin", Auth.loginDoctor)
 //view appointments chekkkk whattttt is thattt???
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", Middle.requireAuth, appointmentContoller.getAppointmentWithFilter);
+router.get("/getWallet/prescriptions", Middle.requireAuthDoctor, controllers.myPrescriptions);
+router.post("/handleFollowUpReq", Middle.requireAuth, controllers.handleFollowUpRequest);
 
 export default router;

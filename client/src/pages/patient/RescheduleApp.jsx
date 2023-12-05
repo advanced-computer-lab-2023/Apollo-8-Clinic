@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import * as React from 'react';
-
 import axios from "axios";
 import ResponsiveAppBar from "../../components/TopBar";
 import { AppBar } from "@mui/material";
@@ -30,20 +28,16 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 //const id = "654d8a73bb465e1aaf27c508";
 const patientID = "6523ba9cd72b2eb0e39cb137";
-const AvailableAppointments = () => {
+const RescheduleApp = () => {
   const [doctor, setDoctor] = useState(null);
   const [slots, setSlots] = useState([]);
   const [options, setOptions] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const { id } = useParams();
+  const { id,drId } = useParams();
 
   const formatDate = (dateTime) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -57,18 +51,11 @@ const AvailableAppointments = () => {
     });
   };
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
-  const [value, setValue] = React.useState('New Appointment');
-
-
   useEffect(() => {
-    console.log(`http://localhost:8000/doctor/${id}`);
+    console.log(`http://localhost:8000/doctor/${drId}`);
     // Fetch doctor information
     axios
-      .get(`http://localhost:8000/doctor/${id}`)
+      .get(`http://localhost:8000/doctor/${drId}`)
       .then((response) => {
         setDoctor(response.data);
         setSlots(response.data.availableSlots);
@@ -113,51 +100,20 @@ const AvailableAppointments = () => {
 
   // Function to handle reservation confirmation
   const confirmReservation = async () => {
-
-    if (value == "follow up") {
-      try {
-        if (!id) {
-          console.error("Doctor or its ID is undefined.");
-          return;
-        }
-
-        const response = await axios.post(
-          "http://localhost:8000/patient/followUpRequest",
-          {
-            doctorId: id,
-            familyMemberId: patientID
-          }
-        );
-
-        if (response.data) {
-        }
-      } catch (error) {
-        console.error("Error Updating Appointment Type ", error);
-      }
-
-    }
-    else {
-      // Implement your reservation logic here
-      const reqBody = {
-        doctorId: id,
-        patientId: patientID,
-        date: selectedSlot,
-        status: "upcoming",
-        type: "regular",
-      };
-      const newApp = await axios.post(
-        "http://localhost:8000/appointment/",
-        reqBody
-      );
-      console.log(selectedSlot);
-      console.log(
-        `Slot reserved: ${formatTime(selectedSlot)} - Option: ${selectedOption}`
-      );
-    }
-    setDialogOpen(false);
-    setSelectedSlot(null);
-    setSelectedOption("");
-
+    // Implement your reservation logic here
+    const reqBody = {
+      _id: id,
+      date: selectedSlot,
+    };
+    const newApp = await axios.post(
+      "http://localhost:8000/appointment/rescheduleAppointment/:id",
+      reqBody
+    );
+    console.log(selectedSlot);
+    console.log(
+      `Slot reserved: ${formatTime(selectedSlot)} - Option: ${selectedOption}`
+    );
+    window.location.href =("/patientFamilyAppointments");
   };
 
   // Function to handle closing the dialog
@@ -166,9 +122,6 @@ const AvailableAppointments = () => {
     setSelectedSlot(null);
     setSelectedOption("");
   };
-
-
-
 
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
@@ -223,43 +176,14 @@ const AvailableAppointments = () => {
           </TableContainer>
           {/* Reservation Dialog */}
           <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-            <DialogTitle>Reserve for..</DialogTitle>
-            <DialogContent>
-              <FormControl fullWidth>
-                <InputLabel id="option-label">Choose</InputLabel>
-                <Select
-                  labelId="option-label"
-                  id="option-select"
-                  value={selectedOption}
-                  onChange={handleOptionChange}
-                >
-                  <MenuItem value="Option 1">Me</MenuItem>
-                  {options.map((option) => (
-                    <MenuItem key={option._id} value={option.name}>
-                      {option.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <FormControl style={{ marginLeft: '10%' }}>
-              <FormLabel id="demo-controlled-radio-buttons-group">Type of Appointment</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={value}
-                onChange={handleChange}
-              >
-                <FormControlLabel value="regular" control={<Radio />} label="New Appointment" />
-                <FormControlLabel value="follow up" control={<Radio />} label="Follow Up" />
-              </RadioGroup>
-            </FormControl>
+            <DialogTitle>Are you sure you want to reschedule?</DialogTitle>
+            
             <DialogActions>
               <Button onClick={handleCloseDialog} color="primary">
                 Cancel
               </Button>
               <Button onClick={confirmReservation} color="primary">
-                Confirm Reservation
+                Confirm Rescheduling
               </Button>
             </DialogActions>
           </Dialog>
@@ -270,4 +194,4 @@ const AvailableAppointments = () => {
   );
 };
 
-export default AvailableAppointments;
+export default RescheduleApp;

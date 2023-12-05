@@ -43,10 +43,15 @@ import HomePageDoc from "./pages/doctor/HomePageDoc";
 import PatientHP_FM from "./pages/patient/PatientFamilyHP";
 import PatientAppointments from "./pages/patient/PatientAppointments";
 import AvailableAppointments from "./pages/patient/AvailableAppointments";
+import RescheduleApp from "./pages/patient/RescheduleApp";
 import HomePageAdmin from "./pages/admin/HomePageAdmin";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DoctorContract from "./pages/doctor/DoctorContract";
+import FollowUPPending from "./pages/doctor/FollowUPPending";
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
@@ -74,7 +79,8 @@ function App() {
   }, [token]);
 
   if (!dataFetched) {
-    return <p>Loading...</p>; // Render nothing until data is fetched
+    return <CircularProgress color="success" />
+      ; // Render nothing until data is fetched
   }
 
   //console.log(type)
@@ -118,6 +124,7 @@ function App() {
           />
           <Route path="/ForgetPassword" element={<Forget />} />
           <Route path="/changePassPat" element={<ChangePass />} />
+          <Route path="/RescheduleApp/:id/:drId" element={<RescheduleApp />} />
         </Routes>
       </div>
     );
@@ -130,6 +137,7 @@ function App() {
 
         <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
         <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
+        <Route path="FollowUPPending/:doctorName" element={<FollowUPPending />} />
         <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
 
         <Route path="/HomePageDoc" element={<HomePageDoc />} />

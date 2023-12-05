@@ -1,6 +1,7 @@
 import DoctorModel from '../models/doctor.js';
 import UserModel from '../models/user.js';
 import AppointmentModel from '../models/appointment.js';
+import prescriptionModel from '../models/prescription.js';
 import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
@@ -446,6 +447,7 @@ const updateAppointment = async (req, res) => {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
+    
     // Allow changing from 'regular' to 'follow up'
     if (appointment.type === "regular" && newType === "follow up") {
       appointment.type = newType;
@@ -457,6 +459,93 @@ const updateAppointment = async (req, res) => {
   } catch (error) {
     console.error("Error in changeAppointmentType:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const addPrescription = async (req, res) => {
+  try {
+    const { patientId, doctorId, state, name, dose, date} = req.body;
+
+    // Check if the patient and doctor exist
+    const patient = await PatientModel.findById(patientId);
+    const doctor = await DoctorModel.findById(doctorId);
+
+    if (!patient || !doctor) {
+      return res.status(404).json({ error: "Patient or Doctor not found" });
+    }
+
+    // Create a new prescription
+    const newPrescription = new prescriptionModel({
+      patientId: patientId,
+      doctorId: doctorId,
+      state: state,
+      medicine: [
+        {
+          name: name,
+          dose: dose
+        }
+      ],
+      date: date,
+    });
+
+    // Save the prescription
+    await newPrescription.save();
+
+    return res.status(201).json({ message: "Prescription added successfully", prescription: newPrescription });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const myPrescriptions = async (req, res) => {
+  try {
+    const doctorId = res.locals.userId;
+
+    const doctor = await DoctorModel.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    const prescriptions = await PresModel.find({ doctorId: doctorId });
+    
+    return res.status(200).json({ prescriptions });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const handleFollowUpRequest = async (req, res) => {
+  try {
+    const { requestId, action } = req.body;
+
+    // Check if the user is a doctor
+    const user = await UserModel.findOne({ _id: res.locals.userId, type: { $regex: /doctor/i } });
+    if (!user) {
+      return res.status(401).json({ message: "You have no authorization to handle follow-up requests" });
+    }
+
+    // Check if the action is valid
+    if (!["Accept", "Revoke"].includes(action)) {
+      return res.status(400).json({ error: "Invalid action" });
+    }
+
+    // Update the follow-up request status
+    const updatedRequest = await FollowUpRequestModel.findByIdAndUpdate(
+      requestId,
+      { status: action === "Accept" ? "Accepted" : "Revoked" },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res.status(404).json({ error: "Follow-up request not found" });
+    }   
+
+    return res.status(200).json({ message: "Follow-up request handled successfully", updatedRequest });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -484,5 +573,8 @@ export default {
   getWallet,
 
   updateAppointment,
+  addPrescription,
+  myPrescriptions,
+  handleFollowUpRequest
 
 }

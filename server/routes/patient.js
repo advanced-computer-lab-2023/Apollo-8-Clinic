@@ -79,11 +79,15 @@ router.post("/docFilter", Middle.requireAuthPatient, doctor.filterBySpecOrAv);
 // router.get("/searchDocNameASpec", doctor.getDoctorByNameASpec);
 // router.get("/searchDocNameOrSpec", doctor.getDoctorByNameOrSpec);
 // router.get("/searchDocSpecASlots", doctor.getDoctorAvailableAndS);
-//sss
 // if your route is : router.post("/something", controllers.something)
 // then test it by sending post request to this route: http://localhost:8000/patient/something
 
 // lw mesh fahem el "/patient" gat mnen fa e7na 3amlenha fi el index.js file fi el line da (app.use("/patient", patientRoutes);)
 router.post("/myApp", Middle.requireAuthPatient, appointmentContoller.patientApp);
+router.get("/prescriptions", Middle.requireAuthPatient, controllers.myPrescriptions);
+//router.get("/prescriptions", controllers.myPrescriptions);
+router.post("/followUpRequest", Middle.requireAuthPatient, controllers.requestFollowUp);
+//router.post("/followUpRequest", controllers.requestFollowUp);
+
 
 export default router; 
