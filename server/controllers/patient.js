@@ -608,11 +608,11 @@ import fs from "fs";
 
 //  require prescription id in params
 const payPrescription = async (req,res)=>{
+  // + redirect to the cart pharmacy 
   try {
-    //called only when paying from wallet
-    let TotalPrice = 0;
-    const patient = await PatientModel.findOne({ user: res.locals.userId })
-    const patientId = patient._id;
+    //let TotalPrice = 0;
+    // const patient = await PatientModel.findOne({ user: res.locals.userId })
+    // const patientId = patient._id;
     const presID = req.params.id ;
     const perscription = await PresModel.findById(presID) ;
     //check its presence to avoid errors
@@ -627,16 +627,17 @@ const payPrescription = async (req,res)=>{
     perscription.state = "filled";
     perscription.save();
 
-    //get the total price of all the medicines in the pres from the pharmacy server
-    axios.get("http://localhost:9000/medicine/medicinesTotPrice",perscription.medicine).
-    then((result) => {
-      console.log("total price from the pharmacy = "+result);
-      TotalPrice = result;
-      });
-    await updateWallet({ body: { patientId, TotalPrice } }, res);
-    //make an order with these medicines in the pharmacy or just add to the cart????? check with the TA 
+    // //get the total price of all the medicines in the pres from the pharmacy server
+    // axios.get("http://localhost:9000/medicine/medicinesTotPrice",perscription.medicine).
+    // then((result) => {
+    //   console.log("total price from the pharmacy = "+result);
+    //   TotalPrice = result;
+    //   });
+    // await updateWallet({ body: { patientId, TotalPrice } }, res);
+    // //make an order with these medicines in the pharmacy or just add to the cart????? check with the TA 
 
-    res.status(200).json(TotalPrice+"  done");
+    // res.status(200).json(TotalPrice+"  done");
+
   } catch {
     res.status(400).json({ error: error.message })
   }

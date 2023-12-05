@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
 import e from 'express';
 import PrescriptionModel from '../models/prescription.js';
+import axios from "axios"
 const saltRounds = 10;
 
 const createDoctor = async (req, res) => {
@@ -523,6 +524,23 @@ const addPrescription = async(req,res)=>{
   //const doctorId = "656cd127e1d756e79b5fea9f"
   const newPres = new PrescriptionModel({doctorId, patientId,state, medicine,date});
   await newPres.save();
+
+  // add medicines to the patient's cart in the pharmacy
+  for(var element of medicine){
+   //get the medicine using its name
+   axios.get("http://localhost:9000/medicine/searchMedForClinic",{"name":element.name}).
+   then((result) => {
+      //the result is a medicine obj 
+      //if found , add it to the cart
+      if(result){
+        console.log("medicine id from the pharmacy"+result._id)
+        axios.post("http://localhost:9000/patient/addToCartFromClinic",{ medicineId:result._id , quantity:1 })
+      }
+     }).catch(error,()=>{
+      console.error('Error adding a prescription', error);
+     });
+  }
+
   res.status(200).json(newPres);
   }
   catch(error){
@@ -531,16 +549,34 @@ const addPrescription = async(req,res)=>{
   }
 }
 
-const updatePrescription = async(req,res)=>{
-  //may need a condition
+const updatePrescription_AddMed = async(req,res)=>{
+  
   try{
     const predId = req.params.id ;
     const prescription = await PrescriptionModel.findById(predId);
-    const  {medicine} = req.body;
-    prescription.medicine = medicine ;
+    if(prescription.state=="filled"){
+      res.status(200).send("cannot edit now !!");
+      return;
+    }
+    const  newMedicine = req.body;  // body = {name:"panadol" , dose:"once a day"}
+    prescription.medicine.push(newMedicine);
     await prescription.save();
+
+    //add it to the cart 
+    axios.get("http://localhost:9000/medicine/searchMedForClinic",{"name":newMedicine.name}).
+   then((result) => {
+   //the result is a medicine obj 
+      //if found , add it to the cart
+      if(result){
+        console.log("medicine id from the pharmacy"+result._id)
+        axios.post("http://localhost:9000/patient/addToCartFromClinic",{ medicineId:result._id , quantity:1 })
+      }   
+    }).catch(error,()=>{
+      console.error('Error adding a medicine', error);
+     });
     res.status(200).json("updated successfully");
     }
+
     catch(error){
       console.error('Error updating prescription', error);
       res.status(500).send('Internal Server Error');
@@ -548,16 +584,72 @@ const updatePrescription = async(req,res)=>{
 
 }
 
-const deletePrescription = async(req,res)=>{
-  //may need a condition 
-  try {
-    const { id } = req.params;
-    await PrescriptionModel.findByIdAndDelete(id);
-    res.sendStatus(204);  //done successfully
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+const updatePrescription_DeleteMed = async(req,res)=>{
+
+  try{
+    const predId = req.params.id ;
+    const prescription = await PrescriptionModel.findById(predId);
+    if(prescription.state=="filled"){
+      res.status(200).send("cannot edit now !!");
+      return ;
+    }
+    const  oldMedicine = req.body;  // body = {name:"panadol" , dose:"once a day"}
+    prescription.medicine.pull({name:oldMedicine.name})
+    await prescription.save();
+
+    //remove it from  cart 
+    axios.get("http://localhost:9000/medicine/searchMedForClinic",{"name":oldMedicine.name}).
+   then((result) => {
+   //the result is a medicine obj 
+      //if found , remove it
+      if(result){
+        console.log("medicine id from the pharmacy"+result._id)
+        axios.delete("http://localhost:9000/patient/removeFromCartClinic",{ medicineId:result._id})
+      }   
+    }).catch(error,()=>{
+      console.error('Error deleting a medicine', error);
+     });
+    res.status(200).json("updated successfully");
+    }
+
+    catch(error){
+      console.error('Error updating prescription', error);
+      res.status(500).send('Internal Server Error');
+    }
+
 }
+
+const updatePrescription_Dosage= async(req,res)=>{
+
+  try{
+    const predId = req.params.id ;
+    const prescription = await PrescriptionModel.findById(predId);
+    if(prescription.state=="filled"){
+      res.status(200).send("cannot edit now !!");
+      return ;
+    }
+    const  medicine = req.body; // body = {name:"panadol" , dose:"twice a day"}
+    prescription.medicine.pull({name:medicine.name})
+    prescription.medicine.push(medicine)
+    await prescription.save();
+  }
+    catch(error){
+      console.error('Error updating medicine dosage', error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+
+  
+// const deletePrescription = async(req,res)=>{
+//   //may need a condition 
+//   try {
+//     const { id } = req.params;
+//     await PrescriptionModel.findByIdAndDelete(id);
+//     res.sendStatus(204);  //done successfully
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// }
 
 export default {
   createDoctor,
@@ -585,8 +677,9 @@ export default {
 
   printPresPDF,
   addPrescription,
-  updatePrescription,
-  deletePrescription,
+  updatePrescription_AddMed,
+  updatePrescription_DeleteMed,
+  updatePrescription_Dosage
 
 
 }
