@@ -601,6 +601,11 @@ const getWallet = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
+
+
 export default {
   createPatient,
   getPatients,

@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import DoctorSignup from "./pages/auth/DoctorSignup";
 import PatientSignup from "./pages/auth/PatientSignup";
 import Home from "./pages/Home";
@@ -9,6 +10,9 @@ import AllDoctors from "./pages/patient/AllDoctors";
 import DoctorInfo from "./pages/patient/DoctorInfo";
 import ViewDoctor from "./pages/patient/ViewDoctor";
 import FilterDoctor from "./pages/patient/FilterDoctor";
+import Call from "./pages/doctor/CallPatient";
+import { useLocation } from 'react-router-dom';
+//import Peer from "simple-peer"
 //youhanna milestone 2222
 import Doctorlogin from "./pages/auth/DoctorLogin";
 import Adminlogin from "./pages/auth/AdminLogin";
@@ -47,17 +51,55 @@ import HomePageAdmin from "./pages/admin/HomePageAdmin";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DoctorContract from "./pages/doctor/DoctorContract";
+import Peer from "simple-peer"
+import io from "socket.io-client"
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
 )}`;
+const token=JSON.parse(
+  sessionStorage.getItem("token")
+);
+
+
+
 
 function App() {
+  const navigate = useNavigate();
   const token = JSON.parse(sessionStorage.getItem("token"));
   const [type, setData] = useState(null);
   const [dataFetched, setDataFetched] = useState(false);
+  const [ receivingCall, setReceivingCall ] = useState(false)
+	const [ caller, setCaller ] = useState("")
+	const [ callerSignal, setCallerSignal ] = useState()
+  const [ name, setName ] = useState("")
+  const location=useLocation();
+
+
 
   useEffect(() => {
+
+    
+
+    const socket = io.connect('http://localhost:8000', {
+    query: {
+      username: 'john_doe',
+      room: token,
+    },
+  });
+
+  socket.on("callUser", (data) => {
+    setDataFetched(false);
+    console.log('calluser fy chat');
+    console.log("georgeee   "+data.from)
+    setReceivingCall(true)
+    setCaller(data.from)
+    setName(data.name)
+    setCallerSignal(data.signal)
+    setDataFetched(true);
+})
+  
+
     const fetchData = async () => {
       try {
         const result = await axios.get("http://localhost:8000/admin/getType");
@@ -73,17 +115,60 @@ function App() {
     fetchData();
   }, [token]);
 
+  const answerCall = () => {
+    console.log("hhhh");
+    navigate('/Call', {
+        state: {
+          back:location.pathname,
+            video: true,
+            answerCall: true,
+            caller: caller,
+            callerUserSignal: callerSignal,
+        }
+      })
+      setReceivingCall(false)
+    }
+    const endCall = () => {
+      console.log("hhhh");
+      setReceivingCall(false)
+      }
+
   if (!dataFetched) {
     return <p>Loading...</p>; // Render nothing until data is fetched
   }
+  if(receivingCall){
+    return(
+      <div className="caller">
+      { <h1 >{name} is calling...</h1> }
+      <button variant="contained" color="primary" onClick={answerCall}>
+          Answer
+      </button>
+      <button variant="contained" color="primary" onClick={endCall}>
+          end call
+      </button>
+  </div>
+  )   
+    
+  }
+  
 
   //console.log(type)
   if (type === "Patient") {
     console.log("fady");
     return (
+      
       <div>
-        <Routes>
+
+      <div style={{position: 'relative', zIndex: 1 }} className="your-custom-class"> {/* Add your desired class for styling */}
+      
+    </div>
+                
+                 
+         <div style={{position: 'relative', zIndex: 2 }}>
+        <Routes>  
+       
           <Route path="/prescriptionsList" element={<PrescriptionsList />} />
+          
           <Route path="/prescriptions/:id" element={<PrescriptionsDetails />} />
           <Route path="/" element={<Home />} />
           <Route path="/allDoctors" element={<AllDoctors />} />
@@ -116,13 +201,16 @@ function App() {
             path="/AvailableAppointments/:id"
             element={<AvailableAppointments />}
           />
+           <Route path="/Call" element={<Call />} />
           <Route path="/ForgetPassword" element={<Forget />} />
           <Route path="/changePassPat" element={<ChangePass />} />
         </Routes>
       </div>
+      </div>      
     );
   } else if (type === "Doctor") {
     return (
+      <div>
       <Routes>
         <Route path="/editDoctor" element={<EditDoctor />} />
         <Route path="/" element={<Home />} />
@@ -141,8 +229,10 @@ function App() {
         <Route path="/doctorAppointments" element={<MainDoctor />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/ForgetPassword" element={<Forget />} />
+        <Route path="/Call" element={<Call />} />
         <Route path="/changePassDoc" element={<ChangePassDoc />} />
       </Routes>
+      </div>
     );
   } else if (type === "Admin") {
     return (
@@ -155,11 +245,12 @@ function App() {
         <Route path="/adminHealthPackage" element={<App1 />} />
         <Route path="/ForgetPassword" element={<Forget />} />
         <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
+        
         <Route path="/changePassAdm" element={<ChangePassAdm />} />
       </Routes>
     );
   } else {
-    console.log("asasa");
+    
     return (
       <div>
         <Routes>
@@ -175,6 +266,7 @@ function App() {
       </div>
     );
   }
+  
 }
 
 export default App;

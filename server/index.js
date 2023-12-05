@@ -9,9 +9,15 @@ import patientRoutes from "./routes/patient.js";
 import adminRoutes from "./routes/admin.js";
 import appointmentRoutes from './routes/appointment.js';
 import stripe from 'stripe';
+import  {Server}  from "socket.io";
+import doctor from './models/doctor.js'
+import UserModel from './models/user.js';
+import jwt from "jsonwebtoken";
+
 
 
 const app = express();
+
 app.use(express.json());
 app.use(cors());
 const stripeInstance = new stripe('sk_test_51OAbKKFG7BNY2kzIjyhX3ByBqijkVoASpjD4fcyOIjGcYiyxMdpHzQAf2rX7bBcokOGHeo7uwxDLX8mkStLJD3pj001MnvPqcn');
@@ -22,14 +28,95 @@ const MONGO_URI = process.env.MONGO_URI;
 mongoose.set('strictQuery', false);
 mongoose
   .connect(MONGO_URI)
-  .then(() => {
+  .then( ()  => {
     console.log("MongoDB is now connected!");
     // Starting server
-    app.listen(port, () => {
-      console.log(`Listening to requests on http://localhost:${port}`);
+     const server= app.listen(port, () => {
+      console.log(`Listening to requests on http://localhost:${port}`);  
+
+      
+      const io=new Server(server,{
+        cors: {
+          origin: true,
+          methods: ["GET", "POST"],
+        },
+      });
+
+      const tokenSocketMap = {};
+
+      function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+      }
+
+      io.on("connection", (socket) => {
+        var room=null;
+        const  token  = socket.handshake.query.room;
+
+
+        jwt.verify(token, process.env.SECRET, async (err, decodedToken) => {
+          if (!err) {
+              room=decodedToken.name;
+       
+          } 
+        });
+
+        socket.join(room);
+        tokenSocketMap[room] = socket.id;
+          console.log(tokenSocketMap);
+
+      //socket.emit("me", socket.id);
+      io.to(socket.id).emit("me",socket.id );
+     
+        socket.on("disconnect", () => {
+          socket.broadcast.emit("callEnded")
+        })
+      
+        socket.on("callUser", async (data) => {
+     //     const fofa= await doctor.find();
+     console.log("yarbb "+data.userToCall)
+        
+        var fromm =null;
+
+
+        jwt.verify(data.fromTok, process.env.SECRET, async (err, decodedToken) => {
+          if (err) {
+              
+            // console.log('You are not logged in.');
+            // res send status 401 you are not logged in
+            console.log("yyyah ya wad ya t2eel")
+            // res.redirect('/login');
+          } else {
+            fromm =decodedToken.name;
+             // console.log("ya m5albiiiii "+tokenSocketMap[fromm]);
+               
+          }
+        });
+
+        const room =await UserModel.findById(data.userToCall);
+        console.log("chelsee  "+room)
+
+
+
+        
+         io.to(room.username).emit("callUser", { signal: data.signalData, from: tokenSocketMap[fromm], name: fromm })
+        
+      //    io.to(fofa).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })
+        })
+      
+        socket.on("answerCall", (data) => {
+          
+          var room = getKeyByValue(tokenSocketMap, data.to);
+          console.log("Ansewr------"+room);
+          io.to(room).emit("callAccepted", data.signal)
+        })
+      })
     });
+    
+    
   })
   .catch((err) => console.log(err));
+
+  
 
 // images
 const __filename = fileURLToPath(import.meta.url);
