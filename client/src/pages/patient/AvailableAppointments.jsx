@@ -113,25 +113,51 @@ const AvailableAppointments = () => {
 
   // Function to handle reservation confirmation
   const confirmReservation = async () => {
-    // Implement your reservation logic here
-    const reqBody = {
-      doctorId: id,
-      patientId: patientID,
-      date: selectedSlot,
-      status: "upcoming",
-      type: "regular",
-    };
-    const newApp = await axios.post(
-      "http://localhost:8000/appointment/",
-      reqBody
-    );
-    console.log(selectedSlot);
-    console.log(
-      `Slot reserved: ${formatTime(selectedSlot)} - Option: ${selectedOption}`
-    );
+
+    if (value == "follow up") {
+      try {
+        if (!id) {
+          console.error("Doctor or its ID is undefined.");
+          return;
+        }
+
+        const response = await axios.post(
+          "http://localhost:8000/patient/followUpRequest",
+          {
+            doctorId: id,
+            familyMemberId: patientID
+          }
+        );
+
+        if (response.data) {
+        }
+      } catch (error) {
+        console.error("Error Updating Appointment Type ", error);
+      }
+
+    }
+    else {
+      // Implement your reservation logic here
+      const reqBody = {
+        doctorId: id,
+        patientId: patientID,
+        date: selectedSlot,
+        status: "upcoming",
+        type: "regular",
+      };
+      const newApp = await axios.post(
+        "http://localhost:8000/appointment/",
+        reqBody
+      );
+      console.log(selectedSlot);
+      console.log(
+        `Slot reserved: ${formatTime(selectedSlot)} - Option: ${selectedOption}`
+      );
+    }
     setDialogOpen(false);
     setSelectedSlot(null);
     setSelectedOption("");
+
   };
 
   // Function to handle closing the dialog
@@ -140,35 +166,6 @@ const AvailableAppointments = () => {
     setSelectedSlot(null);
     setSelectedOption("");
   };
-
-
-
-
-
-
-
-  const UpdateFollowUp = async (appID) => {
-    try {
-      if (!appID) {
-        console.error("Appointment or its ID is undefined.");
-        return;
-      }
-
-      const response = await axios.put(
-        "http://localhost:9000/updateAppointment/:doctorName",
-        {
-          appointmentId: appID,
-          newType: 'follow up'
-        }
-      );
-
-      if (response.data) {
-      }
-    } catch (error) {
-      console.error("Error Updating Appointment Type ", error);
-    }
-  };
-
 
 
 
@@ -253,8 +250,8 @@ const AvailableAppointments = () => {
                 value={value}
                 onChange={handleChange}
               >
-                <FormControlLabel value="female" control={<Radio />} label="New Appointment" />
-                <FormControlLabel value="male" control={<Radio />} label="Follow Up" />
+                <FormControlLabel value="regular" control={<Radio />} label="New Appointment" />
+                <FormControlLabel value="follow up" control={<Radio />} label="Follow Up" />
               </RadioGroup>
             </FormControl>
             <DialogActions>
