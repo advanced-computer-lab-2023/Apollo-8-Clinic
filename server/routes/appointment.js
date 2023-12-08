@@ -12,4 +12,9 @@ router.post("/rescheduleAppointment/:id", Middle.requireAuthPatient, controllers
 router.post("/docRescheduleAppointment/:id", Middle.requireAuthDoctor, controllers.rescheduleAppointment);
 router.post("/cancelAppointment/:id", Middle.requireAuthPatient, controllers.cancelAppointment);
 router.post("/docCancelAppointment/:id", Middle.requireAuthDoctor, controllers.cancelAppointment);
+router.get("/getAppCall", Middle.requireAuth, controllers.getMyAppointmers);
+router.get("/:doctorName", Middle.requireAuthDoctor, controllers.getAppointments);
+router.get("/getPatientAppointments/:id", Middle.requireAuthPatient, controllers.getPatientAppointments);
+
+
 export default router;

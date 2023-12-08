@@ -78,6 +78,33 @@ const getPatientAppointments = async (req, res) => {
 };
 
 
+const getMyAppointmers = async (req, res) => {
+
+  try {
+   // console.log("backend esht5l")
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if(patient){
+      console.log("Patient")
+      const Appointments=await AppointmentModel.find({patientId:patient._id}).populate('doctorId');
+      res.status(200).json(Appointments);
+    }
+    else if(doctor){
+      console.log("Doctor")
+      const Appointments = await AppointmentModel.find({ doctorId: doctor._id }).populate('patientId');
+      res.status(200).json(Appointments);
+    }
+    else{
+      res.status(401).json({ error: 'No call' });
+    }
+  } catch (error) {
+    console.error('Error in getwallet:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+
+
 
 //test it using http://localhost:8000/doctor/appointmentWithFilter?startDate=2002-1-1&endDate=2003-1-1
 
@@ -274,4 +301,5 @@ export default {
   getPatientAppointments,
   rescheduleAppointment,
   cancelAppointment
+  getMyAppointmers
 }

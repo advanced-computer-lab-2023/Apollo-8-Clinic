@@ -660,6 +660,7 @@ const requestFollowUp = async (req, res) => {
   }
 };
 
+
 export default {
   createPatient,
   getPatients,

@@ -44,6 +44,9 @@ function ResponsiveAppBar() {
   const handleTimeSlots = () => {
     navigate("/AddTimeSlots");
   };
+  const handleCall = () => {
+    navigate("/Call");
+  };
   const handleMyWallet = () => {
     navigate("/DoctorWallet/:doctorName");
   };
@@ -317,6 +320,20 @@ function ResponsiveAppBar() {
             >
               {" "}
               Change Password{" "}
+            </Button>
+            <Button
+              onClick={handleCall}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: "9px",
+              }}
+            >
+              {" "}
+              Call{" "}
             </Button>
           </Box>
 

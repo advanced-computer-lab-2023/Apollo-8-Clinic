@@ -41,6 +41,9 @@ function ResponsiveAppBar() {
   const handlePack = () => {
     navigate("/PatientHP_FM");
   };
+  const handleCall = () => {
+    navigate("/Call");
+  };
   const handleMyApp = () => {
     navigate("/patientFamilyAppointments");
   };
@@ -261,6 +264,20 @@ function ResponsiveAppBar() {
             >
               {" "}
               Change Password{" "}
+            </Button>
+            <Button
+              onClick={handleCall}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: "11px",
+              }}
+            >
+              {" "}
+              Call{" "}
             </Button>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
