@@ -446,6 +446,16 @@ const patientDetails = async (req, res) => {
   }
 };
 
+const getPatientById = async (req, res) => {
+  try {
+    const patient = await PatientModel.findOne({ user: res.locals.userId })
+    if (!patient) return res.status(404).send("Patient not found");
+    return res.status(200).send(patient);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 //req.params --> id
 const cancelSubscription = async (req, res) => {
   try {
@@ -672,5 +682,6 @@ export default {
   getWallet,
   checkIfLinked,
   myPrescriptions,
-  requestFollowUp
+  requestFollowUp,
+  getPatientById
 }

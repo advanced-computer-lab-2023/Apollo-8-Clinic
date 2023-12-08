@@ -14,9 +14,10 @@ router.post("/", uploadMiddleware, controllers.createDoctor);
 //
 router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctorContract);
 router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
-router.get("/", Middle.requireAuthAdmin, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
+router.get("/", Middle.requireAuth, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
 router.get("/getAcceptedDoctors", Middle.requireAuth, controllers.getAcceptedDoctors);//for doctors and patients in the sys
 router.get("/:id", Middle.requireAuth, controllers.getDoctorById);
+router.get("/get/byId",  Middle.requireAuth,controllers.getDoctorByIdForChat);
 router.put("/accept/:id", Middle.requireAuthAdmin, controllers.acceptDoctor);
 router.put("/reject/:id", Middle.requireAuthAdmin, controllers.rejectDoctor);
 router.get("/viewPatients/:id", Middle.requireAuthDoctor, patient.getMyPatients);

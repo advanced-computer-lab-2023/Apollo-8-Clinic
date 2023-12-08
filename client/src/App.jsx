@@ -52,6 +52,13 @@ import FollowUPPending from "./pages/doctor/FollowUPPending";
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 
+// import chat 
+import Chat from "./pages/patient/Chat";
+import ChatDoctor from "./pages/doctor/Chat";
+
+import io from "socket.io-client";
+const socket = io.connect("http://localhost:8000");
+
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
@@ -97,6 +104,7 @@ function App() {
           <Route path="/viewDoctor/:id" element={<ViewDoctor />} />
           <Route path="/filter" element={<FilterDoctor />} />
           <Route path="/doctors/:id" element={<DoctorDetails />} />
+          <Route path="/Chat" element={<Chat />} />
           {/* this doctor details is in admin */}
           <Route path="/patientFamilyAppointments" element={<AppPatient />} />
           <Route
@@ -145,7 +153,7 @@ function App() {
         <Route path="/viewMyPatients" element={<MyPatientsList />} />
         <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
         <Route path="/contract" element={<DoctorContract />} />
-
+        <Route path="/ChatDoctor" element={<ChatDoctor />} />
         <Route path="/doctorAppointments" element={<MainDoctor />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/ForgetPassword" element={<Forget />} />
