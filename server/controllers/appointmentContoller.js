@@ -300,6 +300,6 @@ export default {
   patientApp,
   getPatientAppointments,
   rescheduleAppointment,
-  cancelAppointment
+  cancelAppointment,
   getMyAppointmers
 }

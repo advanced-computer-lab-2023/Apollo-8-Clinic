@@ -46,7 +46,7 @@ export default function ChatContainer({ currentChat, socket }) {
         msg,
       });
   
-      await axios.post(`http://localhost:9000/chat/createMessage`, {
+      await axios.post(`http://localhost:8000/chat/createMessage`, {
         senderId: currentUser._id,
         receiverId: currentChat._id,
         content: msg,

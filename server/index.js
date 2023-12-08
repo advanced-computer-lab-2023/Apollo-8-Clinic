@@ -10,7 +10,7 @@ import adminRoutes from "./routes/admin.js";
 import appointmentRoutes from './routes/appointment.js';
 import chatRoutes from "./routes/message.js";
 import stripe from 'stripe';
-import  {Server}  from "socket.io";
+//import  {Server}  from "socket.io";
 import doctor from './models/doctor.js'
 import UserModel from './models/user.js';
 import jwt from "jsonwebtoken";
