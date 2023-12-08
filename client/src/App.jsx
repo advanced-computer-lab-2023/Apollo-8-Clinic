@@ -3,6 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import DoctorSignup from "./pages/auth/DoctorSignup";
 import PatientSignup from "./pages/auth/PatientSignup";
+import CallIcon from '@mui/icons-material/Call';
+import IconButton from "@material-ui/core/IconButton"
+import CallEndIcon from '@mui/icons-material/CallEnd';
 import Home from "./pages/Home";
 import PrescriptionsList from "./pages/patient/PrescriptionsList";
 import EditDoctor from "./pages/doctor/EditDoctor";
@@ -11,7 +14,12 @@ import DoctorInfo from "./pages/patient/DoctorInfo";
 import ViewDoctor from "./pages/patient/ViewDoctor";
 import FilterDoctor from "./pages/patient/FilterDoctor";
 import Call from "./pages/doctor/CallPatient";
+import Calld from "./pages/patient/CallDoctor";
 import { useLocation } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
 //import Peer from "simple-peer"
 //youhanna milestone 2222
 import Doctorlogin from "./pages/auth/DoctorLogin";
@@ -137,15 +145,35 @@ function App() {
     return <p>Loading...</p>; // Render nothing until data is fetched
   }
   if(receivingCall){
+    const imageUrl = 'https://static.vecteezy.com/system/resources/previews/004/477/337/non_2x/face-young-man-in-frame-circular-avatar-character-icon-free-vector.jpg';
     return(
       <div className="caller">
-      { <h1 >{name} is calling...</h1> }
-      <button variant="contained" color="primary" onClick={answerCall}>
-          Answer
-      </button>
-      <button variant="contained" color="primary" onClick={endCall}>
-          end call
-      </button>
+      {/* { <h1 >{name} is calling...</h1> }
+
+      <IconButton color="primary" aria-label="call" style={{ backgroundColor: "lightblue",margin:"10px" }} onClick={answerCall}>
+					 	<CallIcon  fontSize="large" />
+					 </IconButton>
+      <IconButton color="primary" aria-label="call" style={{ backgroundColor: "lightcoral",margin:"10px" }} onClick={endCall}>
+					 	<CallEndIcon  fontSize="large" />
+					 </IconButton> */}
+         <Card className="caller" style={{ maxWidth: 400, margin: 'auto', marginTop: 20 }}>
+      <CardContent>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
+          <Avatar alt={name} src={imageUrl} style={{ width: 100, height: 100, marginBottom: 10 }} />
+          <Typography variant="h5" component="h2">
+            <span style={{ color: 'darkblue', fontSize: '1.5em' }}>{name}</span> is calling...
+          </Typography>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+          <IconButton color="primary" aria-label="call" style={{ backgroundColor: 'lightblue', margin: '10px' }} onClick={answerCall}>
+            <CallIcon fontSize="large" />
+          </IconButton>
+          <IconButton color="primary" aria-label="call" style={{ backgroundColor: 'lightcoral', margin: '10px' }} onClick={endCall}>
+            <CallEndIcon fontSize="large" />
+          </IconButton>
+        </div>
+      </CardContent>
+    </Card>
   </div>
   )   
     
@@ -201,7 +229,7 @@ function App() {
             path="/AvailableAppointments/:id"
             element={<AvailableAppointments />}
           />
-           <Route path="/Call" element={<Call />} />
+           <Route path="/Call" element={<Calld />} />
           <Route path="/ForgetPassword" element={<Forget />} />
           <Route path="/changePassPat" element={<ChangePass />} />
         </Routes>

@@ -5,6 +5,7 @@ import "../init"
 import Button from "@material-ui/core/Button"
 import IconButton from "@material-ui/core/IconButton"
 import TextField from "@material-ui/core/TextField"
+
 import axios from "axios";
 //import AssignmentIcon from "@mui/icons/Assignment"
 //import PhoneIcon from "@mui/icons/Phone"
@@ -46,7 +47,8 @@ function Call(){
 	const [loading, setLoading] = useState(true);
 	const location = useLocation();
 
-	const containerStyles = {
+
+    const containerStyles = {
         background: 'linear-gradient(to bottom, #22c1c3, #64bf90)',
         height: '100vh', // Adjust the height as needed
         display: 'flex',
@@ -193,7 +195,7 @@ function Call(){
 		connectionRef.current.destroy()
 		
 		console.log(location.state);
-		window.location.pathname="/HomePageDoc"
+		window.location.pathname="/HomePage"
 	/*	if(location.state){
 			console.log(location.state);
 			window.location.pathname = location.state.back;
@@ -210,8 +212,8 @@ function Call(){
 
     return(
 		<>
-		<h1 style={{ textAlign: "center", color: "royalblue"  }}>Zoomish</h1>
-		<div className="container" style={containerStyles}>
+		<h1 style={{ textAlign: "center", color: "royalblue" }}>Calling Room</h1>
+	    <div className="container" style={containerStyles}>
 		<div className="video-container">
 			<div className="video">
 				{stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
@@ -263,7 +265,7 @@ function Call(){
                     <tr key={index}>
                       <td>{item._id}</td>
                       <td>{item.date}</td>
-                      <td>{item.patientId.name}</td>
+                      <td>{item.doctorId.name}</td>
                       <td></td>
                       <td></td>
 					  
