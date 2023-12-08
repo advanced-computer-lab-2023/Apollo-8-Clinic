@@ -8,6 +8,7 @@ import doctorRoutes from "./routes/doctor.js";
 import patientRoutes from "./routes/patient.js";
 import adminRoutes from "./routes/admin.js";
 import appointmentRoutes from './routes/appointment.js';
+import chatRoutes from "./routes/message.js";
 import stripe from 'stripe';
 import  {Server}  from "socket.io";
 import doctor from './models/doctor.js'
@@ -21,6 +22,35 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const stripeInstance = new stripe('sk_test_51OAbKKFG7BNY2kzIjyhX3ByBqijkVoASpjD4fcyOIjGcYiyxMdpHzQAf2rX7bBcokOGHeo7uwxDLX8mkStLJD3pj001MnvPqcn');
+import http from "http";
+import { Server } from "socket.io";
+
+//const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: "http://localhost:5174",
+//     methods: ["GET", "POST"], 
+//   }, 
+// })
+
+//global.onlineUsers = new Map();
+// io.on('connection', (socket) => {
+//   console.log('A user connected');
+//   global.chatSocket = socket;
+//   socket.on("add-user", (userId) => {
+//     onlineUsers.set(userId, socket.id);
+//     console.log(`user ${userId}is added`);
+//   });
+
+//   socket.on("send-msg", (data) => {
+//     const sendUserSocket = onlineUsers.get(data.to);
+//     console.log(`${data.msg} is sent from ${data.from} to ${data.to}`);
+//     if (sendUserSocket) {
+//       console.log(`${data.msg} is received by ${data.to}`);
+//       socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+//     }
+//   });
+// });
 
 const port = process.env.PORT || 8000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -43,12 +73,14 @@ mongoose
       });
 
       const tokenSocketMap = {};
+      global.onlineUsers = new Map();
 
       function getKeyByValue(object, value) {
         return Object.keys(object).find(key => object[key] === value);
       }
 
       io.on("connection", (socket) => {
+        global.chatSocket = socket;
         var room=null;
         const  token  = socket.handshake.query.room;
 
@@ -109,6 +141,21 @@ mongoose
           console.log("Ansewr------"+room);
           io.to(room).emit("callAccepted", data.signal)
         })
+          
+                                       global.chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+    console.log(`user ${userId}is added`);
+  });
+
+  socket.on("send-msg", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+    console.log(`${data.msg} is sent from ${data.from} to ${data.to}`);
+    if (sendUserSocket) {
+      console.log(`${data.msg} is received by ${data.to}`);
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
       })
     });
     
@@ -133,6 +180,7 @@ app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/appointment", appointmentRoutes);
+app.use("/chat" , chatRoutes);
 // This is your test secret API key.
 
 

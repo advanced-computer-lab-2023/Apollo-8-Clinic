@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AdbIcon from "@mui/icons-material/Adb";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import ChatIcon from '@mui/icons-material/Chat';
 import WalletIcon from "@mui/icons-material/Wallet";
 
 const pages = ["Home", "Medicine", "My Cart", "My Orders"];
@@ -62,6 +63,10 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleChatNavigate = () => {
+    navigate("/Chat");
   };
 
   const handleLogout = (e) => {
@@ -275,7 +280,17 @@ function ResponsiveAppBar() {
               Call{" "}
             </Button>
           </Box>
-
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title=" Chat">
+              <IconButton
+                style={{ paddingLeft: "20px" }}
+                onClick={handleChatNavigate}
+                sx={{ p: 0 }}
+              >
+                <ChatIcon fontSize="large" sx={{ color: "white" }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="My Wallet">
               <IconButton style={{}} onClick={handleMyWallet} sx={{ p: 0 }}>

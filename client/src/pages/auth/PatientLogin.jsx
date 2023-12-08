@@ -4,15 +4,29 @@ import AppBar from "@mui/material/AppBar";
 import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBarHome";
 import BottomBar from "../../components/BottomBar";
-
+import { useNavigate } from "react-router-dom";
 function Patientlogin() {
   {
     const [name, setUsername] = useState();
     const [password, setPassword] = useState();
-
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
     const handleSubmit = (e) => {
       e.preventDefault();
-
+      if (!name && !password) {
+        setError("Please fill in both username and password.");
+        return;
+      }
+  
+      if (!name) {
+        setError("Please fill in the username.");
+        return;
+      }
+  
+      if (!password) {
+        setError("Please fill in the password.");
+        return;
+      }
       //  console.log(email);
       axios
         .post(" http://localhost:8000/patient/patientLogin", {
@@ -27,9 +41,26 @@ function Patientlogin() {
           console.log("asassaas " + data);
           window.location.pathname = "/homePage";
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err.response.data); // log the error response
+  
+          // Check if the error message is available in the response
+          const errorMessage = err.response?.data || "Incorrect username or password";
+          setError(errorMessage);
+        });
     };
 
+    const inputStyle = {
+      border: `1px solid ${error ? 'red' : '#ced4da'}`, // Set border to red when there's an error
+    };
+    const handleInputChange = () => {
+      // Clear the error message when the input changes
+      setError("");
+    };
+
+    const handleBack= () => {
+      navigate("/");
+    };
     return (
       <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
         <AppBar
@@ -51,7 +82,7 @@ function Patientlogin() {
           >
             <h2>Patient Login</h2>
             <form action="" onSubmit={handleSubmit}>
-              <div className="mb-3">
+            <div className={`mb-3 ${error ? 'has-error' : ''}`}>
                 <label htmlFor="email">
                   <strong>Username</strong>
                 </label>
@@ -61,10 +92,14 @@ function Patientlogin() {
                   autoComplete="off"
                   name="username"
                   className="form-control rounded-0"
-                  onChange={(e) => setUsername(e.target.value)}
+                  style={inputStyle}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    handleInputChange(); 
+                  }}
                 />
               </div>
-              <div className="mb-3">
+              <div className={`mb-3 ${error ? 'has-error' : ''}`}>
                 <label htmlFor="email">
                   <strong>Password</strong>
                 </label>
@@ -73,17 +108,37 @@ function Patientlogin() {
                   placeholder="Enter Password"
                   name="password"
                   className="form-control rounded-0"
-                  onChange={(e) => setPassword(e.target.value)}
+                  style={inputStyle}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    handleInputChange(); // Clear error message when input changes
+                  }}
                 />
+                 {error && <div style={{ color: "red" }}>{error}</div>}
               </div>
               <a href="/ForgetPassword">ForgetPassword</a>
+              <div>
               <button
                 style={{ marginTop: "10px" }}
                 type="submit"
-                className="btn btn-success w-100 rounded-0"
+                className="btn btn-primary w-10 rounded-2"
               >
                 Login
               </button>
+              </div>
+              <button className="btn btn-primary rounded-2"
+              style={{
+                position: 'fixed',
+                bottom: '5%',
+                right: '5%',
+                width: '5%',
+                height: '40px',
+              }}
+              
+              onClick={handleBack}
+            >
+              Back
+            </button>
             </form>
           </div>
           <BottomBar />

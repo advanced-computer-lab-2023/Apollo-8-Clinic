@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AdbIcon from "@mui/icons-material/Adb";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import ChatIcon from '@mui/icons-material/Chat';
 import WalletIcon from "@mui/icons-material/Wallet";
 
 const pages = ["Home", "Medicine", "My Cart", "My Orders"];
@@ -66,6 +67,14 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = () => {
     //   navigate("/cart");
     setAnchorElNav();
+  };
+
+  const handlePending = () => {
+    navigate("/FollowUPPending/:doctorName");
+  };
+
+  const handleChatNavigate = () => {
+    navigate("/ChatDoctor");
   };
 
   const handleCloseUserMenu = () => {
@@ -243,6 +252,20 @@ function ResponsiveAppBar() {
               Add Time-Slots{" "}
             </Button>
             <Button
+              onClick={handlePending}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: "9px",
+              }}
+            >
+              {" "}
+              Pending Follow Up{" "}
+            </Button>
+            <Button
               onClick={handleFollowUp}
               sx={{
                 my: 2,
@@ -314,6 +337,17 @@ function ResponsiveAppBar() {
             </Button>
           </Box>
 
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title=" Chat">
+              <IconButton
+                style={{ paddingLeft: "20px" }}
+                onClick={handleChatNavigate}
+                sx={{ p: 0 }}
+              >
+                <ChatIcon fontSize="large" sx={{ color: "white" }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="My Wallet">
               <IconButton style={{}} onClick={handleMyWallet} sx={{ p: 0 }}>
