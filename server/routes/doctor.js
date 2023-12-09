@@ -39,8 +39,10 @@ router.post("/appointmentWithFilter", Middle.requireAuth, appointmentContoller.g
 //prescription
 router.get("/prescriptionPDF/:id",Middle.requireAuthDoctor,controllers.printPresPDF)
 router.post("/addPrescription",Middle.requireAuthDoctor,controllers.addPrescription)
-router.put("/updatePrescription/:id",Middle.requireAuthDoctor,controllers.updatePrescription)
-router.delete("/DeletePres/:id",Middle.requireAuthDoctor,controllers.deletePrescription)
+router.put("/updatePresAdd/:id",Middle.requireAuthDoctor,controllers.updatePrescription_AddMed)
+router.put("/updatePresDelete/:id",Middle.requireAuthDoctor,controllers.updatePrescription_DeleteMed)
+router.put("/updatePresDose/:id",Middle.requireAuthDoctor,controllers.updatePrescription_Dosage)
+//router.delete("/DeletePres/:id",Middle.requireAuthDoctor,controllers.deletePrescription)
 
 
 export default router;

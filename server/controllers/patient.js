@@ -617,7 +617,7 @@ const payPrescription = async (req,res)=>{
     const perscription = await PresModel.findById(presID) ;
     //check its presence to avoid errors
     if(!perscription){
-      res.status(200).json({ error: "no prescription with that id , check the database" });
+      res.status(200).json({ error: "no prescription with this id , check the database" });
        return;
     }
     if(perscription.state==="filled"){
@@ -626,7 +626,7 @@ const payPrescription = async (req,res)=>{
     }
     perscription.state = "filled";
     perscription.save();
-
+    res.status(200).json("now the prescription is 'filled'");
     // //get the total price of all the medicines in the pres from the pharmacy server
     // axios.get("http://localhost:9000/medicine/medicinesTotPrice",perscription.medicine).
     // then((result) => {
