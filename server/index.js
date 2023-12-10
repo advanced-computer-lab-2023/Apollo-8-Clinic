@@ -9,6 +9,7 @@ import patientRoutes from "./routes/patient.js";
 import adminRoutes from "./routes/admin.js";
 import appointmentRoutes from './routes/appointment.js';
 import stripe from 'stripe';
+import Auth from './Authentication/login.js'
 
 
 const app = express();
@@ -46,6 +47,7 @@ app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/appointment", appointmentRoutes);
+app.post("/login", Auth.login)
 // This is your test secret API key.
 
 

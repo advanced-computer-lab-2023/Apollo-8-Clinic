@@ -1,3 +1,4 @@
+import mailer from "nodemailer";
 import appointments from "../models/appointment.js";
 import DoctorModel from '../models/doctor.js';
 import PatientModel from "../models/patient.js";
@@ -34,11 +35,59 @@ const createAppointment = async (req, res) => {
       { $inc: { wallet: -50 } },
       { new: true } // To return the updated document
     );
-    console.log(updatedDoctor.availableSlots);
-    console.log(updatedPatient.wallet);
+    console.log(updatedDoctor);
+    console.log(updatedPatient);
     await appointment.save();
     console.log(appointment);
-    res.status(200).json(appointment);
+
+
+    const message=`this message is to notify you about your appointment details:
+    doctor ${updatedDoctor.name} : patient ${updatedPatient.name} : date : ${appointment.date}  `;
+
+  const notifi = {
+    title: "Reserved",
+    data: message,
+    state: "Unread"
+  }
+  const docNotification=[...updatedDoctor.notifications,notifi];
+  const patNotification=[...updatedPatient.notifications,notifi]
+  updatedDoctor.notifications=docNotification;
+  updatedPatient.notifications=patNotification;
+  await updatedDoctor.save();
+  await updatedPatient.save();
+
+  //maillll
+            let config={
+              service : "gmail",
+              auth :{
+                  user:process.env.mail,
+                  pass:process.env.appPss
+
+              },
+              tls: {
+                  rejectUnauthorized: false
+              },
+          }
+
+          let transporter=mailer.createTransport(config);
+
+          let messagee = {
+              from: process.env.mail, // sender address
+              to: [updatedDoctor.email,updatedPatient.email], // list of receivers
+              subject: "Hello ✔", // Subject line
+              text: message // plain text body
+              //html: "<b>your verification code is 5555</b>", // html body
+            }
+
+            transporter.sendMail(messagee).then((info) => {
+              console.log(info);
+              return  res.status(200).json(appointment);
+          }).catch(error => {
+            console.log(error)
+              return  res.status(200).json(appointment);
+              
+          })
+
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -193,6 +242,53 @@ const rescheduleAppointment = async (req, res) => {
       { new: true } // To return the updated document
     );
     console.log(updatedApp);
+    const updatedPatient=await PatientModel.findById(updatedApp.patientId);
+      ////notification
+      const message=`this message is to notify you about your appointment Reschadule details:
+doctor ${updatedDoctor.name} : patient ${updatedPatient.name} : date from :${appointment.date} to: ${updatedAppAgain.date}  `;
+
+  const notifi = {
+    title: "Reschaduled",
+    data: message,
+    state: "Unread"
+  }
+  const docNotification=[...updatedDoctor.notifications,notifi];
+  const patNotification=[...updatedPatient.notifications,notifi]
+  updatedDoctor.notifications=docNotification;
+  updatedPatient.notifications=patNotification;
+  await updatedDoctor.save();
+  await updatedPatient.save();
+
+  //maillll
+            let config={
+              service : "gmail",
+              auth :{
+                  user:process.env.mail,
+                  pass:process.env.appPss
+
+              },
+              tls: {
+                  rejectUnauthorized: false
+              },
+          }
+
+          let transporter=mailer.createTransport(config);
+
+          let messagee = {
+              from: process.env.mail, // sender address
+              to: [updatedDoctor.email,updatedPatient.email], // list of receivers
+              subject: "Hello ✔", // Subject line
+              text: message // plain text body
+              //html: "<b>your verification code is 5555</b>", // html body
+            }
+
+            transporter.sendMail(messagee).then((info) => {
+              console.log(info);
+          }).catch(error => {
+            console.log(error)
+          })
+
+
     res.status(200).json(updatedApp);
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -207,10 +303,12 @@ const cancelAppointment = async (req, res) => {
       query._id = _id;
     }
     const appointment = await AppointmentModel.findOne({ _id: query._id });
-    const patient = await PatientModel.findOne({ _id: res.locals.userId });
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
     const doctor = await DoctorModel.findOne({ user: res.locals.userId });
     console.log(appointment);
     console.log(patient);
+    var updatedPatient=patient;
+    
 
     if (patient) {
       query.patientId = patient._id;
@@ -223,7 +321,7 @@ const cancelAppointment = async (req, res) => {
         if (appointmentDate < twentyFourHoursAgo) {
           // The appointment date is less than 24 hours before now
           console.log("Appointment is less than 24 hours before now.");
-          const updatedPatient = await PatientModel.findOneAndUpdate(
+            updatedPatient = await PatientModel.findOneAndUpdate(
             { "_id": appointment.patientId },
             { $inc: { wallet: 50 } },
             { new: true } // To return the updated document
@@ -240,7 +338,7 @@ const cancelAppointment = async (req, res) => {
 
     if (doctor) {
       query.doctorId = doctor._id;
-      const updatedPatient = await PatientModel.findOneAndUpdate(
+        updatedPatient = await PatientModel.findOneAndUpdate(
         { "_id": appointment.patientId },
         { $inc: { wallet: 50 } },
         { new: true } // To return the updated document
@@ -258,6 +356,52 @@ const cancelAppointment = async (req, res) => {
       { $set: { status: "cancelled" } },
       { new: true } // To return the updated document
     );
+    console.log(updatedPatient);
+    //notificationnn
+    const message=`this message is to notify you about appointment cancellation details:
+    doctor ${updatedDoctor.name} : patient ${updatedPatient.name} : date : ${updatedApp.date}  `;
+
+  const notifi = {
+    title: "Cancelled",
+    data: message,
+    state: "Unread"
+  }
+  const docNotification=[...updatedDoctor.notifications,notifi];
+  const patNotification=[...updatedPatient.notifications,notifi]
+  updatedDoctor.notifications=docNotification;
+  updatedPatient.notifications=patNotification;
+  await updatedDoctor.save();
+  await updatedPatient.save();
+
+  //maillll
+            let config={
+              service : "gmail",
+              auth :{
+                  user:process.env.mail,
+                  pass:process.env.appPss
+
+              },
+              tls: {
+                  rejectUnauthorized: false
+              },
+          }
+
+          let transporter=mailer.createTransport(config);
+
+          let messagee = {
+              from: process.env.mail, // sender address
+              to: [updatedDoctor.email,updatedPatient.email], // list of receivers
+              subject: "Hello ✔", // Subject line
+              text: message // plain text body
+              //html: "<b>your verification code is 5555</b>", // html body
+            }
+
+            transporter.sendMail(messagee).then((info) => {
+              console.log(info);
+          }).catch(error => {
+            console.log(error)              
+          })
+
     console.log(updatedApp);
     res.status(200).json(updatedApp);
   } catch (error) {

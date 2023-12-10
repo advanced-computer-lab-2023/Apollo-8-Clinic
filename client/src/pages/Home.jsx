@@ -69,7 +69,7 @@ function Home() {
               <Card1.Img variant="top" src={img2} alt="family.png" />
               <Card1.Body>
                 <Card1.Title style={{ marginTop: "45px" }}>
-                  Doctor Login
+                  Login To Clinic
                 </Card1.Title>
 
                 <Button1
