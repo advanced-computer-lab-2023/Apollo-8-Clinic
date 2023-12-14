@@ -4,7 +4,7 @@ import { useNavigate, createSearchParams } from "react-router-dom";
 import DoctorSignup from "./pages/auth/DoctorSignup";
 import PatientSignup from "./pages/auth/PatientSignup";
 import CallIcon from "@mui/icons-material/Call";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import Home from "./pages/Home";
 import PrescriptionsList from "./pages/patient/PrescriptionsList";
@@ -16,10 +16,9 @@ import FilterDoctor from "./pages/patient/FilterDoctor";
 import Call from "./pages/doctor/CallPatient";
 import Calld from "./pages/patient/CallDoctor";
 import { useLocation } from "react-router-dom";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
+import Card from "@mui/material/Card";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
 //import Peer from "simple-peer"
 //youhanna milestone 2222
 import PatientUpcomingAppointments from "./pages/doctor/PatientUpcomingAppointments";

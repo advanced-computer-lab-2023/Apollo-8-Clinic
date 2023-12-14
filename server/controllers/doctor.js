@@ -714,7 +714,7 @@ export default {
   handleFollowUpRequest,
   getFollowUpRequest,
   updatecompletedAppointment,
-  updatecancelledAppointment,,
+  updatecancelledAppointment,
   getNotfication,
   sawNotfication
 
