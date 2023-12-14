@@ -44,7 +44,7 @@ const getLinkedFamMembers = async (req, res) => {
 // add a New fam member  (addNew)
 const addNewFamilyMember = async (req, res) => {
   try {
-
+    console.log(req.body); 
     const patient = await PatientModel.findOne({ user: res.locals.userId });
     const patientID = patient._id;
     const { name, nationalID, age, gender, relation } = req.body;

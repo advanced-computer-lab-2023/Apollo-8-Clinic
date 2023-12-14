@@ -19,13 +19,18 @@ function PatientSignup() {
   const [emergencyNo, setEmergencyNo] = useState();
   const [emergencyRel, setEmergencyRel] = useState();
   const [adresses, setAdresses] = useState();
-
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name);
-    console.log(email);
+
+   
+
+   
     axios
       .post("http://localhost:8000/patient", {
         name,
@@ -43,10 +48,34 @@ function PatientSignup() {
         status: "Accepted",
       })
       .then((result) => {
-        console.log(result);
+        setRegistrationSuccess(true);
+        setErrorMessage(""); 
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setRegistrationSuccess(false);
+        if (err.response && err.response.data && err.response.data.message) {
+          setErrorMessage(err.response.data.message);
+          setError(err.response.data.message); // Set form-level error
+  
+          // Update error messages based on the response
+          if (err.response.data.message.includes('Username')) {
+            setUsernameError(err.response.data.message);
+          }
+        }
+      });
+  };
+  const inputStyle = (fieldName) => ({
+    border: `1px solid ${error && !eval(fieldName) ? 'red' : '#ced4da'}`,
+  });
+  const handleInputChange = () => {
+   
+    setError("");
+  };
+
+  const handleBack= () => {
+    navigate("/");
   };
 
   return (
@@ -69,6 +98,12 @@ function PatientSignup() {
           }}
         >
           <h2>Patient Register</h2>
+          {registrationSuccess && (
+          <div className="alert alert-success" role="alert">
+            You have successfully registered!
+          </div>
+        )}
+       
           <form action="" onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="email">
@@ -80,10 +115,17 @@ function PatientSignup() {
                 autoComplete="off"
                 name="username"
                 className="form-control rounded-0"
-                onChange={(e) => setUsername(e.target.value)}
+                style={inputStyle("username")}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  handleInputChange(); 
+                }}
               />
-            </div>
-
+             {/* Display general form-level error */}
+          {error && !username && (
+              <div style={{ color: "red" }}>Please fill in the username.</div>
+          )}
+</div>
             <div className="mb-3">
               <label htmlFor="email">
                 <strong>Name</strong>
@@ -92,10 +134,17 @@ function PatientSignup() {
                 type="text"
                 placeholder="Enter Name"
                 autoComplete="off"
-                name="email"
+                name="name"
                 className="form-control rounded-0"
-                onChange={(e) => setName(e.target.value)}
+                style={inputStyle("name")}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    handleInputChange(); 
+                  }}
               />
+               {error && !name && (
+              <div style={{ color: "red" }}>Please fill in the name.</div>
+            )}
             </div>
             <div className="mb-3">
               <label htmlFor="email">
@@ -107,8 +156,15 @@ function PatientSignup() {
                 autoComplete="off"
                 name="email"
                 className="form-control rounded-0"
-                onChange={(e) => setEmail(e.target.value)}
+                style={inputStyle("email")}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  handleInputChange(); 
+                }}
               />
+                 {error && !email && (
+              <div style={{ color: "red" }}>Please fill in the email.</div>
+            )}
             </div>
 
             <div className="mb-3">
@@ -120,10 +176,14 @@ function PatientSignup() {
                 placeholder="Enter Password"
                 name="password"
                 className="form-control rounded-0"
-                onChange={(e) => setPassword(e.target.value)}
+                style={inputStyle("password")}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  handleInputChange(); 
+                }}
               />
+              {error && <div style={{ color: "red" }}>{error}</div>}
             </div>
-
             <div className="mb-3">
               <label htmlFor="email">
                 <strong>Birth Date</strong>
@@ -134,8 +194,15 @@ function PatientSignup() {
                 autoComplete="off"
                 name="birthDate"
                 className="form-control rounded-0"
-                onChange={(e) => setBrithDate(e.target.value)}
+                style={inputStyle("birthDate")}
+                  onChange={(e) => {
+                    setBrithDate(e.target.value);
+                    handleInputChange(); 
+                  }}
               />
+                {error && !birthDate && (
+              <div style={{ color: "red" }}>Please fill in the birthDate.</div>
+            )}
             </div>
 
             <div className="mb-3">
@@ -148,8 +215,15 @@ function PatientSignup() {
                 autoComplete="off"
                 name="gender"
                 className="form-control rounded-0"
-                onChange={(e) => setGender(e.target.value)}
+                style={inputStyle("gender")}
+                onChange={(e) => {
+                  setGender(e.target.value);
+                  handleInputChange(); 
+                }}
               />
+                 {error && !gender && (
+              <div style={{ color: "red" }}>Please fill in the gender.</div>
+            )}
             </div>
 
             <div className="mb-3">
@@ -162,8 +236,15 @@ function PatientSignup() {
                 autoComplete="off"
                 name="phone"
                 className="form-control rounded-0"
-                onChange={(e) => setPhone(e.target.value)}
+                style={inputStyle("phone")}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  handleInputChange(); 
+                }}
               />
+                {error && !phone && (
+              <div style={{ color: "red" }}>Please fill in the phone.</div>
+            )}
             </div>
             <div className="mb-3">
               <label htmlFor="email">
@@ -175,8 +256,15 @@ function PatientSignup() {
                 autoComplete="off"
                 name="emergencyName"
                 className="form-control rounded-0"
-                onChange={(e) => setEmergencyName(e.target.value)}
+                style={inputStyle("emergencyName")}
+                onChange={(e) => {
+                  setEmergencyName(e.target.value);
+                  handleInputChange(); 
+                }}
               />
+               {error && !emergencyName && (
+              <div style={{ color: "red" }}>Please fill in the emergencyName.</div>
+            )}
             </div>
 
             <div className="mb-3">
@@ -189,8 +277,15 @@ function PatientSignup() {
                 autoComplete="off"
                 name="emergencyNo"
                 className="form-control rounded-0"
-                onChange={(e) => setEmergencyNo(e.target.value)}
+                style={inputStyle("emergencyNo")}
+                  onChange={(e) => {
+                    setEmergencyNo(e.target.value);
+                    handleInputChange(); 
+                  }}
               />
+                 {error && !emergencyNo && (
+              <div style={{ color: "red" }}>Please fill in the emergencyNo.</div>
+            )}
             </div>
 
             <div className="mb-3">
@@ -203,8 +298,15 @@ function PatientSignup() {
                 autoComplete="off"
                 name="emergencyRel"
                 className="form-control rounded-0"
-                onChange={(e) => setEmergencyRel(e.target.value)}
+                style={inputStyle("emergencyRel")}
+                  onChange={(e) => {
+                    setEmergencyRel(e.target.value);
+                    handleInputChange(); 
+                  }}
               />
+                  {error && !emergencyRel && (
+              <div style={{ color: "red" }}>Please fill in the emergencyRel.</div>
+            )}
             </div>
 
             <div className="mb-3">
@@ -217,23 +319,47 @@ function PatientSignup() {
                 autoComplete="off"
                 name="address"
                 className="form-control rounded-0"
-                onChange={(e) => setAdresses(e.target.value)}
-              />
+                style={inputStyle(adresses)}
+            onChange={(e) => setAdresses(e.target.value)}
+          />
+               {error && !adresses && (
+            <div style={{ color: "red" }}>Please fill in the address.</div>
+          )}
             </div>
+            {registrationSuccess && (
+            <div className="alert alert-success" role="alert">
+              You have successfully registered!
+            </div>
+          )}
+          
+            <div>
             <button
-              style={{ marginBottom: "40px", marginTop: "30px" }}
-              type="submit"
-              className="btn btn-success w-100 rounded-0"
-            >
-              Register
-            </button>
+                style={{ marginTop: "10px" }}
+                type="submit"
+                className="btn btn-primary w-10 rounded-2"
+              >
+                Register
+              </button>
+              </div>
+              <div>
+         
+          </div>
           </form>
-          <Link
-            to="/"
-            className="btn btn-default border w-100 bg-light rounded-0 text-decoration"
-          >
-            Login
-          </Link>
+          <button className="btn btn-primary rounded-2"
+              style={{
+                position: 'absolute',
+                bottom: '1%',
+                right: '5%',
+                width: '5%',
+                height: '40px',
+              }}
+              
+              onClick={handleBack}
+            >
+              Back
+            </button>
+      
+         
         </div>
         <BottomBar />
       </AppBar>

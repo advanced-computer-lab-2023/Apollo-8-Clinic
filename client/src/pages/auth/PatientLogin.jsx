@@ -42,19 +42,19 @@ function Patientlogin() {
           window.location.pathname = "/homePage";
         })
         .catch((err) => {
-          console.log(err.response.data); // log the error response
+          console.log(err.response.data); 
   
-          // Check if the error message is available in the response
+  
           const errorMessage = err.response?.data || "Incorrect username or password";
           setError(errorMessage);
         });
     };
 
     const inputStyle = {
-      border: `1px solid ${error ? 'red' : '#ced4da'}`, // Set border to red when there's an error
+      border: `1px solid ${error ? 'red' : '#ced4da'}`, 
     };
     const handleInputChange = () => {
-      // Clear the error message when the input changes
+     
       setError("");
     };
 
@@ -111,7 +111,7 @@ function Patientlogin() {
                   style={inputStyle}
                   onChange={(e) => {
                     setPassword(e.target.value);
-                    handleInputChange(); // Clear error message when input changes
+                    handleInputChange(); 
                   }}
                 />
                  {error && <div style={{ color: "red" }}>{error}</div>}

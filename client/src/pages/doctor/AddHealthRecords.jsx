@@ -6,12 +6,15 @@ import "../../App.css";
 import { useParams } from "react-router-dom";
 import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
-
+import { useNavigate } from "react-router-dom";
 function AddHealthRecords() {
   const [file, setFile] = useState();
   const [date, setDate] = useState();
   const [description, setDescription] = useState();
   const { id } = useParams();
+  const navigate = useNavigate();
+    const [isUploadSuccess, setIsUploadSuccess] = useState(false); 
+  const isFormValid = date && description && file;
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,7 +40,9 @@ function AddHealthRecords() {
       console.error("Error adding health records:", error);
     }
   };
-
+  const handleBack= () => {
+    navigate("/viewMyPatients");
+  };
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -72,6 +77,23 @@ function AddHealthRecords() {
           className="card m-3 col-12"
           style={{ width: "80%", borderRadius: "20px", left: "8%" }}
         >
+           <div
+               style={{
+                height: "50px",
+                backgroundColor: "green", // Set the background color to green
+                color: "white", // Set the text color to white
+                display: "flex",
+                
+              
+              }}
+              className="alert alert-primary d-flex align-items-center"
+              role="alert"
+            >
+              <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
+                <use xlink: href="#info-fill" />
+              </svg>
+              <div>health record uploaded successfully!</div>
+            </div>
           <form onSubmit={handleSubmit}>
             <div>
               <div className="mb-3">
@@ -109,12 +131,26 @@ function AddHealthRecords() {
                 onClick={handleSubmit}
                 type="submit"
                 class="btn btn-primary"
+                disabled={!isFormValid}
               >
                 add
               </button>
             </div>
           </form>
         </div>
+        <button className="btn btn-primary rounded-2"
+              style={{
+                position: 'absolute',
+                bottom: '1%',
+                right: '5%',
+                width: '5%',
+                height: '40px',
+              }}
+              
+              onClick={handleBack}
+            >
+              Back
+            </button>
         <BottomBar />
       </AppBar>
     </div>

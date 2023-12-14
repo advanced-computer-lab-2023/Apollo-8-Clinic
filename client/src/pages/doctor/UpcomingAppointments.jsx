@@ -14,7 +14,7 @@ function UpcomingAppointments() {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:8000/doctor/futureAppointmentPatients/6526653e47c45e179aa6886b"
+       "http://localhost:8000/doctor/futureAppointmentPatients/6526653e47c45e179aa6886b"
       )
       .then((response) => {
         setData(response.data);
@@ -27,10 +27,18 @@ function UpcomingAppointments() {
   }, []);
 
   function handleView(id) {
-    // Navigate to another route and pass the ID as a prop
+   
     navigate(`/viewHealth/${id}`);
   }
-
+  const handleBack= () => {
+    navigate("/viewMyPatients");
+  };
+  function handleAddHealthRecord(id) {
+    navigate(`/AddHealthRecords/${id}`);
+  }
+  function handleupcomingpatientAppointment() {
+    navigate(`/PatientUpcomingAppointments/:id`);
+  }
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -57,7 +65,7 @@ function UpcomingAppointments() {
                   <tr>
                     <th>Name</th>
                     <th>Email</th>
-                    <th></th>
+                    <th>Date</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -68,25 +76,54 @@ function UpcomingAppointments() {
                     <tr key={index}>
                       <td>{item.name}</td>
                       <td>{item.email}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{item.date}</td>
+                      
+                      
+                      
                       <td>
-                        <button
-                          className="btn btn-success"
+                      <button className="btn btn-primary rounded-2"
                           onClick={() => handleView(item._id)}
                         >
-                          view
+                          view Health records
                         </button>
                       </td>
+                      <td>
+                          <button
+                            className="btn btn-primary rounded-2"
+                            onClick={() => handleAddHealthRecord(item._id)}
+                          >
+                            add health record
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-primary rounded-2"
+                            onClick={() => handleupcomingpatientAppointment()}
+                          >
+                            upcoming details
+                          </button>
+                        </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             )}
           </div>
+          
         </div>
-
+        <button className="btn btn-primary rounded-2"
+              style={{
+                position: 'absolute',
+                bottom: '1%',
+                right: '5%',
+                width: '5%',
+                height: '40px',
+              }}
+              
+              onClick={handleBack}
+            >
+              Back
+            </button>
         <BottomBar />
       </AppBar>
     </div>
