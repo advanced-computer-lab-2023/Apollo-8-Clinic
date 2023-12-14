@@ -101,9 +101,9 @@ const sawNotfication = async (req, res) => {
     console.log("wslnaa saww");
     const patient = await PatientModel.findOne({ user: res.locals.userId });
     for (let i = 0; i < patient.notifications.length; i++) {
-      patient.notifications[i].state="read"
+      patient.notifications[i].state = "read"
     }
-   await patient.save()
+    await patient.save()
     res.status(200).json(patient.notifications);
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -469,6 +469,16 @@ const patientDetails = async (req, res) => {
   }
 };
 
+const getPatientById = async (req, res) => {
+  try {
+    const patient = await PatientModel.findOne({ user: res.locals.userId })
+    if (!patient) return res.status(404).send("Patient not found");
+    return res.status(200).send(patient);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 //req.params --> id
 const cancelSubscription = async (req, res) => {
   try {
@@ -637,7 +647,7 @@ const myPrescriptions = async (req, res) => {
     }
 
     const prescriptions = await PresModel.find({ patientId: patientId });
-    
+
     return res.status(200).json({ prescriptions });
   } catch (error) {
     console.error(error);
@@ -673,6 +683,7 @@ const requestFollowUp = async (req, res) => {
   }
 };
 
+
 export default {
   createPatient,
   getPatients,
@@ -697,5 +708,6 @@ export default {
   myPrescriptions,
   requestFollowUp,
   getNotfication,
-  sawNotfication
+  sawNotfication,
+  getPatientById
 }

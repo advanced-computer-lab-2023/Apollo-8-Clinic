@@ -119,6 +119,18 @@ const getDoctors = async (req, res) => {
   }
 };
 
+
+const getDoctorByIdForChat = async (req, res) => {
+  try {
+    const pharmacist = await DoctorModel.findOne(
+      {user: res.locals.userId }
+    );
+    if (!pharmacist) return res.status(404).send("Pharmacist not found");
+    res.status(200).send(pharmacist);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 const getDoctorById = async (req, res) => {
 
   try {
@@ -576,6 +588,7 @@ const handleFollowUpRequest = async (req, res) => {
 export default {
   createDoctor,
   getDoctorById,
+  getDoctorByIdForChat,
 
   getDoctors,
   acceptDoctor,

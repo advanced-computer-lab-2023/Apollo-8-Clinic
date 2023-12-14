@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AdbIcon from "@mui/icons-material/Adb";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import ChatIcon from '@mui/icons-material/Chat';
 import WalletIcon from "@mui/icons-material/Wallet";
 import axios from "axios";
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -97,6 +98,9 @@ function ResponsiveAppBar() {
   const handleTimeSlots = () => {
     navigate("/AddTimeSlots");
   };
+  const handleCall = () => {
+    navigate("/Call");
+  };
   const handleMyWallet = () => {
     navigate("/DoctorWallet/:doctorName");
   };
@@ -121,6 +125,10 @@ function ResponsiveAppBar() {
 
   const handlePending = () => {
     navigate("/FollowUPPending/:doctorName");
+  };
+
+  const handleChatNavigate = () => {
+    navigate("/ChatDoctor");
   };
 
   const handleCloseUserMenu = () => {
@@ -367,6 +375,20 @@ function ResponsiveAppBar() {
               {" "}
               Change Password{" "}
             </Button>
+            <Button
+              onClick={handleCall}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: "9px",
+              }}
+            >
+              {" "}
+              Call{" "}
+            </Button>
           </Box>
           <Badge style={{marginRight:"40px", transform: 'none'}} overlap="circular" badgeContent={unseenNotifications} color="secondary">
           <IconButton style={{color:"yellow"}}  aria-label="notifications" onClick={handleOpenPopover}>
@@ -426,6 +448,17 @@ function ResponsiveAppBar() {
   </div>
           </Popover>
 
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title=" Chat">
+              <IconButton
+                style={{ paddingLeft: "20px" }}
+                onClick={handleChatNavigate}
+                sx={{ p: 0 }}
+              >
+                <ChatIcon fontSize="large" sx={{ color: "white" }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="My Wallet">
               <IconButton style={{}} onClick={handleMyWallet} sx={{ p: 0 }}>

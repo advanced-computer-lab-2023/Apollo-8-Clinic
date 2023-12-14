@@ -13,10 +13,11 @@ import Tooltip from "@mui/material/Tooltip";
 import AdbIcon from "@mui/icons-material/Adb";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import ChatIcon from "@mui/icons-material/Chat";
 import WalletIcon from "@mui/icons-material/Wallet";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import CircularProgress from '@mui/material/CircularProgress';
-import Badge from '@mui/material/Badge';
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import CircularProgress from "@mui/material/CircularProgress";
+import Badge from "@mui/material/Badge";
 import Popover from "@mui/material/Popover";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -27,7 +28,7 @@ const pages = ["Home", "Medicine", "My Cart", "My Orders"];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
-  
+
   const [unseenNotifications, setunseenNotifications] = useState();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -35,8 +36,6 @@ function ResponsiveAppBar() {
   const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
   const [dataFetched, setDataFetched] = useState(false);
   const [notfications, setData] = useState(null);
-
-
 
   /*useEffect(() => {
     
@@ -58,10 +57,9 @@ function ResponsiveAppBar() {
     axios
       .get("http://localhost:8000/patient/getNotfication")
       .then((response) => {
-        
-        var num=0;
+        var num = 0;
         for (let i = 0; i < response.data.length; i++) {
-          if(response.data[i].state==="Unread"){
+          if (response.data[i].state === "Unread") {
             num++;
           }
         }
@@ -76,19 +74,17 @@ function ResponsiveAppBar() {
   }, []);
 
   const handleOpenPopover = (event) => {
-    
     setPopoverAnchorEl(event.currentTarget);
   };
 
   const handleClosePopover = () => {
     axios
       .get("http://localhost:8000/patient/sawNotfication")
-      .then((response) => {
-      })
+      .then((response) => {})
       .catch((error) => {
         console.log(error);
       });
-    console.log("out")
+    console.log("out");
     setPopoverAnchorEl(null);
   };
 
@@ -112,6 +108,9 @@ function ResponsiveAppBar() {
   const handlePack = () => {
     navigate("/PatientHP_FM");
   };
+  const handleCall = () => {
+    navigate("/Call");
+  };
   const handleMyApp = () => {
     navigate("/patientFamilyAppointments");
   };
@@ -131,6 +130,10 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleChatNavigate = () => {
+    navigate("/Chat");
   };
 
   const handleLogout = (e) => {
@@ -320,8 +323,6 @@ function ResponsiveAppBar() {
               Health Packages{" "}
             </Button>
 
-
-            
             <Button
               onClick={handlePass}
               sx={{
@@ -336,16 +337,50 @@ function ResponsiveAppBar() {
               {" "}
               Change Password{" "}
             </Button>
+            <Button
+              onClick={handleCall}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+                fontSize: "11px",
+              }}
+            >
+              {" "}
+              Call{" "}
+            </Button>
+          </Box>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title=" Chat">
+              <IconButton
+                style={{ paddingLeft: "20px" }}
+                onClick={handleChatNavigate}
+                sx={{ p: 0 }}
+              >
+                <ChatIcon fontSize="large" sx={{ color: "white" }} />
+              </IconButton>
+            </Tooltip>
           </Box>
 
-          <Badge style={{marginRight:"40px", transform: 'none'}} overlap="circular" badgeContent={unseenNotifications} color="secondary">
-          <IconButton style={{color:"yellow"}}  aria-label="notifications" onClick={handleOpenPopover}>
-            <NotificationsIcon style={{ fontSize: '2rem' }}/>
-          </IconButton>
-        </Badge>
+          <Badge
+            style={{ marginRight: "40px", transform: "none" }}
+            overlap="circular"
+            badgeContent={unseenNotifications}
+            color="secondary"
+          >
+            <IconButton
+              style={{ color: "yellow" }}
+              aria-label="notifications"
+              onClick={handleOpenPopover}
+            >
+              <NotificationsIcon style={{ fontSize: "2rem" }} />
+            </IconButton>
+          </Badge>
 
-         {/* Popover with Notification Data */}
-         <Popover
+          {/* Popover with Notification Data */}
+          <Popover
             open={openPopover}
             anchorEl={popoverAnchorEl}
             onClose={handleClosePopover}
@@ -359,41 +394,61 @@ function ResponsiveAppBar() {
             }}
           >
             <div>
-            {dataFetched ? (
-             <div>
-      {notfications.map((notifi, index) => (
-          <Card sx={{ display: "flex", maxWidth: 500,backgroundColor:"skyblue",border:"solid",borderBlockWidth:"1px" }}>
-    {/* Smaller image and align to the left */}
-    <CardMedia
-      component="img"
-      alt="Notification Image"
-      height="70"
-      image="https://img.freepik.com/free-vector/appointment-booking-with-calendar_52683-39831.jpg"
-      sx={{ alignSelf: "center", marginLeft: 1 }}
-    />
-    <CardContent>
-      <div>
-        {/* Title */}
-        <Typography variant="h6" component="div" sx={{ marginBottom: 1 }}>
-          {notifi.title}
-        </Typography>
-        {/* Text */}
-        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
-          {notifi.data}
-        </Typography>
-        {/* Boolean value (example: true) */}
-          <Typography variant="body2" style={{color:"black"}} color="text.secondary">
-            {notifi.state}
-          </Typography>
-        </div>
-      </CardContent>
-    </Card>
-    ))}
-   </div>
-   ) : (
-    <p>Loading...</p>
-  )}
-  </div>
+              {dataFetched ? (
+                <div>
+                  {notfications.map((notifi, index) => (
+                    <Card
+                      sx={{
+                        display: "flex",
+                        maxWidth: 500,
+                        backgroundColor: "skyblue",
+                        border: "solid",
+                        borderBlockWidth: "1px",
+                      }}
+                    >
+                      {/* Smaller image and align to the left */}
+                      <CardMedia
+                        component="img"
+                        alt="Notification Image"
+                        height="70"
+                        image="https://img.freepik.com/free-vector/appointment-booking-with-calendar_52683-39831.jpg"
+                        sx={{ alignSelf: "center", marginLeft: 1 }}
+                      />
+                      <CardContent>
+                        <div>
+                          {/* Title */}
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{ marginBottom: 1 }}
+                          >
+                            {notifi.title}
+                          </Typography>
+                          {/* Text */}
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ marginBottom: 1 }}
+                          >
+                            {notifi.data}
+                          </Typography>
+                          {/* Boolean value (example: true) */}
+                          <Typography
+                            variant="body2"
+                            style={{ color: "black" }}
+                            color="text.secondary"
+                          >
+                            {notifi.state}
+                          </Typography>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <p>Loading...</p>
+              )}
+            </div>
           </Popover>
 
           <Box sx={{ flexGrow: 0 }}>
