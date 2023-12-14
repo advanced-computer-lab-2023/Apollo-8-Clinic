@@ -49,18 +49,27 @@ const doctorSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  notifications: 
+       [
+        {
+          title: { type: String,enum: ["Reserved","Cancelled", "Reschaduled"] },
+          data: { type: String },
+          state: { type: String,
+            enum: ["Unread", "read"] }
+        }
+      ],
   //sss
   idFile: {
     type: String,
-    required: true,
+    //required: true,
   },
   degreeFile: {
     type: String,
-    required: true,
+    //required: true,
   },
   licenseFile: {
     type: String,
-    required: true,
+    //required: true,
   },
 });
 

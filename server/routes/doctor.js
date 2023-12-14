@@ -11,6 +11,10 @@ const router = express.Router();
 // to test this send a post request to this route: http://localhost:8000/doctor
 //no middlewaree
 router.post("/", uploadMiddleware, controllers.createDoctor);
+
+router.get("/getNotfication",Middle.requireAuthDoctor, controllers.getNotfication);
+
+router.get("/sawNotfication",Middle.requireAuthDoctor, controllers.sawNotfication);
 //
 router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctorContract);
 router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
@@ -31,7 +35,7 @@ router.post('/addHealthRecords', Middle.requireAuthDoctor, uploadMiddleware, con
 router.get("/getWallet/:doctorName", Middle.requireAuthDoctor, controllers.getWallet);
 router.put("/updateAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updateAppointment)
 //no need
-router.post("/doctorLogin", Auth.loginDoctor)
+router.post("/doctorLogin", Auth.login)
 //view appointments chekkkk whattttt is thattt???
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", Middle.requireAuth, appointmentContoller.getAppointmentWithFilter);

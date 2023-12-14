@@ -72,6 +72,16 @@ const patientSchema = new mongoose.Schema(
       type: Date,
       required: false
     },
+    notifications: 
+       [
+        {
+          title: { type: String,enum: ["Reserved","Cancelled", "Reschaduled"] },
+          data: { type: String },
+          state: { type: String,
+            enum: ["Unread", "read"] }
+        }
+      ]
+    ,
     subscriptionStatus: {
       type: String,
       enum: ["cancelled with end date", "subscribed with renewal date", "unsubscribed"],

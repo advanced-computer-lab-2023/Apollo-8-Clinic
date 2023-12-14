@@ -14,7 +14,10 @@ const router = express.Router();
 
 router.post("/", controllers.createPatient);
 router.get("/", controllers.getPatients); // TODO: Add auth middleware
-router.get("/byId",  Middle.requireAuth , controllers.getPatientById);
+router.get("/getNotfication", Middle.requireAuthPatient, controllers.getNotfication);
+
+router.get("/sawNotfication", Middle.requireAuthPatient, controllers.sawNotfication);
+router.get("/byId", Middle.requireAuth, controllers.getPatientById);
 router.get("/getPatientHealthPackage/:id", Middle.requireAuthPatient, controllers.getPatientHealthPackage);
 router.get("/getPerscriptions", Middle.requireAuthPatient, controllers.getPrescriptions)
 router.post("/filterPerscriptions", Middle.requireAuthPatient, controllers.filterPres)

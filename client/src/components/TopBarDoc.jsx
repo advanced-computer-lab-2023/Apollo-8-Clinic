@@ -14,14 +14,68 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import ChatIcon from '@mui/icons-material/Chat';
 import WalletIcon from "@mui/icons-material/Wallet";
+import axios from "axios";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
+import Popover from "@mui/material/Popover";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import { useEffect, useState } from "react";
 
 const pages = ["Home", "Medicine", "My Cart", "My Orders"];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
 
+  const [unseenNotifications, setunseenNotifications] = useState();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [popoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
+  const [dataFetched, setDataFetched] = useState(false);
+  const [notfications, setData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/doctor/getNotfication")
+      .then((response) => {
+        
+        var num=0;
+        for (let i = 0; i < response.data.length; i++) {
+          if(response.data[i].state==="Unread"){
+            num++;
+          }
+        }
+        setunseenNotifications(num);
+        setData(response.data);
+        setDataFetched(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setDataFetched(true);
+      });
+  }, []);
+
+  const handleOpenPopover = (event) => {
+    
+    setPopoverAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    axios
+      .get("http://localhost:8000/doctor/sawNotfication")
+      .then((response) => {
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log("out")
+    setPopoverAnchorEl(null);
+  };
+
+  const openPopover = Boolean(popoverAnchorEl);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -336,6 +390,63 @@ function ResponsiveAppBar() {
               Call{" "}
             </Button>
           </Box>
+          <Badge style={{marginRight:"40px", transform: 'none'}} overlap="circular" badgeContent={unseenNotifications} color="secondary">
+          <IconButton style={{color:"yellow"}}  aria-label="notifications" onClick={handleOpenPopover}>
+            <NotificationsIcon style={{ fontSize: '2rem' }}/>
+          </IconButton>
+        </Badge>
+
+         {/* Popover with Notification Data */}
+         <Popover
+            open={openPopover}
+            anchorEl={popoverAnchorEl}
+            onClose={handleClosePopover}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <div>
+            {dataFetched ? (
+             <div>
+      {notfications.map((notifi, index) => (
+          <Card sx={{ display: "flex", maxWidth: 500,backgroundColor:"skyblue",border:"solid",borderBlockWidth:"1px" }}>
+    {/* Smaller image and align to the left */}
+    <CardMedia
+      component="img"
+      alt="Notification Image"
+      height="70"
+      image="https://img.freepik.com/free-vector/appointment-booking-with-calendar_52683-39831.jpg"
+      sx={{ alignSelf: "center", marginLeft: 1 }}
+    />
+    <CardContent>
+      <div>
+        {/* Title */}
+        <Typography variant="h6" component="div" sx={{ marginBottom: 1 }}>
+          {notifi.title}
+        </Typography>
+        {/* Text */}
+        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
+          {notifi.data}
+        </Typography>
+        {/* Boolean value (example: true) */}
+          <Typography variant="body2" style={{color:"black"}} color="text.secondary">
+            {notifi.state}
+          </Typography>
+        </div>
+      </CardContent>
+    </Card>
+    ))}
+   </div>
+   ) : (
+    <p>Loading...</p>
+  )}
+  </div>
+          </Popover>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title=" Chat">

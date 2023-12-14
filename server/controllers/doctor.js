@@ -86,6 +86,29 @@ const createDoctor = async (req, res) => {
   }
 };
 
+const getNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa");
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    res.status(200).json(doctor.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+const sawNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa saww");
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    for (let i = 0; i < doctor.notifications.length; i++) {
+      doctor.notifications[i].state="read"
+    }
+   await doctor.save()
+    res.status(200).json(doctor.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
 const getDoctors = async (req, res) => {
   try {
     const user = await DoctorModel.find();
@@ -588,6 +611,8 @@ export default {
   updateAppointment,
   addPrescription,
   myPrescriptions,
-  handleFollowUpRequest
+  handleFollowUpRequest,
+  getNotfication,
+  sawNotfication
 
 }

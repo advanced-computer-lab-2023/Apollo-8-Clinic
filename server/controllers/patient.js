@@ -87,6 +87,29 @@ const getPatients = async (req, res) => {
   }
 };
 
+const getNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa");
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    res.status(200).json(patient.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+const sawNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa saww");
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    for (let i = 0; i < patient.notifications.length; i++) {
+      patient.notifications[i].state = "read"
+    }
+    await patient.save()
+    res.status(200).json(patient.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
 const getMyPatients = async (req, res) => {
   //retrieve patients that have an appointmen wth this dr from the database
   const doc = await DocModel.findOne({ user: res.locals.userId })
@@ -624,7 +647,7 @@ const myPrescriptions = async (req, res) => {
     }
 
     const prescriptions = await PresModel.find({ patientId: patientId });
-    
+
     return res.status(200).json({ prescriptions });
   } catch (error) {
     console.error(error);
@@ -684,5 +707,7 @@ export default {
   checkIfLinked,
   myPrescriptions,
   requestFollowUp,
+  getNotfication,
+  sawNotfication,
   getPatientById
 }

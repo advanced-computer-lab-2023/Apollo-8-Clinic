@@ -29,15 +29,24 @@ function Doctorlogin() {
       }
       //  console.log(email);
       axios
-        .post(" http://localhost:8000/doctor/doctorLogin", {
+        .post(" http://localhost:8000/login", {
           name,
           password,
         })
         .then((result) => {
           console.log(result.data.token);
+          console.log("aaaa---"+result.data.type)
           sessionStorage.setItem("token", JSON.stringify(result.data.token));
-
-          window.location.pathname = "/HomePageDoc";
+          if(result.data.type==="Doctor"){
+            window.location.pathname = "/HomePageDoc";
+          }
+          else if(result.data.type==="Patient"){
+            window.location.pathname = "/HomePage";
+          }
+          else{
+            window.location.pathname = "/addAdministrator";
+          }
+          //window.location.pathname = "/HomePageDoc";
         })
         .catch((err) => {
           console.log(err.response.data);
@@ -75,7 +84,7 @@ function Doctorlogin() {
               display: "flex",
             }}
           >
-            <h2>Doctor Login</h2>
+            <h2>Login</h2>
             <form action="" onSubmit={handleSubmit}>
             <div className={`mb-3 ${error ? 'has-error' : ''}`}>
                 <label htmlFor="email">
