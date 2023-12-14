@@ -9,11 +9,11 @@ import BottomBar from "../../components/BottomBar";
 function FollowUPPending() {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const doctorName = "fofa";
+  
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/appointment/${doctorName}`)
+      .get(`http://localhost:8000/doctor/getFollowUpRequest`)
       .then((response) => {
         console.log("API Response:", response.data);
         setAppointments(response.data);
@@ -23,29 +23,49 @@ function FollowUPPending() {
         console.error("Error fetching appointments:", error);
         setLoading(false);
       });
-  }, [doctorName]);
-
-  const handleUpdateAppointment = async (appointment) => {
-    let newType = "follow up";
+  }, []);
+  const handleAccept = async (appointment) => {
+    let newStatus = "Accepted";
     try {
-      const response = await axios.put(
-        `http://localhost:8000/doctor/updateAppointment/${appointment.doctorId.name}`,
-        { appointmentId: appointment._id, newType: newType }
-      );
+      const response =await axios.put(`http://localhost:8000/doctor/updatecompletedAppointment/${appointment.doctorId.name}`, {
+        appointmentId: appointment._id,
+        newStatus,
+      });
+
       if (response.data) {
         setAppointments((prevAppointments) =>
           prevAppointments.map((prevAppointment) =>
             prevAppointment._id === appointment._id
-              ? { ...prevAppointment, type: newType }
+              ? { ...prevAppointment, status: newStatus }
               : prevAppointment
           )
         );
       }
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error updating appointment:", error);
     }
   };
+  const handleReject = async (appointment) => {
+    let newStatus = "Rejected";
+    try {
+      const response =await axios.put(`http://localhost:8000/doctor/updatecancelledAppointment/${appointment.doctorId.name}`, {
+        appointmentId: appointment._id,
+        newStatus,
+      });
 
+      if (response.data) {
+        setAppointments((prevAppointments) =>
+          prevAppointments.map((prevAppointment) =>
+            prevAppointment._id === appointment._id
+              ? { ...prevAppointment, status: newStatus }
+              : prevAppointment
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating appointment:", error);
+    }
+  };
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -88,7 +108,6 @@ function FollowUPPending() {
                 <thead className="table-dark">
                   <tr>
                     <th>Patient Name</th>
-                    <th>Doctor Name</th>
                     <th>Date</th>
                     <th>Status</th>
                     <th>Type</th>
@@ -100,7 +119,6 @@ function FollowUPPending() {
                     appointments.map((appointment) => (
                       <tr key={appointment._id}>
                         <td>{appointment.patientId?.name}</td>
-                        <td>{appointment.doctorId?.name}</td>
                         <td>{appointment.date}</td>
                         <td>{appointment.status}</td>
                         <td>{appointment.type}</td>
@@ -109,15 +127,16 @@ function FollowUPPending() {
                             className="btn btn-success"
                             style={{ backgroundColor: 'darkGreen' }}
 
-                            onClick={() => handleUpdateAppointment(appointment)}
+                            onClick={() => handleAccept(appointment)}
                           >
-                            Follow Up
+                            Accepted
                           </button>
                           <button
                             className="btn btn-success"
                             style={{ backgroundColor: 'darkRed', marginLeft: "5%" }}
+                            onClick={() => handleReject(appointment)}
                           >
-                            Reject
+                            Revoked
                           </button>
                         </td>
                       </tr>

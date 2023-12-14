@@ -19,8 +19,8 @@ const FollowUpRequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Accepted", "Revoked"],
-      default: "Pending",
+      enum: ["upcoming", "Accepted", "Revoked"],
+      default: "upcoming",
       required: true,
     },
     date: {

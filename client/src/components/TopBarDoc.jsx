@@ -37,9 +37,7 @@ function ResponsiveAppBar() {
   const handleUpcoming = () => {
     navigate("/viewUpcomingApp");
   };
-  const handleHealthRecords = () => {
-    navigate("/AddHealthRecords");
-  };
+  ;
   const handleTimeSlots = () => {
     navigate("/AddTimeSlots");
   };
@@ -215,20 +213,7 @@ function ResponsiveAppBar() {
               {" "}
               Upcomming Appointments{" "}
             </Button>
-            <Button
-              onClick={handleHealthRecords}
-              sx={{
-                my: 2,
-                color: "white",
-                display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
-                fontSize: "9px",
-              }}
-            >
-              {" "}
-              Add Health Record{" "}
-            </Button>
+           
             <Button
               onClick={handleTimeSlots}
               sx={{

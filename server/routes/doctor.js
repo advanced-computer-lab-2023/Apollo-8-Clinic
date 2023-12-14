@@ -14,8 +14,11 @@ router.post("/", uploadMiddleware, controllers.createDoctor);
 //
 router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctorContract);
 router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
+
+router.get("/getFollowUpRequest",Middle.requireAuthDoctor,controllers.getFollowUpRequest);
 router.get("/", Middle.requireAuthAdmin, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
 router.get("/getAcceptedDoctors", Middle.requireAuth, controllers.getAcceptedDoctors);//for doctors and patients in the sys
+
 router.get("/:id", Middle.requireAuth, controllers.getDoctorById);
 router.put("/accept/:id", Middle.requireAuthAdmin, controllers.acceptDoctor);
 router.put("/reject/:id", Middle.requireAuthAdmin, controllers.rejectDoctor);
@@ -29,7 +32,10 @@ router.post('/add-available-time-slot', Middle.requireAuthDoctor, controllers.ad
 router.post('/addHealthRecords', Middle.requireAuthDoctor, uploadMiddleware, controllers.addHealthRecords);
 router.get("/getWallet/:doctorName", Middle.requireAuthDoctor, controllers.getWallet);
 router.put("/updateAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updateAppointment)
-//no need
+router.put("/updatecompletedAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updatecompletedAppointment)
+
+
+router.put("/updatecancelledAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updatecancelledAppointment)
 router.post("/doctorLogin", Auth.loginDoctor)
 //view appointments chekkkk whattttt is thattt???
 import appointmentContoller from "../controllers/appointmentContoller.js";

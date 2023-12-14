@@ -10,6 +10,7 @@ import DoctorInfo from "./pages/patient/DoctorInfo";
 import ViewDoctor from "./pages/patient/ViewDoctor";
 import FilterDoctor from "./pages/patient/FilterDoctor";
 //youhanna milestone 2222
+import PatientUpcomingAppointments from "./pages/doctor/PatientUpcomingAppointments"
 import Doctorlogin from "./pages/auth/DoctorLogin";
 import Adminlogin from "./pages/auth/AdminLogin";
 import Patientlogin from "./pages/auth/PatientLogin";
@@ -17,7 +18,7 @@ import Forget from "./pages/auth/ForgetPassword";
 import ChangePass from "./pages/patient/chnagePass";
 import ChangePassDoc from "./pages/doctor/changePassDoc";
 import ChangePassAdm from "./pages/admin/changePassAdm";
-
+import PatientAppointments from "./pages/doctor/PatientAppointments";
 import AppPatient from "./pages/patient/patientFamApp";
 import MyPatientsList from "./pages/doctor/MyPatientsList";
 import UpcomingAppointments from "./pages/doctor/UpcomingAppointments";
@@ -32,6 +33,7 @@ import PatientHealthRecords from "./pages/patient/PatientHealthRecords";
 import MainDoctor from "./pages/doctor/DoctorAppointments";
 import App1 from "./pages/admin/adminHealthP";
 import PrescriptionsDetails from "./pages/patient/PrescriptionDetails";
+
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/patient/DoctorsWithDiscount";
 import AppointmentWalletPayment from "./pages/patient/AppointmentWalletPayment";
@@ -41,7 +43,8 @@ import FollowUP from "./pages/doctor/FollowUP";
 import HomePage from "./pages/patient/HomePage";
 import HomePageDoc from "./pages/doctor/HomePageDoc";
 import PatientHP_FM from "./pages/patient/PatientFamilyHP";
-import PatientAppointments from "./pages/patient/PatientAppointments";
+
+
 import AvailableAppointments from "./pages/patient/AvailableAppointments";
 import RescheduleApp from "./pages/patient/RescheduleApp";
 import HomePageAdmin from "./pages/admin/HomePageAdmin";
@@ -145,11 +148,12 @@ function App() {
         <Route path="/viewMyPatients" element={<MyPatientsList />} />
         <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
         <Route path="/contract" element={<DoctorContract />} />
-
+        <Route path="/PatientAppointments"element={<PatientAppointments />} />
         <Route path="/doctorAppointments" element={<MainDoctor />} />
         <Route path="/viewHealth/:patientID" element={<Health />} />
         <Route path="/ForgetPassword" element={<Forget />} />
         <Route path="/changePassDoc" element={<ChangePassDoc />} />
+        <Route path="/PatientUpcomingAppointments/:id" element={<PatientUpcomingAppointments />} />
       </Routes>
     );
   } else if (type === "Admin") {

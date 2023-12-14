@@ -59,18 +59,7 @@ const getPatientAppointments = async (req, res) => {
     const patient1 = await PatientModel.findOne({ user: res.locals.userId });
     const patientID = patient1._id;
     const appointments1 = await AppointmentModel.find({ "patientId": patientID });
-    //     let result = {};
-
-    // for(let appointment1 of appointments1) {
-    //   let doctor = await DoctorModel.findById(appointment1.doctorId);
-    //   let newObj = {
-    //     status: appointment1.status,
-    //     date: appointment1.date,
-    //     doctorName: doctor.name
-    //   };
-    //   result[appointment1._id] = newObj;
-    // }
-    //      res.status(200).send(result);
+   
     res.status(200).json(appointments1);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -142,7 +131,23 @@ const getAppointments = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-const patientApp = async (req, res) => {  // to get all appointments for a selected dr.
+
+    const getupcomingAppointments = async (req, res) => {
+      console.log("dcdcdc")
+      try {
+      const patient1 = await PatientModel.findOne({ user: res.locals.userId });
+      const patientID = patient1._id;
+      const appointments1 = await AppointmentModel.find({
+        patientId: patientID,
+        status: 'upcoming',
+      });
+    
+      res.status(200).json(appointments1);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+const patientApp = async (req, res) => { 
   try {
     const { patientId } = req.body;
     const appointment = await appointments.find({ patientId: patientId });
@@ -273,5 +278,6 @@ export default {
   patientApp,
   getPatientAppointments,
   rescheduleAppointment,
-  cancelAppointment
+  cancelAppointment,
+  getupcomingAppointments
 }

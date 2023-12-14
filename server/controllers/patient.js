@@ -28,13 +28,21 @@ const createPatient = async (req, res) => {
   } = req.body;
 
   try {
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(password, salt);
+   // Check if password is provided
+   if (!password || password.trim() === '') {
+    return res.status(400).json({ message: 'Please fill in the password.' });
+  }
+  if (!username || username.trim() === '') {
+    return res.status(400).json({ message: 'Please fill in the username.' });
+  }
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      return res.status(400).json({ message: 'Password is invalid' });
-    }
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({ message: 'Password is invalid' });
+  }
 
     const existingUser = await UserModel.findOne({ username });
     if (!existingUser) {
@@ -72,8 +80,8 @@ const createPatient = async (req, res) => {
       res.status(400).json("Username already exist");
     }
   } catch (error) {
-    console.log(error)
-    res.status(400).json({ error: error.message });
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -206,60 +214,44 @@ const getPatientByName = async (req, res) => {
 
 };
 const upcomingApp = async (req, res) => {
-  console.log("YARABBBBB")
-  //retrieve patients that have an appointmen wth this dr from the database
-  const doc = await DocModel.findOne({ user: res.locals.userId })
-  const doctorId = doc._id;
-  console.log(doctorId);
-
-  const myPatients = [];
   try {
-    const drAppointments = await AppointmentModel.find({ doctorId: doctorId });
-    const patients = []
-    console.log(drAppointments);
-    for (const appointment1 of drAppointments) {
+    const doc = await DocModel.findOne({ user: res.locals.userId });
+    const doctorId = doc._id;
 
-      let arrayOfPatient = await PatientModel.find({ _id: appointment1.patientId });
-      let patient = arrayOfPatient[0];
+    const drAppointments = await AppointmentModel.find({
+      doctorId: doctorId,
+      status: "upcoming", // Only fetch upcoming appointments
+    }).populate("patientId"); // Populate the patientId field to get patient details
 
-      if (patients.length === 0 && appointment1.status === "upcoming")
-        patients.push(patient);
-      else {
-        let found = false;
-        for (let i = 0; i < patients.length; i++) {
-          if ((patients[i]._id).equals(patient._id) && appointment1.status === "upcoming") {
-            found = true;
-            break;
-          }
-        }
-        if (!found && appointment1.status === "upcoming") {
-          patients.push(patient);
-        }
+    // Create a map to keep track of unique patients based on patientId
+    const uniquePatientsMap = new Map();
+
+    drAppointments.forEach((appointment) => {
+      const patientId = appointment.patientId._id.toString();
+
+      if (!uniquePatientsMap.has(patientId)) {
+        uniquePatientsMap.set(patientId, {
+          _id: appointment.patientId._id,
+          name: appointment.patientId.name,
+          email: appointment.patientId.email,
+          birthDate: appointment.patientId.birthDate,
+          gender: appointment.patientId.gender,
+          phone: appointment.patientId.phone,
+          emergencyName: appointment.patientId.emergencyName,
+          emergencyNo: appointment.patientId.emergencyNo,
+          emergencyRel: appointment.patientId.emergencyRel,
+          date: appointment.date,
+        });
       }
-
-    }
-    console.log(patients);
-    // res.status(200).json(patients);
-    const rows = patients.map((object) => {
-      return {
-        _id: object._id,
-        name: object.name,
-        email: object.email,
-        birthDate: object.birthDate,
-        gender: object.gender,
-        phone: object.phone,
-        emergencyName: object.emergencyName,
-        emergencyNo: object.emergencyNo,
-        emergencyRel: object.emergencyRel
-      };
     });
-    console.log(rows);
-    res.status(200).json(rows)
+
+    const uniquePatients = [...uniquePatientsMap.values()];
+
+    res.status(200).json(uniquePatients);
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
 };
-
 const getPrescriptions = async (req, res) => {
   try {
     console.log(req.query)
@@ -649,7 +641,6 @@ const requestFollowUp = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-
 export default {
   createPatient,
   getPatients,

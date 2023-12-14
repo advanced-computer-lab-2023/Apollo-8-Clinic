@@ -5,6 +5,7 @@ import prescriptionModel from '../models/prescription.js';
 import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
+import FollowUpRequestModel from '../models/followUpRequest.js';
 import e from 'express';
 const saltRounds = 10;
 
@@ -320,19 +321,30 @@ const getHealthRecord = async (req, res) => {
     const doc = await DoctorModel.findOne({ user: res.locals.userId })
     const doctorID = doc._id;
     const patientID = req.body.patientID;
-
+    console.log("doc"+doc);
     const appointment = await AppointmentModel.findOne({ doctorId: doctorID, patientId: patientID })
-    if (appointment) {
-      const Appointment = await AppointmentModel.find({ patientId: patientID }).populate('patientId')
-      res.status(200).json(Appointment)
-    }
-    else {
-      res.status(400).json({ error: "cannot look at that patient" })
+    console.log("appointments"+appointment)
+   
+    if (appointment && appointment.patientId) {
+      // Extract patient ID from the appointment
+      const patient = appointment.patientId;
+
+      console.log("patient ID:", patient._id);
+
+      // Fetch health records for the patient
+      const healthRecords = await PatientModel.findById(patient._id).select('health_records.records');
+
+      console.log("healthRecords:", healthRecords);
+
+      res.status(200).json(healthRecords);
+    } else {
+      res.status(400).json({ error: "No appointment found for the specified doctor and patient." });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    console.error("Error:", error.message);
+    res.status(400).json({ error: error.message });
   }
-}
+};
 const addAvailableTimeSlots = async (req, res) => {
   try {
     const doc = await DoctorModel.findOne({ user: res.locals.userId })
@@ -428,7 +440,6 @@ const getWallet = async (req, res) => {
 const updateAppointment = async (req, res) => {
   try {
     const { appointmentId, newType } = req.body;
-    const doctorName = "helen";
     const doctor = await DoctorModel.findOne({ user: res.locals.userId });
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
@@ -448,7 +459,7 @@ const updateAppointment = async (req, res) => {
     }
 
     
-    // Allow changing from 'regular' to 'follow up'
+   
     if (appointment.type === "regular" && newType === "follow up") {
       appointment.type = newType;
       await appointment.save();
@@ -461,12 +472,82 @@ const updateAppointment = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const updatecompletedAppointment = async (req, res) => {
+  try {
+    const { appointmentId, newStatus } = req.body;
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    if (!appointmentId || !newStatus) {
+      return res.status(400).json({ error: "Invalid input" });
+    }
+
+    
+    const appointment = await AppointmentModel.findOne({
+      _id: appointmentId
+    });
+
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+    
+   
+    if (appointment.status === "upcoming" ) {
+      appointment.status = newStatus;
+      await appointment.save();
+      return res.status(200).json(appointment);
+    } else {
+      return res.status(400).json({ error: "Invalid type change request" });
+    }
+  } catch (error) {
+    console.error("Error in changeAppointmentType:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const updatecancelledAppointment = async (req, res) => {
+  try {
+    const { appointmentId,newStatus } = req.body;
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    if (!appointmentId || !newStatus) {
+      return res.status(400).json({ error: "Invalid input" });
+    }
+
+  
+    const appointment = await AppointmentModel.findOne({
+      _id: appointmentId
+    });
+
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+    
+   
+    if (appointment.status === "upcoming") {
+      appointment.status = newStatus; 
+      await appointment.save();
+      return res.status(200).json(appointment);
+    } else {
+      return res.status(400).json({ error: "Invalid type change request" });
+    }
+  } catch (error) {
+    console.error("Error in updatecompletedAppointment:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 const addPrescription = async (req, res) => {
   try {
     const { patientId, doctorId, state, name, dose, date} = req.body;
 
-    // Check if the patient and doctor exist
+   
     const patient = await PatientModel.findById(patientId);
     const doctor = await DoctorModel.findById(doctorId);
 
@@ -548,7 +629,26 @@ const handleFollowUpRequest = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-
+const getFollowUpRequest = async (req, res) => {
+  console.log("Getting follow-up requests...");
+  try {
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    const doctorId = doctor._id;
+    console.log("doctor"+doctor);
+      // Use the AppointmentModel to find follow-up appointments
+      const followUpRequests = await AppointmentModel.find({
+        doctorId,
+        type: "follow up",
+        status: "upcoming",
+      }).populate('patientId', 'name');
+      
+    console.log("followUpRequests"+followUpRequests);
+    res.status(200).json(followUpRequests);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export default {
   createDoctor,
@@ -575,6 +675,9 @@ export default {
   updateAppointment,
   addPrescription,
   myPrescriptions,
-  handleFollowUpRequest
-
+  handleFollowUpRequest,
+  getFollowUpRequest,
+  updatecompletedAppointment,
+  updatecancelledAppointment,
+ 
 }
