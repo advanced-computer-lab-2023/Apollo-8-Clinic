@@ -28,21 +28,21 @@ const createPatient = async (req, res) => {
   } = req.body;
 
   try {
-   // Check if password is provided
-   if (!password || password.trim() === '') {
-    return res.status(400).json({ message: 'Please fill in the password.' });
-  }
-  if (!username || username.trim() === '') {
-    return res.status(400).json({ message: 'Please fill in the username.' });
-  }
+    // Check if password is provided
+    if (!password || password.trim() === '') {
+      return res.status(400).json({ message: 'Please fill in the password.' });
+    }
+    if (!username || username.trim() === '') {
+      return res.status(400).json({ message: 'Please fill in the username.' });
+    }
 
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hashedPassword = await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-  if (!passwordRegex.test(password)) {
-    return res.status(400).json({ message: 'Password is invalid' });
-  }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ message: 'Password is invalid' });
+    }
 
     const existingUser = await UserModel.findOne({ username });
     if (!existingUser) {
@@ -90,6 +90,29 @@ const getPatients = async (req, res) => {
     const patients = await PatientModel.find();
     console.log(patients);
     res.status(200).json(patients);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
+const getNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa");
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    res.status(200).json(patient.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+const sawNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa saww");
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    for (let i = 0; i < patient.notifications.length; i++) {
+      patient.notifications[i].state = "read"
+    }
+    await patient.save()
+    res.status(200).json(patient.notifications);
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -438,6 +461,16 @@ const patientDetails = async (req, res) => {
   }
 };
 
+const getPatientById = async (req, res) => {
+  try {
+    const patient = await PatientModel.findOne({ user: res.locals.userId })
+    if (!patient) return res.status(404).send("Patient not found");
+    return res.status(200).send(patient);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 //req.params --> id
 const cancelSubscription = async (req, res) => {
   try {
@@ -606,7 +639,7 @@ const myPrescriptions = async (req, res) => {
     }
 
     const prescriptions = await PresModel.find({ patientId: patientId });
-    
+
     return res.status(200).json({ prescriptions });
   } catch (error) {
     console.error(error);
@@ -641,6 +674,7 @@ const requestFollowUp = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
 export default {
   createPatient,
   getPatients,
@@ -663,5 +697,8 @@ export default {
   getWallet,
   checkIfLinked,
   myPrescriptions,
-  requestFollowUp
+  requestFollowUp,
+  getNotfication,
+  sawNotfication,
+  getPatientById
 }

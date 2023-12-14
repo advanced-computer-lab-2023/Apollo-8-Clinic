@@ -87,6 +87,29 @@ const createDoctor = async (req, res) => {
   }
 };
 
+const getNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa");
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    res.status(200).json(doctor.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+const sawNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa saww");
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    for (let i = 0; i < doctor.notifications.length; i++) {
+      doctor.notifications[i].state = "read"
+    }
+    await doctor.save()
+    res.status(200).json(doctor.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
 const getDoctors = async (req, res) => {
   try {
     const user = await DoctorModel.find();
@@ -97,6 +120,18 @@ const getDoctors = async (req, res) => {
   }
 };
 
+
+const getDoctorByIdForChat = async (req, res) => {
+  try {
+    const pharmacist = await DoctorModel.findOne(
+      { user: res.locals.userId }
+    );
+    if (!pharmacist) return res.status(404).send("Pharmacist not found");
+    res.status(200).send(pharmacist);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 const getDoctorById = async (req, res) => {
 
   try {
@@ -321,10 +356,10 @@ const getHealthRecord = async (req, res) => {
     const doc = await DoctorModel.findOne({ user: res.locals.userId })
     const doctorID = doc._id;
     const patientID = req.body.patientID;
-    console.log("doc"+doc);
+    console.log("doc" + doc);
     const appointment = await AppointmentModel.findOne({ doctorId: doctorID, patientId: patientID })
-    console.log("appointments"+appointment)
-   
+    console.log("appointments" + appointment)
+
     if (appointment && appointment.patientId) {
       // Extract patient ID from the appointment
       const patient = appointment.patientId;
@@ -458,8 +493,8 @@ const updateAppointment = async (req, res) => {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
-    
-   
+
+
     if (appointment.type === "regular" && newType === "follow up") {
       appointment.type = newType;
       await appointment.save();
@@ -484,7 +519,7 @@ const updatecompletedAppointment = async (req, res) => {
       return res.status(400).json({ error: "Invalid input" });
     }
 
-    
+
     const appointment = await AppointmentModel.findOne({
       _id: appointmentId
     });
@@ -493,9 +528,9 @@ const updatecompletedAppointment = async (req, res) => {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
-    
-   
-    if (appointment.status === "upcoming" ) {
+
+
+    if (appointment.status === "upcoming") {
       appointment.status = newStatus;
       await appointment.save();
       return res.status(200).json(appointment);
@@ -509,7 +544,7 @@ const updatecompletedAppointment = async (req, res) => {
 };
 const updatecancelledAppointment = async (req, res) => {
   try {
-    const { appointmentId,newStatus } = req.body;
+    const { appointmentId, newStatus } = req.body;
     const doctor = await DoctorModel.findOne({ user: res.locals.userId });
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
@@ -519,7 +554,7 @@ const updatecancelledAppointment = async (req, res) => {
       return res.status(400).json({ error: "Invalid input" });
     }
 
-  
+
     const appointment = await AppointmentModel.findOne({
       _id: appointmentId
     });
@@ -528,10 +563,10 @@ const updatecancelledAppointment = async (req, res) => {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
-    
-   
+
+
     if (appointment.status === "upcoming") {
-      appointment.status = newStatus; 
+      appointment.status = newStatus;
       await appointment.save();
       return res.status(200).json(appointment);
     } else {
@@ -545,9 +580,9 @@ const updatecancelledAppointment = async (req, res) => {
 
 const addPrescription = async (req, res) => {
   try {
-    const { patientId, doctorId, state, name, dose, date} = req.body;
+    const { patientId, doctorId, state, name, dose, date } = req.body;
 
-   
+
     const patient = await PatientModel.findById(patientId);
     const doctor = await DoctorModel.findById(doctorId);
 
@@ -589,7 +624,7 @@ const myPrescriptions = async (req, res) => {
     }
 
     const prescriptions = await PresModel.find({ doctorId: doctorId });
-    
+
     return res.status(200).json({ prescriptions });
   } catch (error) {
     console.error(error);
@@ -621,7 +656,7 @@ const handleFollowUpRequest = async (req, res) => {
 
     if (!updatedRequest) {
       return res.status(404).json({ error: "Follow-up request not found" });
-    }   
+    }
 
     return res.status(200).json({ message: "Follow-up request handled successfully", updatedRequest });
   } catch (error) {
@@ -634,15 +669,15 @@ const getFollowUpRequest = async (req, res) => {
   try {
     const doctor = await DoctorModel.findOne({ user: res.locals.userId });
     const doctorId = doctor._id;
-    console.log("doctor"+doctor);
-      // Use the AppointmentModel to find follow-up appointments
-      const followUpRequests = await AppointmentModel.find({
-        doctorId,
-        type: "follow up",
-        status: "upcoming",
-      }).populate('patientId', 'name');
-      
-    console.log("followUpRequests"+followUpRequests);
+    console.log("doctor" + doctor);
+    // Use the AppointmentModel to find follow-up appointments
+    const followUpRequests = await AppointmentModel.find({
+      doctorId,
+      type: "follow up",
+      status: "upcoming",
+    }).populate('patientId', 'name');
+
+    console.log("followUpRequests" + followUpRequests);
     res.status(200).json(followUpRequests);
   } catch (error) {
     console.error(error);
@@ -653,6 +688,7 @@ const getFollowUpRequest = async (req, res) => {
 export default {
   createDoctor,
   getDoctorById,
+  getDoctorByIdForChat,
 
   getDoctors,
   acceptDoctor,
@@ -678,6 +714,8 @@ export default {
   handleFollowUpRequest,
   getFollowUpRequest,
   updatecompletedAppointment,
-  updatecancelledAppointment,
- 
+  updatecancelledAppointment,,
+  getNotfication,
+  sawNotfication
+
 }

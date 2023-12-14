@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import * as React from 'react';
+import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ResponsiveAppBar from "../../components/TopBar";
@@ -30,10 +30,10 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 //const id = "654d8a73bb465e1aaf27c508";
 const patientID = "6523ba9cd72b2eb0e39cb137";
 const AvailableAppointments = () => {
@@ -44,8 +44,10 @@ const AvailableAppointments = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [doctorName, setDoctorName] = useState("");
-  const [isAppointmentTypeSelected, setIsAppointmentTypeSelected] = useState(false);
-  const [appointmentTypeErrorMessage, setAppointmentTypeErrorMessage] = useState('');
+  const [isAppointmentTypeSelected, setIsAppointmentTypeSelected] =
+    useState(false);
+  const [appointmentTypeErrorMessage, setAppointmentTypeErrorMessage] =
+    useState("");
   const { id } = useParams();
   const navigate = useNavigate();
   const formatDate = (dateTime) => {
@@ -66,29 +68,28 @@ const AvailableAppointments = () => {
   function handleBack() {
     navigate("/allDoctors");
   }
-  const [value, setValue] = React.useState('New Appointment');
+  const [value, setValue] = React.useState("New Appointment");
 
-  const [slotsAvailable, setSlotsAvailable] = useState(true); 
+  const [slotsAvailable, setSlotsAvailable] = useState(true);
   useEffect(() => {
-
     // Fetch doctor information
     axios
-    .get(`http://localhost:8000/doctor/${id}`)
-    .then((response) => {
-      setDoctor(response.data);
-      const uniqueSlots = [...new Set(response.data.availableSlots)];
-      setSlots(uniqueSlots);
-      console.log(response.data);
-      setSlotsAvailable(uniqueSlots.length > 0); // Check if slots are available
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 404) {
-        console.log("No available time slots for this doctor.");
-        setSlotsAvailable(false); // Set the state to false
-      } else {
-        console.error("Failed to fetch doctor:", error);
-      }
-    });
+      .get(`http://localhost:8000/doctor/${id}`)
+      .then((response) => {
+        setDoctor(response.data);
+        const uniqueSlots = [...new Set(response.data.availableSlots)];
+        setSlots(uniqueSlots);
+        console.log(response.data);
+        setSlotsAvailable(uniqueSlots.length > 0); // Check if slots are available
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          console.log("No available time slots for this doctor.");
+          setSlotsAvailable(false); // Set the state to false
+        } else {
+          console.error("Failed to fetch doctor:", error);
+        }
+      });
 
     axios
       .get("http://localhost:8000/patient/NotlinkedFamily/" + patientID)
@@ -122,13 +123,13 @@ const AvailableAppointments = () => {
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
     setIsAppointmentTypeSelected(true);
-    setAppointmentTypeErrorMessage('');
+    setAppointmentTypeErrorMessage("");
   };
 
   // Function to handle reservation confirmation
   const confirmReservation = async () => {
     if (!isAppointmentTypeSelected) {
-      setAppointmentTypeErrorMessage('Please choose an appointment type!');
+      setAppointmentTypeErrorMessage("Please choose an appointment type!");
       return;
     }
     const reqBody = {
@@ -151,7 +152,7 @@ const AvailableAppointments = () => {
     setSelectedSlot(null);
     setSelectedOption("");
     setIsAppointmentTypeSelected(false); // Reset the state
-    setAppointmentTypeErrorMessage('');
+    setAppointmentTypeErrorMessage("");
   };
 
   // Function to handle closing the dialog
@@ -159,6 +160,28 @@ const AvailableAppointments = () => {
     setDialogOpen(false);
     setSelectedSlot(null);
     setSelectedOption("");
+  };
+
+  const UpdateFollowUp = async (appID) => {
+    try {
+      if (!appID) {
+        console.error("Appointment or its ID is undefined.");
+        return;
+      }
+
+      const response = await axios.put(
+        "http://localhost:9000/updateAppointment/:doctorName",
+        {
+          appointmentId: appID,
+          newType: "follow up",
+        }
+      );
+
+      if (response.data) {
+      }
+    } catch (error) {
+      console.error("Error Updating Appointment Type ", error);
+    }
   };
 
   return (
@@ -209,26 +232,21 @@ const AvailableAppointments = () => {
                     </TableCell>
                   </TableRow>
                 ))}
-                
-                {!slotsAvailable &&(
+
+                {!slotsAvailable && (
                   <TableRow>
                     <TableCell colSpan={2} style={{ textAlign: "center" }}>
-                      <p style={{ color: "red" }}>
-                        No available time slots .
-                      </p>
+                      <p style={{ color: "red" }}>No available time slots .</p>
                     </TableCell>
                   </TableRow>
                 )}
-                 
               </TableBody>
             </Table>
-           
           </TableContainer>
           {/* Reservation Dialog */}
           <Dialog open={dialogOpen} onClose={handleCloseDialog}>
             <DialogTitle>Reserve for..</DialogTitle>
             <DialogContent>
-            
               <FormControl fullWidth>
                 <InputLabel id="option-label">Choose</InputLabel>
                 <Select
@@ -246,41 +264,55 @@ const AvailableAppointments = () => {
                 </Select>
               </FormControl>
             </DialogContent>
-            <FormControl style={{ marginLeft: '10%' }}>
-              <FormLabel id="demo-controlled-radio-buttons-group">Type of Appointment</FormLabel>
+            <FormControl style={{ marginLeft: "10%" }}>
+              <FormLabel id="demo-controlled-radio-buttons-group">
+                Type of Appointment
+              </FormLabel>
               <RadioGroup
                 aria-labelledby="demo-controlled-radio-buttons-group"
                 name="controlled-radio-buttons-group"
                 value={value}
                 onChange={handleChange}
               >
-                <FormControlLabel value="female" control={<Radio />} label="New Appointment" />
-                <FormControlLabel value="male" control={<Radio />} label="Follow Up" />
+                <FormControlLabel
+                  value="regular"
+                  control={<Radio />}
+                  label="New Appointment"
+                />
+                <FormControlLabel
+                  value="follow up"
+                  control={<Radio />}
+                  label="Follow Up"
+                />
               </RadioGroup>
             </FormControl>
             <DialogActions>
               <Button onClick={handleCloseDialog} color="primary">
                 Cancel
               </Button>
-              <Button onClick={confirmReservation} color="primary"  disabled={!isAppointmentTypeSelected}>
+              <Button
+                onClick={confirmReservation}
+                color="primary"
+                disabled={!isAppointmentTypeSelected}
+              >
                 Confirm Reservation
               </Button>
             </DialogActions>
           </Dialog>
         </div>
-         <button className="btn btn-primary rounded-2"
-              style={{
-                position: 'absolute',
-                bottom: '1%',
-                right: '5%',
-                width: '5%',
-                height: '40px',
-              }}
-              
-              onClick={handleBack}
-            >
-              Back
-            </button>
+        <button
+          className="btn btn-primary rounded-2"
+          style={{
+            position: "absolute",
+            bottom: "1%",
+            right: "5%",
+            width: "5%",
+            height: "40px",
+          }}
+          onClick={handleBack}
+        >
+          Back
+        </button>
         <BottomBar />
       </AppBar>
     </div>

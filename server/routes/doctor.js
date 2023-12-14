@@ -11,15 +11,20 @@ const router = express.Router();
 // to test this send a post request to this route: http://localhost:8000/doctor
 //no middlewaree
 router.post("/", uploadMiddleware, controllers.createDoctor);
+
+router.get("/getNotfication", Middle.requireAuthDoctor, controllers.getNotfication);
+
+router.get("/sawNotfication", Middle.requireAuthDoctor, controllers.sawNotfication);
 //
 router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctorContract);
 router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
 
-router.get("/getFollowUpRequest",Middle.requireAuthDoctor,controllers.getFollowUpRequest);
+router.get("/getFollowUpRequest", Middle.requireAuthDoctor, controllers.getFollowUpRequest);
 router.get("/", Middle.requireAuthAdmin, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
 router.get("/getAcceptedDoctors", Middle.requireAuth, controllers.getAcceptedDoctors);//for doctors and patients in the sys
 
 router.get("/:id", Middle.requireAuth, controllers.getDoctorById);
+router.get("/get/byId", Middle.requireAuth, controllers.getDoctorByIdForChat);
 router.put("/accept/:id", Middle.requireAuthAdmin, controllers.acceptDoctor);
 router.put("/reject/:id", Middle.requireAuthAdmin, controllers.rejectDoctor);
 router.get("/viewPatients/:id", Middle.requireAuthDoctor, patient.getMyPatients);
@@ -36,7 +41,7 @@ router.put("/updatecompletedAppointment/:doctorName", Middle.requireAuthDoctor, 
 
 
 router.put("/updatecancelledAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updatecancelledAppointment)
-router.post("/doctorLogin", Auth.loginDoctor)
+router.post("/doctorLogin", Auth.login)
 //view appointments chekkkk whattttt is thattt???
 import appointmentContoller from "../controllers/appointmentContoller.js";
 router.post("/appointmentWithFilter", Middle.requireAuth, appointmentContoller.getAppointmentWithFilter);

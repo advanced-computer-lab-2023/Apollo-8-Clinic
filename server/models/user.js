@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
     enum: ['Patient', 'Admin', 'Doctor'],
     required: true,
   },
+  socket: {
+    type: String
+  },
 });
 
 const UserModel = mongoose.model("User", userSchema);
