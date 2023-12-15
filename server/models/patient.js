@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const patientSchema = new mongoose.Schema(
   {
     user: {
@@ -14,7 +13,6 @@ const patientSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: true,
       required: true,
     },
     birthDate: {
@@ -28,7 +26,6 @@ const patientSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      unique: true,
       required: true,
     },
     emergencyName: {
@@ -46,14 +43,28 @@ const patientSchema = new mongoose.Schema(
     adresses: {
       type: [String],
     },
+    cart: [
+      {
+        medicine: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Medicine",
+        },
+        quantity: {
+          type: Number,
+          default: 0,
+        },
+        default: [],
+      },
+    ],
     wallet: {
       type: Number,
-      default: 0,
+      default: 2000,
     },
     status: {
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
-      required: true
+      required: true,
+      default: "Accepted"
     },
     health_records: {
       records: [
@@ -72,13 +83,15 @@ const patientSchema = new mongoose.Schema(
       type: Date,
       required: false
     },
-    notifications: 
-       [
+    notifications:
+      [
         {
-          title: { type: String,enum: ["Reserved","Cancelled", "Reschaduled"] },
+          title: { type: String, enum: ["Reserved", "Cancelled", "Reschaduled"] },
           data: { type: String },
-          state: { type: String,
-            enum: ["Unread", "read"] }
+          state: {
+            type: String,
+            enum: ["Unread", "read"]
+          }
         }
       ]
     ,
