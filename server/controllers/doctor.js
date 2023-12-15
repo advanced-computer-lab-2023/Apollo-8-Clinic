@@ -5,7 +5,10 @@ import prescriptionModel from '../models/prescription.js';
 import PatientModel from '../models/patient.js';
 import bcrypt from "bcrypt";
 import mongoose from 'mongoose';
+import FollowUpRequestModel from '../models/followUpRequest.js';
 import e from 'express';
+import PrescriptionModel from '../models/prescription.js';
+import axios from "axios"
 const saltRounds = 10;
 
 const createDoctor = async (req, res) => {
@@ -86,6 +89,29 @@ const createDoctor = async (req, res) => {
   }
 };
 
+const getNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa");
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    res.status(200).json(doctor.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+const sawNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa saww");
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    for (let i = 0; i < doctor.notifications.length; i++) {
+      doctor.notifications[i].state = "read"
+    }
+    await doctor.save()
+    res.status(200).json(doctor.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
 const getDoctors = async (req, res) => {
   try {
     const user = await DoctorModel.find();
@@ -96,6 +122,18 @@ const getDoctors = async (req, res) => {
   }
 };
 
+
+const getDoctorByIdForChat = async (req, res) => {
+  try {
+    const pharmacist = await DoctorModel.findOne(
+      { user: res.locals.userId }
+    );
+    if (!pharmacist) return res.status(404).send("Pharmacist not found");
+    res.status(200).send(pharmacist);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 const getDoctorById = async (req, res) => {
 
   try {
@@ -320,19 +358,30 @@ const getHealthRecord = async (req, res) => {
     const doc = await DoctorModel.findOne({ user: res.locals.userId })
     const doctorID = doc._id;
     const patientID = req.body.patientID;
-
+    console.log("doc" + doc);
     const appointment = await AppointmentModel.findOne({ doctorId: doctorID, patientId: patientID })
-    if (appointment) {
-      const Appointment = await AppointmentModel.find({ patientId: patientID }).populate('patientId')
-      res.status(200).json(Appointment)
-    }
-    else {
-      res.status(400).json({ error: "cannot look at that patient" })
+    console.log("appointments" + appointment)
+
+    if (appointment && appointment.patientId) {
+      // Extract patient ID from the appointment
+      const patient = appointment.patientId;
+
+      console.log("patient ID:", patient._id);
+
+      // Fetch health records for the patient
+      const healthRecords = await PatientModel.findById(patient._id).select('health_records.records');
+
+      console.log("healthRecords:", healthRecords);
+
+      res.status(200).json(healthRecords);
+    } else {
+      res.status(400).json({ error: "No appointment found for the specified doctor and patient." });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    console.error("Error:", error.message);
+    res.status(400).json({ error: error.message });
   }
-}
+};
 const addAvailableTimeSlots = async (req, res) => {
   try {
     const doc = await DoctorModel.findOne({ user: res.locals.userId })
@@ -428,7 +477,6 @@ const getWallet = async (req, res) => {
 const updateAppointment = async (req, res) => {
   try {
     const { appointmentId, newType } = req.body;
-    const doctorName = "helen";
     const doctor = await DoctorModel.findOne({ user: res.locals.userId });
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor not found' });
@@ -447,8 +495,8 @@ const updateAppointment = async (req, res) => {
       return res.status(404).json({ error: "Appointment not found" });
     }
 
-    
-    // Allow changing from 'regular' to 'follow up'
+
+
     if (appointment.type === "regular" && newType === "follow up") {
       appointment.type = newType;
       await appointment.save();
@@ -461,12 +509,82 @@ const updateAppointment = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const updatecompletedAppointment = async (req, res) => {
+  try {
+    const { appointmentId, newStatus } = req.body;
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    if (!appointmentId || !newStatus) {
+      return res.status(400).json({ error: "Invalid input" });
+    }
+
+
+    const appointment = await AppointmentModel.findOne({
+      _id: appointmentId
+    });
+
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+
+
+    if (appointment.status === "upcoming") {
+      appointment.status = newStatus;
+      await appointment.save();
+      return res.status(200).json(appointment);
+    } else {
+      return res.status(400).json({ error: "Invalid type change request" });
+    }
+  } catch (error) {
+    console.error("Error in changeAppointmentType:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const updatecancelledAppointment = async (req, res) => {
+  try {
+    const { appointmentId, newStatus } = req.body;
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if (!doctor) {
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    if (!appointmentId || !newStatus) {
+      return res.status(400).json({ error: "Invalid input" });
+    }
+
+
+    const appointment = await AppointmentModel.findOne({
+      _id: appointmentId
+    });
+
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+
+
+    if (appointment.status === "upcoming") {
+      appointment.status = newStatus;
+      await appointment.save();
+      return res.status(200).json(appointment);
+    } else {
+      return res.status(400).json({ error: "Invalid type change request" });
+    }
+  } catch (error) {
+    console.error("Error in updatecompletedAppointment:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 const addPrescription = async (req, res) => {
   try {
-    const { patientId, doctorId, state, name, dose, date} = req.body;
+    const { patientId, doctorId, state, name, dose, date } = req.body;
 
-    // Check if the patient and doctor exist
+
     const patient = await PatientModel.findById(patientId);
     const doctor = await DoctorModel.findById(doctorId);
 
@@ -508,7 +626,7 @@ const myPrescriptions = async (req, res) => {
     }
 
     const prescriptions = await PresModel.find({ doctorId: doctorId });
-    
+
     return res.status(200).json({ prescriptions });
   } catch (error) {
     console.error(error);
@@ -540,7 +658,7 @@ const handleFollowUpRequest = async (req, res) => {
 
     if (!updatedRequest) {
       return res.status(404).json({ error: "Follow-up request not found" });
-    }   
+    }
 
     return res.status(200).json({ message: "Follow-up request handled successfully", updatedRequest });
   } catch (error) {
@@ -548,11 +666,232 @@ const handleFollowUpRequest = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+const getFollowUpRequest = async (req, res) => {
+  console.log("Getting follow-up requests...");
+  try {
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    const doctorId = doctor._id;
+    console.log("doctor" + doctor);
+    // Use the AppointmentModel to find follow-up appointments
+    const followUpRequests = await AppointmentModel.find({
+      doctorId,
+      type: "follow up",
+      status: "upcoming",
+    }).populate('patientId', 'name');
 
+    console.log("followUpRequests" + followUpRequests);
+    res.status(200).json(followUpRequests);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+//npm install pdfkit 
+import pdfkit from 'pdfkit'
+import fs from 'fs'
+const printPresPDF = async (req, res) => {
+
+  const id = req.params.id;
+  const data = await PrescriptionModel.findById(id);
+  if (!data) {
+    console.error('pres not found ', error);
+    return;
+  }
+  try {
+    // Generate a unique filename for the PDF
+    const filename = "output_prescription.pdf";
+
+    // Generate the PDF
+    const doc = new pdfkit();
+    doc.pipe(fs.createWriteStream(filename));
+    doc.text("prescription: \n \n")
+    doc.text("Date : " + data.date.toISOString() + "\n")
+    data.medicine.forEach(function (element) {
+      doc.text("medicine: " + element.name + "  dose: " + element.dose + "\n")
+    });
+    doc.end();
+
+    // Send the generated PDF as a response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+
+    const fileStream = fs.createReadStream(filename);
+    fileStream.pipe(res);
+
+    fileStream.on('end', () => {
+      // Delete the file after it's streamed or on error
+      fs.unlinkSync(filename);
+    });
+
+    fileStream.on('error', (err) => {
+      console.error('Error streaming PDF:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+
+}
+
+
+const addPrescription2 = async (req, res) => {
+  try {
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+    if (!doctor) { res.status(400).send('dr not defined in my db'); return; }
+    const { patientId, medicine } = req.body;
+    console.log(medicine);
+    const state = "unfilled"
+    const date = (new Date());
+    const doctorId = doctor._id;
+    //const doctorId = "6573a8306be1610a354e196b"
+    const newPres = new PrescriptionModel({ doctorId, patientId, state, medicine, date });
+    await newPres.save();
+
+    // add medicines to the patient's cart in the pharmacy
+    for (var element of medicine) {
+      try {
+        const result = await axios.request({
+          method: 'get',
+          url: "http://localhost:9000/medicine/searchMedForClinic",
+          data: { name: element.name }
+        });
+        if (result) {
+          console.log("medicine " + element.name + " id from the pharmacy " + result.data[0]._id);
+          await axios.request({
+            method: 'post',
+            url: "http://localhost:9000/patient/addToCartFromClinic",
+            data: { medicineId: result.data[0]._id, quantity: 1 }
+          });
+        }
+      } catch (error) {
+        console.error('Error while connecting to the pharmacy', error);
+        res.status(500).send('Internal Server Error');
+        return; // Stop the execution of the function
+      }
+    }
+    res.status(200).json(newPres);
+  }
+  catch (error) {
+    console.error('Error adding a prescription', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+const updatePrescription_AddMed = async (req, res) => {
+
+  try {
+    const predId = req.params.id;
+    const prescription = await PrescriptionModel.findById(predId);
+    if (prescription.state == "filled") {
+      res.status(200).send("cannot edit now !! , the prescription is filled");
+      return;
+    }
+    const newMedicine = req.body;  // body = {name:"panadol" , dose:"once a day"}
+    prescription.medicine.push(newMedicine);
+    await prescription.save();
+
+    //add it to the cart 
+    const result = await axios.request({
+      method: 'get',
+      url: "http://localhost:9000/medicine/searchMedForClinic",
+      data: { name: newMedicine.name }
+    });
+
+    if (result) {
+      console.log("medicine " + newMedicine.name + " id from the pharmacy " + result.data[0]._id);
+      await axios.request({
+        method: 'post',
+        url: "http://localhost:9000/patient/addToCartFromClinic",
+        data: { medicineId: result.data[0]._id, quantity: 1 }
+      });
+    }
+    res.status(200).json("updated successfully");
+
+  } catch (error) {
+    console.error('Error while updating prescription', error);
+    res.status(500).send('Internal Server Error');
+    return; // Stop the execution of the function
+  }
+
+}
+
+const updatePrescription_DeleteMed = async (req, res) => {
+
+  try {
+    const predId = req.params.id;
+    const prescription = await PrescriptionModel.findById(predId);
+    if (prescription.state == "filled") {
+      res.status(200).send("cannot edit now, the prescription is filled !!");
+      return;
+    }
+    const oldMedicine = req.body;  // body = {name:"panadol"}
+    prescription.medicine.pull({ name: oldMedicine.name })
+    await prescription.save();
+
+    //remove it from  cart 
+    const result = await axios.request({
+      method: 'get',
+      url: "http://localhost:9000/medicine/searchMedForClinic",
+      data: { name: oldMedicine.name }
+    });
+
+    if (result) {
+      console.log("medicine " + oldMedicine.name + " id from the pharmacy " + result.data[0]._id);
+      await axios.request({
+        method: 'delete',
+        url: "http://localhost:9000/patient/removeFromCartClinic",
+        data: { medicineId: result.data[0]._id }
+      });
+    }
+    res.status(200).json("updated successfully");
+  } catch (error) {
+    console.error('Error updating prescription', error);
+    res.status(500).send('Internal Server Error');
+  }
+
+}
+
+const updatePrescription_Dosage = async (req, res) => {
+
+  try {
+    const predId = req.params.id;
+    const prescription = await PrescriptionModel.findById(predId);
+    if (prescription.state == "filled") {
+      res.status(200).send("cannot edit now !! , the prescription is filled");
+      return;
+    }
+    const medicine = req.body; // body = {name:"panadol" , dose:"twice a day"}
+    prescription.medicine = prescription.medicine.filter(med => med.name !== medicine.name);
+    prescription.medicine.push(medicine)
+    await prescription.save();
+    res.status(200).send('Prescription updated successfully.');
+
+  }
+  catch (error) {
+    console.error('Error updating medicine dosage', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+
+// const deletePrescription = async(req,res)=>{
+//   //may need a condition 
+//   try {
+//     const { id } = req.params;
+//     await PrescriptionModel.findByIdAndDelete(id);
+//     res.sendStatus(204);  //done successfully
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// }
 
 export default {
   createDoctor,
   getDoctorById,
+  getDoctorByIdForChat,
 
   getDoctors,
   acceptDoctor,
@@ -575,6 +914,20 @@ export default {
   updateAppointment,
   addPrescription,
   myPrescriptions,
-  handleFollowUpRequest
+  handleFollowUpRequest,
+  getFollowUpRequest,
+  updatecompletedAppointment,
+  updatecancelledAppointment,
+  getNotfication,
+  sawNotfication,
+
+  printPresPDF,
+  addPrescription2,
+  updatePrescription_AddMed,
+  updatePrescription_DeleteMed,
+  updatePrescription_Dosage
+
+
+
 
 }

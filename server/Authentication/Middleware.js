@@ -33,8 +33,11 @@ const getType = async (req, res, next) => {
 
 
 const requireAuth = async (req, res, next) => {
+  
+  
   const authHeader=req.headers['authorization'];
   const token =authHeader && (authHeader.split(' ')[1])
+  
     
   // check json web token exists & is verified
   if (token) {

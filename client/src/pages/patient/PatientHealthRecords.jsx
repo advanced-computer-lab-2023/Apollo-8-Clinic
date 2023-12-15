@@ -18,6 +18,7 @@ function PatientHealthRecords() {
   const [file, setFile] = useState();
   const [date, setDate] = useState();
   const [description, setDescription] = useState();
+  const [uploadButtonDisabled, setUploadButtonDisabled] = useState(true);
   const change2 = useRef(null);
 
   // Manually set the patient ID
@@ -40,9 +41,19 @@ function PatientHealthRecords() {
         setLoading(false);
       });
   }, [patientId]);
+  useEffect(() => {
+    // Enable the upload button only if date, description, and file are not empty
+  setUploadButtonDisabled(!date || !description || !file);
+}, [date, description, file]);
+
 
   const handleAddMedicalHistory = (e) => {
     e.preventDefault();
+    if (!date || !description || !file) {
+      // Display a message or perform any other action to inform the user about the missing fields
+      return;
+    }
+
     axios
       .put(
         " http://localhost:8000/patient/health-records",
@@ -59,18 +70,31 @@ function PatientHealthRecords() {
       )
       .then((result) => {
         if (result.status === 200) {
+          setHealthRecords(result.data.health_records.records);
+          setLoading(false);
+          // Reset the form fields
+          setDate("");
+          setDescription("");
+          setFile(null);
           change2.current.style.display = "block";
+          setTimeout(() => {
+            change2.current.style.display = "none";
+          }, 5000);
         }
       })
+      
       .catch((err) => console.log(err));
   };
 
   const handleRemoveMedicalHistory = (id) => {
     axios
-      .put(" http://localhost:8000/patient/remove-health-records", {
+      .post("http://localhost:8000/patient/remove-health-records", {
         id,
       })
-      .then(() => { })
+      .then(() => {
+        // Remove the record from the frontend
+        setHealthRecords((prevRecords) => prevRecords.filter(record => record._id !== id));
+      })
       .catch((err) => console.log(err));
   };
 
@@ -127,8 +151,15 @@ function PatientHealthRecords() {
           </div>
           <div ref={change2} style={{ display: "none" }}>
             <div
-              style={{ height: "50px" }}
-              class="alert alert-primary d-flex align-items-center"
+               style={{
+                height: "50px",
+                backgroundColor: "green", // Set the background color to green
+                color: "white", // Set the text color to white
+                display: "flex",
+                
+              
+              }}
+              className="alert alert-primary d-flex align-items-center"
               role="alert"
             >
               <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
@@ -173,20 +204,23 @@ function PatientHealthRecords() {
               onClick={handleAddMedicalHistory}
               type="submit"
               class="btn btn-primary"
+              disabled={uploadButtonDisabled}
             >
               upload
             </button>
           </div>
           <div className="card-body">
             <div className="image">
-              {loading ? (
-                <CircularProgress color="success" />
-              ) : (
-                <div style={{ display: "inline-flex", flexWrap: "wrap" }}>
-                  {list}
-                </div>
-              )}
-            </div>
+            {loading ? (
+          <CircularProgress color="success" />
+        ) : records.length === 0 ? (
+          <p style={{ color: "red" }}>No health records available.</p>
+        ) : (
+          <div className="image" style={{ display: "inline-flex", flexWrap: "wrap" }}>
+            {list}
+          </div>
+        )}
+      </div>
           </div>
         </div>
         <BottomBar />

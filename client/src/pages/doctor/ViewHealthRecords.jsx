@@ -6,20 +6,15 @@ import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
 import config from "../../config/config";
-
+import { useNavigate, useLocation } from "react-router-dom";
 function Health() {
-  const [data, setData] = useState([]);
+  const [healthData, setHealthData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [name, setName] = useState([]);
-  const [email, setEmail] = useState(null);
-  const [gender, setGender] = useState(null);
-  const [birthDate, setDate] = useState(null);
-  const [phone, setPhone] = useState(null);
-  const [records, setHealth] = useState([]);
   const { patientID } = useParams();
+  const location = useLocation();
   const doctorID = "6526653e47c45e179aa6886b";
-  //const patientID = "6523ba9cd72b2eb0e39cb137";
-
+  
+  const navigate = useNavigate();
   useEffect(() => {
     const apiUrl = "http://localhost:8000/doctor/getHealthRecord";
     axios
@@ -28,79 +23,51 @@ function Health() {
         patientID,
       })
       .then((response) => {
-        if (response.data) {
-          setData(response.data);
-          setName(response.data[0].patientId.name);
-          setEmail(response.data[0].patientId.email);
-          setGender(response.data[0].patientId.gender);
-          setDate(response.data[0].patientId.birthDate);
-          setPhone(response.data[0].patientId.phone);
-          setHealth(response.data[0].patientId.health_records.records);
+        if (response.data && response.data.health_records) {
+          setHealthData(response.data.health_records);
+          setLoading(false);
+        } else {
+          console.error("Invalid data structure:", response.data);
+         
+          setHealthData({});
           setLoading(false);
         }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+
+        setHealthData({});
         setLoading(false);
       });
-  }, []);
+  }, [patientID]);
 
-  const listo = data.map((user, i) => {
-    console.log(user);
-    return (
-      <div
-        key={i}
-        className="card"
-        style={{
-          width: 300,
-          margin: 50,
-          border: "5px solid ",
-          borderColor: "black",
-        }}
-      >
-        <img
-          style={{ height: 200, width: 200 }}
-          src="https://www.managemore.com/images/appointment.jpg"
-          className="card-img-top"
-          alt="no image"
-        />
-        <div className="card-body">
-          <h5 className="card-title">Appointment : {i + 1}</h5>
-          <p className="card-text">status : {user.status}</p>
-          <p className="card-text">date : {user.date}</p>
-        </div>
+ 
+  const list = healthData.records?.map((user, i) => (
+    <div
+      key={i}
+      className="card"
+      style={{
+        width: 300,
+        margin: 50,
+        border: "5px solid ",
+        borderColor: "black",
+      }}
+    >
+      <img
+        style={{ height: 200, width: 200 }}
+        src={config.STORAGE_URL + user?.image}
+        className="card-img-top"
+      />
+      <div className="card-body">
+        <h5 className="card-title">Record : {i + 1}</h5>
+        <p className="card-text">description : {user?.description}</p>
+        <p className="card-text">date : {user?.date}</p>
       </div>
-    );
-  });
-
-  const list = records.map((user, i) => {
-    console.log(user);
-    return (
-      <div
-        key={i}
-        className="card"
-        style={{
-          width: 300,
-          margin: 50,
-          border: "5px solid ",
-          borderColor: "black",
-        }}
-      >
-        <img
-          style={{ height: 200, width: 200 }}
-          src={config.STORAGE_URL + user.image}
-          className="card-img-top"
-        />
-        <div className="card-body">
-          <h5 className="card-title">Record : {i + 1}</h5>
-          <p className="card-text">decription : {user.description}</p>
-          <p className="card-text">date : {user.date}</p>
-        </div>
-      </div>
-    );
-  });
+    </div>
+  ));
 
   return (
+
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
         style={{
@@ -109,7 +76,9 @@ function Health() {
           overflowY: "auto",
         }}
       >
+        
         <ResponsiveAppBar />
+        
         <div
           style={{
             backgroundColor: " rgb(65, 105, 225)",
@@ -119,6 +88,7 @@ function Health() {
             marginLeft: "30%",
           }}
         >
+          
           <h1
             style={{
               font: "Arial",
@@ -130,44 +100,32 @@ function Health() {
             Health Records
           </h1>
         </div>
+       
+          
         <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
-          {/*fofaaaaaa
-      
-      */}
-
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Birth-Date</th>
-                <th scope="col">Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">{name}</th>
-                <td>{email}</td>
-                <td>{gender}</td>
-                <td>{birthDate}</td>
-                <td>{phone}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/*fofaaaaaa
-      
-      */}
-          <div style={{ display: "inline-flex", flexWrap: "wrap" }}>
-            {listo}
-            {list}
-          </div>
+          <div style={{ display: "inline-flex", flexWrap: "wrap" }}>{list}</div>
+          <button className="btn btn-primary rounded-2"
+              style={{
+                position: 'absolute',
+                bottom: '1%',
+                right: '5%',
+                width: '5%',
+                height: '40px',
+              }}
+              
+             
+            >
+              Back
+            </button>
         </div>
+       
+       
         <BottomBar />
+        
       </AppBar>
+     
     </div>
+    
   );
 }
-
 export default Health;

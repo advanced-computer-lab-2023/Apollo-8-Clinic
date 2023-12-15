@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBar";
-
+import CircularProgress from '@mui/material/CircularProgress';
 function PrescriptionsList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filterMessage, setFilterMessage] = useState("");
   const navigate = useNavigate();
   const name = useRef(null);
   const date = useRef(null);
@@ -22,7 +23,14 @@ function PrescriptionsList() {
       .then((response) => {
         setData(response.data);
         setLoading(false);
+        // Check if the filtered result is empty and set the message accordingly
+        if (response.data.length === 0) {
+          setFilterMessage("No prescriptions are available");
+        } else {
+          setFilterMessage("");
+        }
       })
+      
       .catch((error) => {
         console.error("Error fetching data:", error);
         setLoading(false);
@@ -98,7 +106,7 @@ function PrescriptionsList() {
           <ResponsiveAppBar />
           <div
             style={{
-              backgroundColor: " rgb(65, 105, 225)",
+              backgroundColor: "rgb(65, 105, 225)",
               borderRadius: "50px",
               margin: "10px",
               width: "40%",
@@ -117,83 +125,100 @@ function PrescriptionsList() {
             </h1>
           </div>
           <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
-            <div style={{ display: "flex" }}>
-              <div className="form-check" style={{ height: "2%" }}>
-                <input
-                  ref={name}
-                  style={{ marginTop: "15px" }}
-                  className="form-check-input"
-                  value="lolos"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                />
-                <label
-                  style={{ margin: "10px", marginRight: "50px" }}
-                  className="form-check-label"
-                  htmlFor="flexRadioDefault1"
-                >
-                  Filter By doctor name
-                </label>
-              </div>
-              <div className="form-check" style={{}}>
-                <input
-                  ref={date}
-                  style={{ marginTop: "15px" }}
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault2"
-                  checked
-                />
-                <label
-                  style={{ margin: "10px", marginRight: "50px" }}
-                  className="form-check-label"
-                  htmlFor="flexRadioDefault2"
-                >
-                  Filter by date
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  ref={status}
-                  style={{ marginTop: "15px", marginLeft: "10px" }}
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault3"
-                  checked
-                />
-                <label
-                  style={{ margin: "10px", marginRight: "50px" }}
-                  className="form-check-label"
-                  htmlFor="flexRadioDefault3"
-                >
-                  Filter by status
-                </label>
-              </div>
+            <div className="card-body">
+              <div style={{ display: "flex" }}>
+                <div className="form-check" style={{ height: "2%" }}>
+                  <input
+                    ref={name}
+                    style={{ marginTop: "15px" }}
+                    className="form-check-input"
+                    value="lolos"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault1"
+                  />
+                  <label
+                    style={{ margin: "10px", marginRight: "50px" }}
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault1"
+                  >
+                    Filter By doctor name
+                  </label>
+                </div>
+                <div className="form-check" style={{}}>
+                  <input
+                    ref={date}
+                    style={{ marginTop: "15px" }}
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    checked
+                  />
+                  <label
+                    style={{ margin: "10px", marginRight: "50px" }}
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault2"
+                  >
+                    Filter by date
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    ref={status}
+                    style={{ marginTop: "15px", marginLeft: "10px" }}
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault3"
+                    checked
+                  />
+                  <label
+                    style={{ margin: "10px", marginRight: "50px" }}
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault3"
+                  >
+                    Filter by status
+                  </label>
+                </div>
 
-              <div className="input-group mb-3" style={{ width: 250 }}>
-                <input
-                  type="text"
-                  ref={filter}
-                  style={{ border: "1px solid black" }}
-                  name="patientId"
-                  className="form-control"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-                <button
-                  onClick={handleClick}
-                  type="button"
-                  className="btn btn-primary"
-                >
-                  filter
-                </button>
+                <div className="input-group mb-3" style={{ width: 250 }}>
+                  <input
+                    type="text"
+                    ref={filter}
+                    style={{ border: "1px solid black" }}
+                    name="patientId"
+                    className="form-control"
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                  <button
+                    onClick={handleClick}
+                    type="button"
+                    className="btn btn-primary"
+                  >
+                    filter
+                  </button>
+                </div>
               </div>
+              {loading ? (
+                <div style={{ textAlign: "center", marginTop: "20px" }}>
+                  <CircularProgress color="success" />
+                </div>
+              ) : (
+                <>
+                  {data.length === 0 && filterMessage && (
+                    <div style={{ textAlign: "center", marginTop: "20px", color: "red" }}>
+                      <p>{filterMessage}</p>
+                    </div>
+                  )}
+
+                  {data.length > 0 && !filterMessage && (
+                    <div className="image">{listo}</div>
+                  )}
+                </>
+              )}
             </div>
-
-            <div className="image">{listo}</div>
           </div>
         </AppBar>
       </div>
