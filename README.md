@@ -55,33 +55,56 @@ Please ensure your code adheres to these guidelines before submitting a pull req
 ## screenshots
 
 ### Main Registeration page
+
+
 ![Registeration page](./ReadmeImages/registration1.png)
 ![Registeration page](./ReadmeImages/registration2.png)
+
+
 Description: First landing page for users; dual signup for doctors and patients, with sign-in options for doctors, patients, and admins.
 
+
 ### Admin HomePage
+
+
 ![admin homepage](./ReadmeImages/adminHomepage.png)
+
 
 Description: The admin homepage offers a centralized dashboard. Access key features conveniently from your personalized dashboard, including adding administrators, removing users, handling doctor requests, managing health packages, and updating your password for secure account control.
 
+
 ### Doctor HomePage
+
+
 ![doctor homepage](./ReadmeImages/doctorHomePage.png)
+
 
 Description: Doctors can navigate through a specialized toolbar with options such as managing appointments, viewing patients, scheduling follow-ups, updating their profiles, and more. 
 
 
 ### Patient HomePage
+
+
 ![patient homepage](./ReadmeImages/homePage.png)
+
 
 Description: Centralized access to patient options via a top bar including Doctors Prescriptions, Family Members, My Appointments, Health Records, Health Packages, Change Password, View Wallet, and Logout.
 
+
 ### View all doctors
+
+
 ![all doctors](./ReadmeImages/viewDoctors.png)
+
 
 Description: Explore a comprehensive table featuring doctors, with options to filter by specialty and available slots. Use the search function to quickly find specific doctors.
 
+
 ### Appointment History
+
+
 ![Appointment History](./ReadmeImages/appointments.png)
+
 
 Description: Display the patient's appointment history, with options to filter by appointment date or status. 
 
