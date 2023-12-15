@@ -5,6 +5,8 @@ import "../../App.css";
 import { Alert } from "@mui/material";
 import ResponsiveAppBar from "../../components/TopBar";
 import BottomBar from "../../components/BottomBar";
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function PatientWallet() {
   const [loading, setLoading] = useState(true);
@@ -66,7 +68,7 @@ function PatientWallet() {
         >
           <div className="card-body">
             {loading ? (
-              <p>Loading...</p>
+              <CircularProgress color="success" />
             ) : error ? (
               <p>
                 <Alert

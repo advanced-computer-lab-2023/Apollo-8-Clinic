@@ -26,18 +26,19 @@ function MyPatientsList() {
       });
   }, []);
   function handleFilter() {
-    // Navigate to another route and pass the ID as a prop
     navigate(`/viewUpcomingApp`);
   }
 
   function handleView(id) {
-    // Navigate to another route and pass the ID as a prop
+   
     navigate(`/viewHealth/${id}`);
   }
 
   function handleAddHealthRecord(id) {
-    // Navigate to another route and pass the ID as a prop
     navigate(`/AddHealthRecords/${id}`);
+  }
+  function handlePatientAppointmentDetails() {
+    navigate('/PatientAppointments');
   }
 
   return (
@@ -56,7 +57,7 @@ function MyPatientsList() {
         >
           <div className="card-header">
             <h2>Your patients' list</h2>
-            <button className="btn btn-success" onClick={() => handleFilter()}>
+           <button className="btn btn-primary rounded-2" onClick={() => handleFilter()}>
               filter to future appointments
             </button>
           </div>
@@ -81,6 +82,7 @@ function MyPatientsList() {
                         className="form-control rounded-0"
                         onChange={(e) => setSearch(e.target.value)}
                       />
+                    
                     </th>
                   </tr>
                 </thead>
@@ -95,19 +97,26 @@ function MyPatientsList() {
                       <tr key={index}>
                         <td>{item.name}</td>
                         <td>{item.email}</td>
-                        <td></td>
                         <td>
                           <button
-                            className="btn btn-success"
+                            className="btn btn-primary rounded-2"
+                            onClick={() => handlePatientAppointmentDetails()}
+                          >
+                            view PatientAp
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                           className="btn btn-primary rounded-2"
                             onClick={() => handleView(item._id)}
                           >
-                            view
+                            view Health Records
                           </button>
                         </td>
                         <td></td>
                         <td>
                           <button
-                            className="btn btn-success"
+                            className="btn btn-primary rounded-2"
                             onClick={() => handleAddHealthRecord(item._id)}
                           >
                             add health record
@@ -116,7 +125,18 @@ function MyPatientsList() {
                       </tr>
                     ))}
                 </tbody>
+          
+                {data.filter((item) => item.name.toLowerCase().includes(search)).length === 0 &&
+                  search.length > 0 && (
+                    <tr>
+                      <td colSpan="6" style={{ color: "red", textAlign: "center" }}>
+                        No patients found with this name
+                      </td>
+                    </tr>
+                  )} 
+                 
               </table>
+              
             )}
           </div>
         </div>

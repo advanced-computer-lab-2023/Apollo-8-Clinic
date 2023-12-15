@@ -2,6 +2,7 @@ import PatientModel from '../models/patient.js';
 import UserModel from '../models/user.js';
 import PresModel from '../models/prescription.js';
 import HealthPackageModel from '../models/healthPackage.js';
+import FollowUpRequestModel from '../models/followUpRequest.js';
 import DocModel from '../models/doctor.js';
 import AppointmentModel from '../models/appointment.js';
 import bcrypt from "bcrypt";
@@ -27,6 +28,14 @@ const createPatient = async (req, res) => {
   } = req.body;
 
   try {
+    // Check if password is provided
+    if (!password || password.trim() === '') {
+      return res.status(400).json({ message: 'Please fill in the password.' });
+    }
+    if (!username || username.trim() === '') {
+      return res.status(400).json({ message: 'Please fill in the username.' });
+    }
+
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -71,8 +80,8 @@ const createPatient = async (req, res) => {
       res.status(400).json("Username already exist");
     }
   } catch (error) {
-    console.log(error)
-    res.status(400).json({ error: error.message });
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -81,6 +90,29 @@ const getPatients = async (req, res) => {
     const patients = await PatientModel.find();
     console.log(patients);
     res.status(200).json(patients);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+
+const getNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa");
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    res.status(200).json(patient.notifications);
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+};
+const sawNotfication = async (req, res) => {
+  try {
+    console.log("wslnaa saww");
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    for (let i = 0; i < patient.notifications.length; i++) {
+      patient.notifications[i].state = "read"
+    }
+    await patient.save()
+    res.status(200).json(patient.notifications);
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -205,66 +237,50 @@ const getPatientByName = async (req, res) => {
 
 };
 const upcomingApp = async (req, res) => {
-  console.log("YARABBBBB")
-  //retrieve patients that have an appointmen wth this dr from the database
-  const doc = await DocModel.findOne({ user: res.locals.userId })
-  const doctorId = doc._id;
-  console.log(doctorId);
-
-  const myPatients = [];
   try {
-    const drAppointments = await AppointmentModel.find({ doctorId: doctorId });
-    const patients = []
-    console.log(drAppointments);
-    for (const appointment1 of drAppointments) {
+    const doc = await DocModel.findOne({ user: res.locals.userId });
+    const doctorId = doc._id;
 
-      let arrayOfPatient = await PatientModel.find({ _id: appointment1.patientId });
-      let patient = arrayOfPatient[0];
+    const drAppointments = await AppointmentModel.find({
+      doctorId: doctorId,
+      status: "upcoming", // Only fetch upcoming appointments
+    }).populate("patientId"); // Populate the patientId field to get patient details
 
-      if (patients.length === 0 && appointment1.status === "upcoming")
-        patients.push(patient);
-      else {
-        let found = false;
-        for (let i = 0; i < patients.length; i++) {
-          if ((patients[i]._id).equals(patient._id) && appointment1.status === "upcoming") {
-            found = true;
-            break;
-          }
-        }
-        if (!found && appointment1.status === "upcoming") {
-          patients.push(patient);
-        }
+    // Create a map to keep track of unique patients based on patientId
+    const uniquePatientsMap = new Map();
+
+    drAppointments.forEach((appointment) => {
+      const patientId = appointment.patientId._id.toString();
+
+      if (!uniquePatientsMap.has(patientId)) {
+        uniquePatientsMap.set(patientId, {
+          _id: appointment.patientId._id,
+          name: appointment.patientId.name,
+          email: appointment.patientId.email,
+          birthDate: appointment.patientId.birthDate,
+          gender: appointment.patientId.gender,
+          phone: appointment.patientId.phone,
+          emergencyName: appointment.patientId.emergencyName,
+          emergencyNo: appointment.patientId.emergencyNo,
+          emergencyRel: appointment.patientId.emergencyRel,
+          date: appointment.date,
+        });
       }
-
-    }
-    console.log(patients);
-    // res.status(200).json(patients);
-    const rows = patients.map((object) => {
-      return {
-        _id: object._id,
-        name: object.name,
-        email: object.email,
-        birthDate: object.birthDate,
-        gender: object.gender,
-        phone: object.phone,
-        emergencyName: object.emergencyName,
-        emergencyNo: object.emergencyNo,
-        emergencyRel: object.emergencyRel
-      };
     });
-    console.log(rows);
-    res.status(200).json(rows)
+
+    const uniquePatients = [...uniquePatientsMap.values()];
+
+    res.status(200).json(uniquePatients);
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
 };
-
 const getPrescriptions = async (req, res) => {
   try {
     console.log(req.query)
     const patient = await PatientModel.findOne({ user: res.locals.userId });
     const patientID = patient._id;
-    const arr = await PresModel.find({"patientId" : patientID}).populate('doctorId');
+    const arr = await PresModel.find({ "patientId": patientID }).populate('doctorId');
     console.log(arr);
     res.status(200).json(arr);
   } catch (error) {
@@ -445,6 +461,16 @@ const patientDetails = async (req, res) => {
   }
 };
 
+const getPatientById = async (req, res) => {
+  try {
+    const patient = await PatientModel.findOne({ user: res.locals.userId })
+    if (!patient) return res.status(404).send("Patient not found");
+    return res.status(200).send(patient);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 //req.params --> id
 const cancelSubscription = async (req, res) => {
   try {
@@ -602,25 +628,73 @@ const getWallet = async (req, res) => {
   }
 };
 
+const myPrescriptions = async (req, res) => {
+  try {
+    const patientId = res.locals.userId;
+
+    // Check if the patient exists
+    const patient = await PatientModel.findById(patientId);
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    const prescriptions = await PresModel.find({ patientId: patientId });
+
+    return res.status(200).json({ prescriptions });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const requestFollowUp = async (req, res) => {
+  try {
+    const { doctorId, familyMemberId } = req.body;
+
+    // Check if the user is a patient
+    const user = await UserModel.findOne({ _id: res.locals.userId, type: { $regex: /patient/i } });
+    if (!user) {
+      return res.status(401).json({ message: "You have no authorization to request follow-up" });
+    }
+
+    // Create a new follow-up request
+    const followUpRequest = new FollowUpRequestModel({
+      patientId: res.locals.userId,
+      doctorId,
+      familyMemberId,
+      status: "Pending",
+    });
+
+    // Save the follow-up request
+    await followUpRequest.save();
+
+    return res.status(201).json({ message: "Follow-up request created successfully", followUpRequest });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 import axios from "axios"
 import fs from "fs";
 
 
 //  require prescription id in params
-const payPrescription = async (req,res)=>{
+const payPrescription = async (req, res) => {
   // + redirect to the cart pharmacy 
   try {
     //let TotalPrice = 0;
     // const patient = await PatientModel.findOne({ user: res.locals.userId })
     // const patientId = patient._id;
-    const presID = req.params.id ;
-    const perscription = await PresModel.findById(presID) ;
+    const presID = req.params.id;
+    const perscription = await PresModel.findById(presID);
     //check its presence to avoid errors
-    if(!perscription){
+    if (!perscription) {
       res.status(200).json({ error: "no prescription with this id , check the database" });
-       return;
+      return;
     }
-    if(perscription.state==="filled"){
+    if (perscription.state === "filled") {
       res.status(200).json({ error: "already ordered!!, can not order it twice" });
       return;
     }
@@ -645,52 +719,52 @@ const payPrescription = async (req,res)=>{
 
 
 //npm install pdfkit 
-import pdfkit  from 'pdfkit'
-const printPresPDF  = async (req,res)=>{
-  
-    const id = req.params.id ;
-    const data = await PresModel.findById(id) ;
-    if(!data){
-      console.error('pres not found ', error);
-      return ;
-    }
-  try{
-   // Generate a unique filename for the PDF
-   const filename = "output_prescription.pdf";
+import pdfkit from 'pdfkit'
+const printPresPDF = async (req, res) => {
 
-   // Generate the PDF
-   const doc = new pdfkit();
-   doc.pipe(fs.createWriteStream(filename));
-   doc.text("prescription: \n \n")
-   doc.text("Date : "+data.date.toISOString() +"\n")
-   data.medicine.forEach(function (element) {
-      doc.text("medicine: "+element.name+"  dose: "+element.dose+"\n")
-   });
-   doc.end();
-
-// Send the generated PDF as a response
-res.setHeader('Content-Type', 'application/pdf');
-res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-
-const fileStream = fs.createReadStream(filename);
-fileStream.pipe(res);
-
-fileStream.on('end', () => {
-  // Delete the file after it's streamed or on error
-  fs.unlinkSync(filename);
-});
-
-fileStream.on('error', (err) => {
-  console.error('Error streaming PDF:', err);
-  res.status(500).json({ error: 'Internal server error' });
-});
-
- } catch (error) {
-   console.error('Error generating PDF:', error);
-   res.status(500).json({ error: 'Internal server error' });
- }
-  
+  const id = req.params.id;
+  const data = await PresModel.findById(id);
+  if (!data) {
+    console.error('pres not found ', error);
+    return;
   }
+  try {
+    // Generate a unique filename for the PDF
+    const filename = "output_prescription.pdf";
+
+    // Generate the PDF
+    const doc = new pdfkit();
+    doc.pipe(fs.createWriteStream(filename));
+    doc.text("prescription: \n \n")
+    doc.text("Date : " + data.date.toISOString() + "\n")
+    data.medicine.forEach(function (element) {
+      doc.text("medicine: " + element.name + "  dose: " + element.dose + "\n")
+    });
+    doc.end();
+
+    // Send the generated PDF as a response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+
+    const fileStream = fs.createReadStream(filename);
+    fileStream.pipe(res);
+
+    fileStream.on('end', () => {
+      // Delete the file after it's streamed or on error
+      fs.unlinkSync(filename);
+    });
+
+    fileStream.on('error', (err) => {
+      console.error('Error streaming PDF:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+
+}
 
 
 export default {
@@ -714,6 +788,11 @@ export default {
   removeHealthRecord,
   getWallet,
   checkIfLinked,
+  myPrescriptions,
+  requestFollowUp,
+  getNotfication,
+  sawNotfication,
+  getPatientById,
   payPrescription,
   printPresPDF
 }

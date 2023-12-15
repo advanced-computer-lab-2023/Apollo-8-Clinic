@@ -21,7 +21,7 @@ const loginDoctor = async (req, res) => {
     const passwordMatch=await bcrypt.compare(password,user.password);
     console.log(passwordMatch);
     if(!passwordMatch||!(user.type.toLowerCase()==='doctor')){
-        return res.status(400).json("wrong password or email");
+        return res.status(400).json("wrong username or password");
     }
     else{
         console.log(user)
@@ -33,7 +33,7 @@ const loginDoctor = async (req, res) => {
     }
     }
     catch(err){
-        return res.status(400).json("wrong password or email");
+        return res.status(400).json("wrong username or password");
     }   
 }
 
@@ -43,7 +43,7 @@ const loginPatient = async (req, res) => {
     const user=await UserModel.findOne({username:name});
     const passwordMatch=await bcrypt.compare(password,user.password);
     if(!passwordMatch||!user.type.toLowerCase()==='patient'){
-       return res.status(400).json("wrong password or email");
+       return res.status(400).json("wrong username or password");
     }
     else{
         console.log(user)
@@ -54,9 +54,34 @@ const loginPatient = async (req, res) => {
         } 
     }
     catch(err){
-       return res.status(400).json("wrong password or email");
+       return res.status(400).json("wrong username or password");
     }
 }
+
+
+const login = async (req, res) => {
+    try{
+    const { name,  password } = req.body;
+    const user=await UserModel.findOne({username:name});
+    const passwordMatch=await bcrypt.compare(password,user.password);
+    if(!passwordMatch){
+       return res.status(400).json("wrong username or password");
+    }
+    else{
+        console.log(user)
+        const token = createToken(user.username);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+        return res.status(201).json({token:token,type:user.type})
+
+        } 
+    }
+    catch(err){
+       return res.status(400).json("wrong username or password");
+    }
+}
+
+
+
 
 
 
@@ -67,14 +92,14 @@ const loginAdmin = async (req, res) => {
     const user=await UserModel.findOne({username:name});
     console.log(user);
     if(!user){
-        return res.status(400).json("wrong password or email");
+        return res.status(400).json("wrong username or password");
     }
     //must hash it 
    //  const passwordMatch=await bcrypt.compare(password,user.password);
     const passwordMatch=password===user.password;
     if(!passwordMatch||!user.type.toLowerCase()==='admin'){
         console.log("shshsh");
-       return res.status(400).json("wrong password or email");
+       return res.status(400).json("wrong username or password");
     }
     else{
         const token = createToken(user.username);
@@ -84,7 +109,7 @@ const loginAdmin = async (req, res) => {
         }   
     }
     catch(err){
-       return res.status(400).json("wrong password or email ")
+       return res.status(400).json("wrong username or password")
     }
 }
 //not needed
@@ -99,5 +124,6 @@ export default {
     loginDoctor,
     loginAdmin,
     loginPatient,
-    logout
+    logout,
+    login
   }

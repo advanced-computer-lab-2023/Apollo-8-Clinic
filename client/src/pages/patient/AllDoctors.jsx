@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import ResponsiveAppBar from "../../components/TopBar";
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function AllDoctors() {
   const [data, setData] = useState([]);
@@ -11,7 +13,7 @@ function AllDoctors() {
   const [searchSpec, setSearchSpec] = useState("");
   const [hp, setHp] = useState(null);
   const navigate = useNavigate();
-
+  const [searchResultEmpty, setSearchResultEmpty] = useState(false);
   useEffect(() => {
     const patientApiUrl =
       "http://localhost:8000/patient/getPatientHealthPackage/" +
@@ -59,6 +61,14 @@ function AllDoctors() {
     else return hourlyRate + hourlyRate * 0.1;
   }
 
+  const filteredData = data.filter((item) => {
+    const nameMatch = searchName.toLowerCase() === "" || item.name.toLowerCase().includes(searchName);
+    const specMatch = searchSpec.toLowerCase() === "" || item.speciality.toLowerCase().includes(searchSpec);
+  
+    console.log(`Name: ${item.name}, Spec: ${item.speciality}, Name Match: ${nameMatch}, Spec Match: ${specMatch}`);
+  
+    return nameMatch && specMatch;
+  });
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -90,10 +100,12 @@ function AllDoctors() {
           </h1>
         </div>
         <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
-          <div className="card-body">
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
+        <div className="card-body">
+          {loading ? (
+            <CircularProgress color="success" />
+          ) : (
+            <>
+              
               <table className="table table-striped">
                 <thead className="table-dark">
                   <tr>
@@ -113,7 +125,7 @@ function AllDoctors() {
                     <th>
                       <input
                         type="text"
-                        placeholder="search by a spciality"
+                        placeholder="search by a speciality"
                         autoComplete="off"
                         name="spec"
                         className="form-control rounded-0"
@@ -133,54 +145,46 @@ function AllDoctors() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data
-                    .filter((item) => {
-                      return searchName.toLowerCase() === "" &&
-                        searchSpec.toLowerCase() === ""
-                        ? item
-                        : searchName.toLowerCase() !== "" &&
-                          searchSpec.toLowerCase() !== ""
-                        ? item.speciality.toLowerCase().includes(searchSpec) &&
-                          item.name.toLowerCase().includes(searchName)
-                        : searchName.toLowerCase() === ""
-                        ? item.speciality.toLowerCase().includes(searchSpec)
-                        : item.name.toLowerCase().includes(searchName);
-                    })
-                    .map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.name}</td>
-                        <td>{item.speciality}</td>
-                        <td>{getSessionPrice(item.hourlyRate)}</td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <button
-                            style={{ backgroundColor: "rgb(65, 105, 225)" }}
-                            className="btn btn-success"
-                            onClick={() => handleView(item._id)}
-                          >
-                            view
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            style={{ backgroundColor: "rgb(65, 105, 225)" }}
-                            className="btn btn-success"
-                            onClick={() => handleViewAvailableSlots(item._id)}
-                          >
-                            view Available slots
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                  {filteredData.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.name}</td>
+                      <td>{item.speciality}</td>
+                      <td>{getSessionPrice(item.hourlyRate)}</td>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        <button
+                          style={{ backgroundColor: "rgb(65, 105, 225)" }}
+                          className="btn btn-success"
+                          onClick={() => handleView(item._id)}
+                        >
+                          view
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          style={{ backgroundColor: "rgb(65, 105, 225)" }}
+                          className="btn btn-success"
+                          onClick={() => handleViewAvailableSlots(item._id)}
+                        >
+                          view Available slots
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
-            )}
-          </div>
+              <div style={{ textAlign: "center", marginTop: "20px", color: "red"  }}>
+                {!loading && filteredData.length === 0 && (
+                  <p>No doctors found with the specified criteria.</p>
+                )}
+              </div>
+            </>
+          )}
         </div>
-      </AppBar>
-    </div>
-  );
-}
-
+      </div>
+    </AppBar>
+  </div>
+)
+                  }
 export default AllDoctors;

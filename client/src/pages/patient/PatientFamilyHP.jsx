@@ -35,6 +35,8 @@ const PatientHP_FM = () => {
   const [Fammember, setFammember] = useState("");
   const [wallet, setWallet] = useState("");
   const [mydiscount, setmydiscount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [familyMembers, setFamilyMembers] = useState([]);
   const fn1 = () => {
     setmainshow(false);
     setfamilyshow(true);
@@ -42,7 +44,8 @@ const PatientHP_FM = () => {
       .get(`http://localhost:8000/patient/NotlinkedFamily/${patientID}`)
       .then((res) => {
         setnonlinkedfamily(res.data);
-        console.log(res.data);
+        
+     
       })
       .catch((error) => {
         res.status(400).send(error);
@@ -53,7 +56,8 @@ const PatientHP_FM = () => {
       .get(`http://localhost:8000/patient/LinkedFamily/${patientID}`)
       .then((res) => {
         setlinkedfamily(res.data);
-        console.log(res.data);
+       
+   
       })
       .catch((error) => {
         res.status(400).send(error);
@@ -68,45 +72,55 @@ const PatientHP_FM = () => {
   const [gender, setGender] = useState("");
   const [relation, setRelation] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    console.log({ name, nationalID, age, gender, relation });
+  
+  
     if (!name || !nationalID || !age || !gender || !relation) {
-      alert("Please fill in all fields.");
+      setErrorMessage("Please fill in all fields.");
       return;
     }
     const numberFormat = /^\d+$/;
     const nameFormat = /^[a-zA-Z\s]+$/;
-    if (!numberFormat.test(age) || !numberFormat.test(nationalID)) {
-      alert("invalid number format");
+    if (!numberFormat.test(nationalID)) {
+      setErrorMessage("invalid nationalID format");
       return;
     }
-
+  
     if (!nameFormat.test(name)) {
-      alert("invalid text format");
+      setErrorMessage("Invalid text format");
       return;
     }
-
-    setaddFamilyMemForm(false);
+  
     try {
-      const familyMember = { name, nationalID, age, gender, relation };
-      axios
-        .post(
-          "http://localhost:8000/patient/AddFamilyMember/" + patientID,
-          familyMember
-        )
-        .then((res) => alert(res.data));
+      const familyMember= { name, nationalID, age, gender, relation };
+console.log(familyMember)
+      const response = await axios.post(
+        `http://localhost:8000/patient/AddFamilyMember/${patientID}`,
+        familyMember
+      );
+ 
+      setErrorMessage(response.data);
+      
+    
+  if (!response.data.errorMessage) {
+    // Update the nonlinkedfamily state with the new member
+    setnonlinkedfamily((prevNonLinkedFamily) => [
+      ...prevNonLinkedFamily,
+      response.data.familyMember,
+    ]);
+  }
+    console.log("After adding family member:", nonlinkedfamily);
+  
+      setName("");
+      setAge("");
+      setGender("");
+      setNationalID("");
+      setRelation("");
     } catch (error) {
       console.error(error);
     }
-    setName("");
-    setAge("");
-    setGender("");
-    setNationalID("");
-    setRelation("");
-  };
-
+  }
   const linkPatient = (event) => {
     event.preventDefault();
     if (!name || !relation) {
@@ -446,7 +460,7 @@ const PatientHP_FM = () => {
               </div>
               {nonlinkedfamily.map((member) => (
                 <div
-                  key={member.id}
+                  key={member?.id}
                   style={{
                     border: "1px solid black",
                     "text-align": "center",
@@ -456,31 +470,31 @@ const PatientHP_FM = () => {
                   }}
                 >
                   <p>
-                    <strong>Name:</strong> {member.name}
+                    <strong>Name:</strong> {member?.name}
                   </p>
                   <p>
-                    <strong>National ID:</strong> {member.nationalID}
+                    <strong>National ID:</strong> {member?.nationalID}
                   </p>
                   <p>
-                    <strong>Age:</strong> {member.age}
+                    <strong>Age:</strong> {member?.age}
                   </p>
                   <p>
-                    <strong>Gender:</strong> {member.gender}
+                    <strong>Gender:</strong> {member?.gender}
                   </p>
                   <p>
-                    <strong>Relation:</strong> {member.relation}
+                    <strong>Relation:</strong> {member?.relation}
                   </p>
                   <p>
                     <strong>health package subscription:</strong>{" "}
-                    {member.healthPackageSub}
+                    {member?.healthPackageSub}
                   </p>
                   <p>
                     <strong>subscription due date:</strong>{" "}
-                    {member.DateOfSubscribtion}
+                    {member?.DateOfSubscribtion}
                   </p>
                   <p>
                     <strong>subscription status:</strong>{" "}
-                    {member.subscriptionStatus}
+                    {member?.subscriptionStatus}
                   </p>
                 </div>
               ))}
@@ -571,6 +585,7 @@ const PatientHP_FM = () => {
                       <option value="wife">wife</option>
                       <option value="husband">husband</option>
                     </Form.Select>
+                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
                     <Button1 type="submit" onClick={handleSubmit}>
                       Submit
                     </Button1>

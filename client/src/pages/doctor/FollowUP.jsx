@@ -46,6 +46,14 @@ function FollowUP() {
     }
   };
 
+  const handlePending = () => {
+    navigate("/FollowUPPending/:doctorName");
+  };
+
+  const handleMyFollowUps = () => {
+    navigate("/FollowUP/:doctorName");
+  };
+
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -75,16 +83,21 @@ function FollowUP() {
           >
             Follow Up
           </h1>
+
         </div>
+
         <div
+
           className="card m-3 col-12"
-          style={{ width: "80%", borderRadius: "20px", left: "8%" }}
+          style={{ width: "80%", borderRadius: "20px", left: "8%", display: 'flow' }}
         >
           <div className="card-body">
             {loading ? (
               <p>Loading...</p>
             ) : (
+
               <table className="table table-striped">
+
                 <thead className="table-dark">
                   <tr>
                     <th>Patient Name</th>
@@ -107,10 +120,13 @@ function FollowUP() {
                         <td>
                           <button
                             className="btn btn-success"
+                            style={{ backgroundColor: 'darkGreen' }}
+
                             onClick={() => handleUpdateAppointment(appointment)}
                           >
                             Follow Up
                           </button>
+
                         </td>
                       </tr>
                     ))
