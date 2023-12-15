@@ -25,7 +25,7 @@ Welcome to El7a2ny, a comprehensive Virtual Clinic Management System designed to
 
 
 ## Build Status
-  **passing**
+  ![Build Status](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/workflows/NodePackage/badge.svg)
 
 ## Code Style
 
@@ -49,6 +49,9 @@ This project adheres to the following code style guidelines:
 
 5. **Whitespace**:
 - Use whitespace to make the code more readable. There should be whitespace around operators and after commas.
+
+6. **Coding Standards**
+- Follow the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) for our JavaScript/React code.
 
 Please ensure your code adheres to these guidelines before submitting a pull request.
 
@@ -122,7 +125,7 @@ El7a2ny is built using the MERN (MongoDB, Express.js, React, Node.js) stack.
     - Material-UI
 
 - Backend:
-    - Node.js
+    - Node.js  v18.18.0.
     - Express.js
     - MongoDB
     
@@ -302,6 +305,7 @@ node index.js
 cd client
 npm install
 npm install react react-dom
+npm install react-bootstrap
 npm install @mui/material @emotion/react @emotion/styled
 ```
 6. **Start the Client Application:**
@@ -359,8 +363,10 @@ http://localhost:5173/
 - **Response**: Success message or error message
 
 
-## Tests
-these are some of the test cases used in postman
+## Testing with Postman
+Before testing the API using Postman, make sure **Postman Installed**. Download and install [Postman](https://www.postman.com/downloads/).
+
+Use these test cases to test your code using Postman:
 
 #### **Create Patient (POST)**
 
@@ -571,6 +577,7 @@ We welcome contributions from everyone. Here's how you can contribute:
 
 7. **Submit a Pull Request**: From your fork, submit a pull request to the `main` branch of the original repository. Describe your changes in the pull request. Link any related issues or pull requests.
 
+- Communication Channels: If you have questions or need clarification, feel free to reach out to us on [Discord](https://discord.com/channels/@nadaemad222) or by opening an issue on GitHub. We value open communication and are here to help!
 
 ## Credits
 
@@ -586,4 +593,14 @@ This project was made possible thanks to the following resources and contributio
 
 
 ## License
-This project is licensed under the terms of the MIT license. See the LICENSE file for details.
+
+This project is licensed under the terms of the MIT license. See the [LICENSE](https://opensource.org/licenses/MIT) file for details.
+
+The credit card form in this project utilizes the Stripe library, which is subject to its own license. Please review the [Stripe Terms of Service](https://stripe.com/terms) and [Stripe Legal](https://stripe.com/legal) for details.
+
+This project uses the Bootstrap framework, which is licensed under the [MIT License](https://opensource.org/licenses/MIT). For more information, see the [Bootstrap License](https://github.com/twbs/bootstrap/blob/main/LICENSE).
+
+The project utilizes Material-UI components, a library licensed under the [MIT License](https://opensource.org/licenses/MIT). For more information, see the [Material-UI License](https://github.com/mui-org/material-ui/blob/next/LICENSE).
+
+This project is licensed under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). See the [LICENSE](LICENSE) file for details.
+

@@ -27,7 +27,12 @@
     "socket.io": "^4.7.2",
     "pdfkit": "^0.14.0",
     "stripe": "^14.4.0",
+<<<<<<< Updated upstream
     "uuid": "^9.0.1"
+=======
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
+>>>>>>> Stashed changes
   },
   "proxy": "<http://localhost:4242>"
 }
