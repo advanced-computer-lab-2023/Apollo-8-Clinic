@@ -280,7 +280,7 @@ const getPrescriptions = async (req, res) => {
     console.log(req.query)
     const patient = await PatientModel.findOne({ user: res.locals.userId });
     const patientID = patient._id;
-    const arr = await PresModel.find({ patientId: patientID }).populate('doctorId');
+    const arr = await PresModel.find({ "patientId": patientID }).populate('doctorId');
     console.log(arr);
     res.status(200).json(arr);
   } catch (error) {
@@ -675,6 +675,98 @@ const requestFollowUp = async (req, res) => {
   }
 };
 
+
+import axios from "axios"
+import fs from "fs";
+
+
+//  require prescription id in params
+const payPrescription = async (req, res) => {
+  // + redirect to the cart pharmacy 
+  try {
+    //let TotalPrice = 0;
+    // const patient = await PatientModel.findOne({ user: res.locals.userId })
+    // const patientId = patient._id;
+    const presID = req.params.id;
+    const perscription = await PresModel.findById(presID);
+    //check its presence to avoid errors
+    if (!perscription) {
+      res.status(200).json({ error: "no prescription with this id , check the database" });
+      return;
+    }
+    if (perscription.state === "filled") {
+      res.status(200).json({ error: "already ordered!!, can not order it twice" });
+      return;
+    }
+    perscription.state = "filled";
+    perscription.save();
+    res.status(200).json("now the prescription is 'filled'");
+    // //get the total price of all the medicines in the pres from the pharmacy server
+    // axios.get("http://localhost:9000/medicine/medicinesTotPrice",perscription.medicine).
+    // then((result) => {
+    //   console.log("total price from the pharmacy = "+result);
+    //   TotalPrice = result;
+    //   });
+    // await updateWallet({ body: { patientId, TotalPrice } }, res);
+    // //make an order with these medicines in the pharmacy or just add to the cart????? check with the TA 
+
+    // res.status(200).json(TotalPrice+"  done");
+
+  } catch {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+
+//npm install pdfkit 
+import pdfkit from 'pdfkit'
+const printPresPDF = async (req, res) => {
+
+  const id = req.params.id;
+  const data = await PresModel.findById(id);
+  if (!data) {
+    console.error('pres not found ', error);
+    return;
+  }
+  try {
+    // Generate a unique filename for the PDF
+    const filename = "output_prescription.pdf";
+
+    // Generate the PDF
+    const doc = new pdfkit();
+    doc.pipe(fs.createWriteStream(filename));
+    doc.text("prescription: \n \n")
+    doc.text("Date : " + data.date.toISOString() + "\n")
+    data.medicine.forEach(function (element) {
+      doc.text("medicine: " + element.name + "  dose: " + element.dose + "\n")
+    });
+    doc.end();
+
+    // Send the generated PDF as a response
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+
+    const fileStream = fs.createReadStream(filename);
+    fileStream.pipe(res);
+
+    fileStream.on('end', () => {
+      // Delete the file after it's streamed or on error
+      fs.unlinkSync(filename);
+    });
+
+    fileStream.on('error', (err) => {
+      console.error('Error streaming PDF:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+
+}
+
+
 export default {
   createPatient,
   getPatients,
@@ -700,5 +792,7 @@ export default {
   requestFollowUp,
   getNotfication,
   sawNotfication,
-  getPatientById
+  getPatientById,
+  payPrescription,
+  printPresPDF
 }
