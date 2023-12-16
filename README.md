@@ -232,14 +232,14 @@ and much more to discover... 😊🚀
 here are some code examples for developers to have an overview about our implementation
 
 #### register for a new user:
-```
+```javascript
 //create a new user and save it in our database
 
  const user = new UserModel({ username, password, type });
  await user.save();
 ```
 #### login:
-```
+```javascript
   //get user's information and compare it with the given
 
   const { name,  password } = req.body;
@@ -254,7 +254,7 @@ here are some code examples for developers to have an overview about our impleme
 ```
 
 #### book an appointment:
-```
+```javascript
   //create a new appointment
 
   const appointment = new AppointmentModel({doctorId,patientId,date,status,type});
@@ -273,7 +273,7 @@ here are some code examples for developers to have an overview about our impleme
 
 ```
 #### view health records:
-```
+```javascript
   //get patient's information for thet database 
 
   const patientId = req.params.patientId;
