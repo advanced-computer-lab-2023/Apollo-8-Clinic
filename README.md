@@ -25,8 +25,7 @@ Welcome to El7a2ny, a comprehensive Virtual Clinic Management System designed to
 
 
 ## Build Status
-  ![Build Status](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/workflows/NodePackage/badge.svg?branch=nada3)
-
+[![Node.js Package](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/actions/workflows/NodePackage.yml/badge.svg)](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/actions/workflows/NodePackage.yml)
 ## Code Style
 
 This project adheres to the following code style guidelines:
