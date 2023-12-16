@@ -475,7 +475,135 @@ http://localhost:5173/
 
 </details>
 <details> <summary>Admin APIs</summary>
- //here put the admin apis
+ 
+ #### POST admin/forget
+- **Purpose:** Forget password and send verification code via email.
+- **Authentication:** None
+- **HTTP Method:** POST
+- **Parameters:**
+    - `name` (string): The username of the user.
+- **Response:**
+    - Status 201: JSON object with a success message and email information.
+    - Status 400: JSON object with an error message if the provided username is incorrect.
+    - Status 500: JSON object with an error message if there's a server error.
+
+#### POST admin/compare
+- **Purpose:** Compare the provided username and PIN to authenticate the user and generate a JWT token.
+- **Authentication:** None
+- **HTTP Method:** POST
+- **Parameters:**
+    - `name` (string): The username of the user.
+    - `PIN` (string): The Personal Identification Number (PIN) of the user.
+- **Response:**
+    - Status 201: JSON object with a JWT token and the user type.
+    - Status 400: JSON object with an error message if the provided username or PIN is incorrect.
+    - Status 500: JSON object with an error message if there's a server error.
+
+#### POST admin/chanePass
+- **Purpose:** Change the password for the authenticated user.
+- **Authentication:** User authentication is required. The user must provide a valid JWT token in the Authorization header.
+- **HTTP Method:** POST
+- **Parameters:**
+    - `password` (string): The new password.
+- **Response:**
+    - Status 200: JSON object with a success message.
+    - Status 401: JSON object with an error message if the user is not logged in or the token is invalid.
+
+#### GET admin/getType
+- **Purpose:** Get the type of the authenticated user.
+- **Authentication:** User authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: JSON object with the user type.
+    - Status 401: JSON object with an error message if the user is not logged in or the token is invalid.
+
+#### POST admin/createUser
+- **Purpose:** Create a new user.
+- **Authentication:** None
+- **HTTP Method:** POST
+- **Parameters:**
+    - `username` (string): Username for the new user.
+    - `password` (string): Password for the new user.
+    - `type` (string): Type of the new user (e.g., "Doctor", "Patient").
+- **Response:**
+    - Status 200: The newly created user object.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### GET admin/getUsers
+- **Purpose:** Retrieve a list of all users.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of user objects.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### POST admin/addAdministrator
+- **Purpose:** Add a new administrator.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** POST
+- **Parameters:**
+    - `username` (string): Username for the new administrator.
+    - `password` (string): Password for the new administrator.
+- **Response:**
+    - Status 200: The newly created administrator object.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### DELETE admin/removeUser
+- **Purpose:** Remove a user.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** DELETE
+- **Parameters:**
+    - `username` (string): Username of the user to be removed.
+- **Response:**
+    - Status 200: JSON object with a success message.
+    - Status 404: JSON object with an error message if the user is not found.
+
+#### GET admin/healthPackage
+- **Purpose:** Retrieve all health packages.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of health packages.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### POST admin/healthPackage
+- **Purpose:** Create a new health package.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** POST
+- **Parameters:**
+    - `name` (string): Name of the health package.
+    - `price` (number): Price of the health package.
+    - `sessDiscount` (number): Session discount for the health package.
+    - `medDiscount` (number): Medicine discount for the health package.
+    - `subDiscount` (number): Subscription discount for the health package.
+- **Response:**
+    - Status 200: The newly created health package object.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### PUT admin/healthPackage/:id
+- **Purpose:** Update an existing health package.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** PUT
+- **Parameters:**
+    - `id` (string): ID of the health package to be updated.
+    - Request body with updated information.
+- **Response:**
+    - Status 200: The updated health package object.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### DELETE admin/healthPackage/:id
+- **Purpose:** Delete a health package.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** DELETE
+- **Parameters:**
+    - `id` (string): ID of the health package to be deleted.
+- **Response:**
+    - Status 204: No content, indicating successful deletion.
+    - Status 400: JSON object with an error message if there's an issue.
+
 </details>
 
 <details> <summary>Doctor APIs</summary>
