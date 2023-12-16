@@ -21,7 +21,7 @@ router.put("/acceptContract", Middle.requireAuthDoctor, controllers.acceptDoctor
 router.get("/contract", Middle.requireAuthDoctor, controllers.getContract);
 
 router.get("/getFollowUpRequest", Middle.requireAuthDoctor, controllers.getFollowUpRequest);
-router.get("/", Middle.requireAuthAdmin, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
+router.get("/", Middle.requireAuth, controllers.getDoctors); //take care! to be used only for admins where status=Pending,Rejected,Accepted
 router.get("/getAcceptedDoctors", Middle.requireAuth, controllers.getAcceptedDoctors);//for doctors and patients in the sys
 
 router.get("/:id", Middle.requireAuth, controllers.getDoctorById);

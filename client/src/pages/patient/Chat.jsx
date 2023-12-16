@@ -33,7 +33,7 @@ export default function Chat() {
    useEffect(() => {
       const connectSocket = async () => {
         if (currentUser) {
-          socket.current = io('http://localhost:9000');
+          socket.current = io('http://localhost:8000');
           socket.current.emit("add-user", currentUser._id);
         }
       };
@@ -44,8 +44,10 @@ export default function Chat() {
    useEffect(() => {
       const fetchUsersList = async () => {
          try {
-            const response = await axios.get(`http://localhost:8000/doctor/`);
-            setContacts(response.data);
+            const pharmacistResponse = await axios.get(`http://localhost:9000/pharmacist/`);
+            const doctorResponse = await axios.get(`http://localhost:8000/doctor/`);
+            const combinedContacts = [...pharmacistResponse.data, ...doctorResponse.data];
+            setContacts(combinedContacts);
          } catch (error) {
             console.error(error);
          }

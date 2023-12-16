@@ -44,8 +44,10 @@ export default function Chat() {
    useEffect(() => {
       const fetchUsersList = async () => {
          try {
-            const response = await axios.get(`http://localhost:8000/patient/`);
-            setContacts(response.data);
+            const patientResponse = await axios.get(`http://localhost:8000/patient/`);
+            const pharmacistResponse = await axios.get(`http://localhost:9000/pharmacist/`);
+            const combinedContacts = [...patientResponse.data, ...pharmacistResponse.data];
+            setContacts(combinedContacts);
          } catch (error) {
             console.error(error);
          }
