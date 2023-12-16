@@ -1,4 +1,6 @@
 {
+  "name": "your-package-name",
+  "version": "1.0.0",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -13,3 +15,4 @@
     "styled-components": "^6.1.0"
   }
 }
+
