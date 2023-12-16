@@ -26,7 +26,7 @@ Welcome to El7a2ny, your one-stop Virtual Clinic Management System. Built with t
 - [Code Examples](#Code-Examples)                 
 - [configuration](#configuration)                 
 - [Installation](#installation)                   
-- [API reference](#API-reference)                      -->
+- [API reference](#API-reference)                     
 - [Tests](#Tests)                                 
 - [How to Use?](#How-to-Use?)
 - [Contributing](#contribute)
@@ -339,48 +339,148 @@ http://localhost:5173/
 
 ## API reference
 
-#### GET /patient/getPrescriptions
+<details> <summary>Patient APIs</summary>
+ 
+#### GET /patient/
+* *Purpose:* Retrieve all patients 
+* *Authentication:* Required 
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* List of patients or error message
 
-- **Purpose**: Retrieve all prescriptions for the authenticated patient.
-- **Authentication**: Required (Patient)
-- **Parameters**: None
-- **Response**: Array of prescription objects
+#### Post /patient/
+* *Purpose:* sing in new patient
+* *Authentication:*not required
+* *HTTP Method:* Post
+* *Parameters:* none
+* *Response:* new patient object or error message
 
-#### GET /patient/docInfo/:id
+#### GET /patient/getNotfication
+* *Purpose:* get notification of certain patient
+* *Authentication:* Required (Patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* list of patient notfication
 
-- **Purpose**: Retrieve a specific doctor's information using his id.
-- **Authentication**: Required (Patient)
-- **Parameters**: doctor's id
-- **Response**: Doctor object or error message
+#### GET /patient/sawNotfication
+* *Purpose:* make notification status to read
+* *Authentication:* Required (Patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* error or new notifications with updated status
 
-#### GET /patient/docInfo/:id
+#### GET /patient/byId
+* *Purpose:* get data of certain patient
+* *Authentication:* Required (Patient or doctor)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:*get patient details or error
 
-- **Purpose**: Retrieve information about a specific doctor.
-- **Authentication**: Required (Patient)
-- **Parameters**: `id` (Doctor ID)
-- **Response**: Doctor object or error message
+#### GET /patient/getPatientHealthPackage/:id
+* *Purpose:* get health package of logged in patient
+* *Authentication:* Required (Patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* healthpackage of certain patient or error
 
-#### GET /patient/patientdetails/:patientID
+#### GET /patient/getPerscriptions
+* *Purpose:* Retrieve perscriptions of logged user
+* *Authentication:* Required (Patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:*list of prescriptions or error message
+#### POST /patient/filterPerscriptions
+* *Purpose:* Retrieve prescriptions filtered by state or date or doctor name
+* *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* none (path parameter) date,state,name (body)
+* *Response:* list of prescription or error
 
-- **Purpose**: Retrieve details about a specific patient.
-- **Authentication**: Required (Patient)
-- **Parameters**: `patientID` (Patient ID)
-- **Response**: Patient object or error message
+#### GET /patient/getPerscription/:id
+* *Purpose:* Retrieve prescription details 
+* *Authentication:* Required (Patient)
+* *HTTP Method:* GET
+* *Parameters:* prescription id (path parameter)
+* *Response:* one prescription details
+ 
+#### GET /patient/prescriptionPDF/:id
+* *Purpose:* make pdf prescription 
+* *Authentication:* Required (Patient)
+* *HTTP Method:* GET
+* *Parameters prescription id (path parameter)
+* *Response:* generated pdf or error message
 
-#### POST /doctor/addPrescription
+#### POST /patient/payForPrescription/:id
+* *Purpose:* make prescription state filled
+* *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* prescription id (path parameter)
+* *Response:* error or ensuring text
 
-- **Purpose**: Add a new prescription for a specific patient.
-- **Authentication**: Required (Doctor)
-- **Parameters**: `patientId` (Patient ID), `medicine` (Array of medicine objects)
-- **Response**: New prescription object or error message
+#### GET /patient/patientLogin
+* *Purpose:* login patient
+* *Authentication:* none
+* *HTTP Method:* post
+* *Parameters:* none  (path parameter) name password(request body )
+* *Response:* error or the token
 
-#### POST /patient/linkPatient/:patientID
+#### GET /patient/healthPackage
+* *Purpose:*get all health packages.
+* *Authentication:* Required (Patient)
+* *HTTP Method:* GET
+* *Parameters:* none (path parameter)
+* *Response:* List of health packages or error message
 
-- **Purpose**: Link a patient to another patient (family member).
-- **Authentication**: Required (Patient)
-- **Parameters**: `patientID` (Patient ID), `input` (Email or phone number of the patient to be linked), `relation` (Relation to the patient)
-- **Response**: Success message or error message
+#### GET /patient/healthPackage /:id
+* *Purpose:* Retrieve certain health package details 
+* *HTTP Method:* GET
+* *Authentication:* Required (Patient)
+* *Parameters:* healthPackage id (path parameter)
+* *Response:* health package details or error message
 
+#### POST /patient/subscribeForMe/
+* *Purpose:* subscribe for certain health package
+ * *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* none (path parameter) health package name (reuest body)
+* *Response:* insurance message  or error message
+
+#### POST /patient/subscribeForFam/:id
+* *Purpose:* subscribe for family member
+* *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* family member ID (path parameter) health package name (reuest body)
+* *Response:* insurance message  or error message
+
+#### POST /patient/cancelMYsubscription/
+* *Purpose:* cancel my health package subscription
+* *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* none (path parameter) none(reuest body)
+* *Response:* insurance message  or error message
+
+#### POST /patient/cancelFMsubscription/:id
+* *Purpose:* cancel subscribe for family member
+* *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* family member ID (path parameter) none (reuest body)
+* *Response:* insurance message  or error message
+
+#### POST /patient/unsubscribeForMe/
+* *Purpose:*unsubscribe of my health package subscription
+* *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* none (path parameter) none(reuest body)
+* *Response:* insurance message  or error message
+
+#### POST /patient/unsubscribeForMember/:id
+* *Purpose:* unsubscribe for family member healyh package
+* *Authentication:* Required (Patient)
+* *HTTP Method:* POST
+* *Parameters:* family member ID (path parameter) none (reuest body)
+* *Response:* insurance message  or error message
+
+</details>
 
 ## Testing with Postman
 Before testing the API using Postman, make sure **Postman Installed**. Download and install [Postman](https://www.postman.com/downloads/).
