@@ -1,14 +1,24 @@
 # El7a2ny - Virtual Clinic Management System
-Welcome to El7a2ny, a comprehensive Virtual Clinic Management System designed to streamline healthcare interactions for clinics, doctors, and patients.
+Welcome to El7a2ny, your one-stop Virtual Clinic Management System. Built with the MERN stack, El7a2ny is designed to revolutionize healthcare interactions for clinics, doctors, and patients.
 
 ## Motivation
 ✨El7a2ny is here to make healthcare easy for everyone. ✨
  our project aims to simplify healthcare processes, providing an efficient and accessible platform for users to find doctors, schedule appointments, manage medical records ,and get medical prescriptions online.
  With El7a2ny, we're bringing a new level of ease and convenience to healthcare interactions. 😉
 
+
+## Badges 
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+
 ## Table of Contents
 
-- [Build Status](#Build-Status)                   
+- [Build Status](#Build-Status)                     
 - [code style](#code-style)                         
 - [screenshots](#screenshots)                        
 - [Tech/Framework Stack](#Tech/Framework-used)    
@@ -24,10 +34,19 @@ Welcome to El7a2ny, a comprehensive Virtual Clinic Management System designed to
 - [License](#license)
 
 
-## Build Status
-![Build Status](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/workflows/CI/badge.svg)
+## Build Status 🔨
 
-## Code Style
+[![Node.js Package](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/actions/workflows/NodePackage.yml/badge.svg)](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/actions/workflows/NodePackage.yml)
+
+- The project is currently in development.
+- The admin panel requires modifications for managing health packages while the patient is subscribed.
+- The frontend needs to display more feedback messages such as "Your request has been submitted successfully".
+- The testing technique needs improvement. Plan to create Jest test files and enable them as workflows for more robust and efficient testing.
+- Future improvements:
+  - Implement a caching layer to improve application performance.
+  - Integrate a message broker to handle asynchronous tasks such as sending emails and notifications.
+
+## Code Style 📜
 
 This project adheres to the following code style guidelines:
 
@@ -50,9 +69,12 @@ This project adheres to the following code style guidelines:
 5. **Whitespace**:
 - Use whitespace to make the code more readable. There should be whitespace around operators and after commas.
 
+6. **Coding Standards**
+- Follow the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) for our JavaScript/React code.
+
 Please ensure your code adheres to these guidelines before submitting a pull request.
 
-## screenshots
+## screenshots 🖵
 
 ### Main Registeration page
 
@@ -109,7 +131,7 @@ Description: Explore a comprehensive table featuring doctors, with options to fi
 Description: Display the patient's appointment history, with options to filter by appointment date or status. 
 
 
-## Tech/Framework used
+## Tech/Framework used 🧰
 
 El7a2ny is built using the MERN (MongoDB, Express.js, React, Node.js) stack.
 
@@ -122,11 +144,11 @@ El7a2ny is built using the MERN (MongoDB, Express.js, React, Node.js) stack.
     - Material-UI
 
 - Backend:
-    - Node.js
+    - Node.js  v18.18.0.
     - Express.js
     - MongoDB
     
-## Features
+## Features ✨
 
 ### Doctors
 
@@ -206,7 +228,7 @@ El7a2ny is built using the MERN (MongoDB, Express.js, React, Node.js) stack.
 
 and much more to discover... 😊🚀
 
-## Code Examples
+## Code Examples 🐱‍💻
 here are some code examples for developers to have an overview about our implementation
 
 #### register for a new user:
@@ -276,7 +298,7 @@ DB_CONNECTION=mongodb+srv://<username>:<password>@your_cluster_url/your_database
 
 To ensure smooth operation of the system, it's necessary to manually add at least one admin user to your database. This can be done using MongoDB Compass.
 
-## Installation
+## Installation 📥
 
 Follow these steps to set up the project on your local machine:
 
@@ -302,6 +324,7 @@ node index.js
 cd client
 npm install
 npm install react react-dom
+npm install react-bootstrap
 npm install @mui/material @emotion/react @emotion/styled
 ```
 6. **Start the Client Application:**
@@ -359,8 +382,10 @@ http://localhost:5173/
 - **Response**: Success message or error message
 
 
-## Tests
-these are some of the test cases used in postman
+## Testing with Postman
+Before testing the API using Postman, make sure **Postman Installed**. Download and install [Postman](https://www.postman.com/downloads/).
+
+Use these test cases to test your code using Postman:
 
 #### **Create Patient (POST)**
 
@@ -571,6 +596,7 @@ We welcome contributions from everyone. Here's how you can contribute:
 
 7. **Submit a Pull Request**: From your fork, submit a pull request to the `main` branch of the original repository. Describe your changes in the pull request. Link any related issues or pull requests.
 
+- Communication Channels: If you have questions or need clarification, feel free to reach out to us on [Discord](https://discord.com/channels/@nadaemad222) or by opening an issue on GitHub. We value open communication and are here to help!
 
 ## Credits
 
@@ -586,4 +612,13 @@ This project was made possible thanks to the following resources and contributio
 
 
 ## License
-This project is licensed under the terms of the MIT license. See the LICENSE file for details.
+
+This project is licensed under the terms of the MIT license. See the [LICENSE](https://opensource.org/licenses/MIT) file for details.
+
+The credit card form in this project utilizes the Stripe library, which is subject to its own license. Please review the [Stripe Terms of Service](https://stripe.com/terms) and [Stripe Legal](https://stripe.com/legal) for details.
+
+This project uses the Bootstrap framework, which is licensed under the [MIT License](https://opensource.org/licenses/MIT). For more information, see the [Bootstrap License](https://github.com/twbs/bootstrap/blob/main/LICENSE).
+
+The project utilizes Material-UI components, a library licensed under the [MIT License](https://opensource.org/licenses/MIT). For more information, see the [Material-UI License](https://github.com/mui-org/material-ui/blob/next/LICENSE).
+
+This project is licensed under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). See the [LICENSE](LICENSE) file for details.
