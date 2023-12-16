@@ -86,8 +86,9 @@ function ResponsiveAppBar() {
     navigate("/viewMyPatients");
   };
   const handleUpcoming = () => {
-    navigate("/viewUpcomingApp");
+    navigate("/PatientUpcomingAppointments/:id");
   };
+
   const handleTimeSlots = () => {
     navigate("/AddTimeSlots");
   };

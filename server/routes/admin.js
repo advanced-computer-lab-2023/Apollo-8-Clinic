@@ -6,6 +6,7 @@ import changePass from "../Authentication/changePass.js";
 import Middle from "../Authentication/Middleware.js"
 
 const router = express.Router();
+
 //youhanna reset password will not get middleware
 router.post("/forget", forget.forget)
 router.post("/compare", forget.compare)
@@ -22,8 +23,9 @@ router.post("/adminLogin", Auth.loginAdmin)
 
 //health packages (view,add,update,delete)
 import HealthPackageController from '../controllers/healthPackageController.js';
-router.get('/healthPackage', Middle.requireAuthAdmin, HealthPackageController.getAllHealthPackages);
 router.post('/healthPackage', Middle.requireAuthAdmin, HealthPackageController.createHealthPackage);
+router.get('/healthPackage', Middle.requireAuthAdmin, HealthPackageController.getAllHealthPackages);
+
 router.put('/healthPackage/:id', Middle.requireAuthAdmin, HealthPackageController.updateHealthPackage);
 router.delete('/healthPackage/:id', Middle.requireAuthAdmin, HealthPackageController.deleteHealthPackage);
 

@@ -20,8 +20,9 @@ function PatientSignup() {
   const [emergencyRel, setEmergencyRel] = useState();
   const [adresses, setAdresses] = useState();
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const [usernameError, setUsernameError] = useState('');
+  const navigate = useNavigate();
+  const [showUsernameError, setShowUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -50,6 +51,8 @@ function PatientSignup() {
       .then((result) => {
         setRegistrationSuccess(true);
         setErrorMessage(""); 
+        setUsernameError("");
+        setShowUsernameError(false);
         navigate("/");
       })
       .catch((err) => {
@@ -58,14 +61,19 @@ function PatientSignup() {
         if (err.response && err.response.data && err.response.data.message) {
           setErrorMessage(err.response.data.message);
           setError(err.response.data.message); // Set form-level error
+               console.log('err.response.data.message',err.response.data.message)
+            if (err.response.data.message.toLowerCase().trim()==="Username already exist") {
+              setUsernameError(err.response.data.message);
+              setShowUsernameError(true);
+            }
+              else{
+                setShowUsernameError(false);
+              }
+            }
+          })
+        
+    };
   
-          // Update error messages based on the response
-          if (err.response.data.message.includes('Username')) {
-            setUsernameError(err.response.data.message);
-          }
-        }
-      });
-  };
   const inputStyle = (fieldName) => ({
     border: `1px solid ${error && !eval(fieldName) ? 'red' : '#ced4da'}`,
   });
@@ -122,9 +130,9 @@ function PatientSignup() {
                 }}
               />
              {/* Display general form-level error */}
-          {error && !username && (
-              <div style={{ color: "red" }}>Please fill in the username.</div>
-          )}
+             {error && !username && (
+              <div style={{ color: "red" }}>{usernameError ||"Please fill in the username."}</div>
+            )}
 </div>
             <div className="mb-3">
               <label htmlFor="email">
@@ -344,7 +352,13 @@ function PatientSignup() {
               <div>
          
           </div>
+          
           </form>
+          {showUsernameError && (
+  <div style={{ color: "red", marginBottom: "10px" }}>
+    {usernameError}
+  </div>
+)}
           <button className="btn btn-primary rounded-2"
               style={{
                 position: 'absolute',
