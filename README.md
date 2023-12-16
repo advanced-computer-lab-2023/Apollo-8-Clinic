@@ -87,7 +87,8 @@ First landing page for users; dual signup for doctors and patients, with sign-in
 
 ### Admin HomePage
 
-The admin homepage offers a centralized dashboard. Access key features conveniently from your personalized dashboard, including adding administrators, removing users, handling doctor requests, managing health packages, and updating your password for secure account control.
+The admin homepage provides a centralized dashboard for convenient access to key features. Easily manage administrators, handle doctor requests, and oversee health packages. Ensure secure account control by updating your password directly from the dashboard.
+
 
 ![admin homepage](./ReadmeImages/adminHomepage.png)
 
@@ -607,7 +608,126 @@ http://localhost:5173/
 </details>
 
 <details> <summary>Doctor APIs</summary>
-//here put the doctor APIs
+ 
+#### GET /getNotfication
+- **Purpose:** Retrieve notifications for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of notification objects.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### GET /sawNotfication
+- **Purpose:** Mark notifications as read for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of notification objects after marking as read.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### PUT /acceptContract
+- **Purpose:** Accept the contract for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** PUT
+- **Parameters:** None
+- **Response:**
+    - Status 200: The updated doctor information after accepting the contract.
+    - Status 404: If the doctor is not found.
+    - Status 500: Internal Server Error.
+
+#### GET /contract
+- **Purpose:** Retrieve contract information for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: The doctor's contract information.
+    - Status 404: If the doctor is not found.
+    - Status 400: Error message if there's an issue.
+
+#### GET /getFollowUpRequest
+- **Purpose:** Retrieve follow-up appointment requests for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of follow-up appointment objects.
+    - Status 500: Internal server error.
+
+#### GET /
+- **Purpose:** Retrieve a list of all doctors.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of doctor objects.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### GET /getAcceptedDoctors
+- **Purpose:** Retrieve a list of all accepted doctors.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of accepted doctor objects.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### GET /:id
+- **Purpose:** Retrieve information about a specific doctor by their ID.
+- **Authentication:** User authentication is required.
+- **HTTP Method:** GET
+- **Parameters:**
+    - `id` (Path Parameter): The ID of the doctor.
+- **Response:**
+    - Status 200: The doctor's information.
+    - Status 404: If the doctor is not found.
+    - Status 400: Error message if there's an issue.
+
+#### GET /get/byId
+- **Purpose:** Retrieve information about the authenticated doctor for chat purposes.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: The doctor's information.
+    - Status 404: If the doctor is not found.
+    - Status 400: Error message if there's an issue.
+
+#### PUT /accept/:id
+- **Purpose:** Accept a doctor's registration request.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** PUT
+- **Parameters:**
+    - `id` (Path parameter): Doctor ID.
+- **Response:**
+    - Status 200: The updated doctor information after acceptance.
+    - Status 404: If the doctor is not found.
+    - Status 500: Internal Server Error.
+
+#### PUT /reject/:id
+- **Purpose:** Reject a doctor's registration request.
+- **Authentication:** Admin authentication is required.
+- **HTTP Method:** PUT
+- **Parameters:**
+    - `id` (Path parameter): Doctor ID.
+- **Response:**
+    - Status 200: The updated doctor information after rejection.
+    - Status 404: If the doctor is not found.
+    - Status 500: Internal Server Error.
+
+#### GET /viewPatients/:id
+- **Purpose:** Retrieve patients associated with the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:**
+    - `id` (Path Parameter): ID of the doctor.
+- **Response:**
+    - Status 200: Array of patient objects associated with the doctor.
+    - Status 404: If the doctor is not found.
+    - Status 400: Error message if there's an issue.
+
 </details>
 
 ## Testing with Postman
@@ -769,8 +889,10 @@ Use these test cases to test your code using Postman:
   // ... additional appointments if any
 ]
 ```
-**Note:** Ensure that the user is authenticated before running any of these tests by including the JWT token in the request header.
-
+**Note:** 
+- Ensure that the user is authenticated before running any of these tests by including the JWT token in the request header.
+- Please refrain from including comments in the actual JSON code. The comments provided in red are for explanatory purposes only and should be considered as additional information. Including comments in the JSON files may lead to parsing errors or unexpected behavior. They are meant solely for clarification in this documentation.
+  
 ## How to Use?
 
 ### As a Patient
