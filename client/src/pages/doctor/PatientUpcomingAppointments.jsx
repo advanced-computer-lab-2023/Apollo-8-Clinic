@@ -8,27 +8,27 @@ import BottomBar from "../../components/BottomBar";
 import config from "../../config/config";
 import { useNavigate } from "react-router-dom";
 
-function UpcomingAppointment() {
+function UpcomingAppointmentDetails() {
   const [appointments, setAppointments] = useState([]);
   const { patientID } = useParams();
   const navigate = useNavigate();
-
+  const [upcoming, setupcoming] = useState(true);
   useEffect(() => {
-    const apiUrl = `http://localhost:8000/appointment/getupcomingAppointments`;
+    const apiUrl = `http://localhost:8000/appointment/getupcomingAppointments/${patientID}`;
     axios
       .get(apiUrl)
       .then((response) => {
         setAppointments(response.data);
       })
       .catch((error) => {
+        console.log("Error fetching appointments:", error);
+        setupcoming(false);
         console.error("Error fetching appointments:", error);
       });
   }, [patientID]);
-
-  //const handleBack = () => {
-  //  navigate("/viewUpcomingApp");
-  //};
-
+  const handleBack = () => {
+    navigate("/viewMyPatients");
+  };
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -68,8 +68,17 @@ function UpcomingAppointment() {
                   </tr>
                 ))}
               </tbody>
+              {!upcoming && (
+                  
+                  <div colSpan={2} style={{ textAlign: "center" }}>
+                    <p style={{ color: "red" }}>No upcoming appointments yet.</p>
+                  </div>
+               
+              )}
             </table>
+          
           </div>
+              
           <button className="btn btn-primary rounded-2"
               style={{
                 position: 'absolute',
@@ -77,9 +86,10 @@ function UpcomingAppointment() {
                 right: '5%',
                 width: '5%',
                 height: '40px',
+                
               }}
-              
-             // onClick={handleBack}
+              onClick={handleBack}
+             
             >
               Back
             </button>
@@ -90,4 +100,4 @@ function UpcomingAppointment() {
     </div>
   );
 }
-export default UpcomingAppointment;
+export default UpcomingAppointmentDetails;

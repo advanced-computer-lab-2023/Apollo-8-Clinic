@@ -77,7 +77,7 @@ const createPatient = async (req, res) => {
         res.status(400).json({ error: error.message });
       }
     } else {
-      res.status(400).json("Username already exist");
+      return res.status(400).json({message:"Username already exist"});
     }
   } catch (error) {
     console.log(error);

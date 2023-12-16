@@ -6,14 +6,17 @@ import "../../App.css";
 import { useParams } from "react-router-dom";
 import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
+import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 function AddHealthRecords() {
   const [file, setFile] = useState();
   const [date, setDate] = useState();
   const [description, setDescription] = useState();
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-    const [isUploadSuccess, setIsUploadSuccess] = useState(false); 
+   
   const isFormValid = date && description && file;
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,13 +37,19 @@ function AddHealthRecords() {
           },
         }
       );
-
+      setShowAlert(true);
+      setAlertMessage("Health records Added Successfully");
+      setTimeout(() => {
+        setShowAlert(false);
+        setAlertMessage("");
+      }, 9000);
       console.log(response.data);
     } catch (error) {
       console.error("Error adding health records:", error);
+      setShowAlert(true);
     }
   };
-  const handleBack= () => {
+  const handleBack = () => {
     navigate("/viewMyPatients");
   };
   return (
@@ -73,27 +82,30 @@ function AddHealthRecords() {
             Add Health Records
           </h1>
         </div>
+        {showAlert && (
+         <Alert
+         style={{
+           marginTop: "2%",
+           fontSize: "18px",
+           backgroundColor:  "RGB(50, 205, 50)" ,
+           width: "70%",
+           marginLeft: "15%",
+           textAlign: "center",
+         }}
+         variant="filled"
+         onClose={() => {
+           setShowAlert(false);
+           setAlertMessage("");
+         }}
+            dismissible
+          >
+         {alertMessage}
+          </Alert>
+        )}
         <div
           className="card m-3 col-12"
           style={{ width: "80%", borderRadius: "20px", left: "8%" }}
         >
-           <div
-               style={{
-                height: "50px",
-                backgroundColor: "green", // Set the background color to green
-                color: "white", // Set the text color to white
-                display: "flex",
-                
-              
-              }}
-              className="alert alert-primary d-flex align-items-center"
-              role="alert"
-            >
-              <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
-                <use xlink: href="#info-fill" />
-              </svg>
-              <div>health record uploaded successfully!</div>
-            </div>
           <form onSubmit={handleSubmit}>
             <div>
               <div className="mb-3">
@@ -146,8 +158,8 @@ function AddHealthRecords() {
                 width: '5%',
                 height: '40px',
               }}
-              
               onClick={handleBack}
+             
             >
               Back
             </button>

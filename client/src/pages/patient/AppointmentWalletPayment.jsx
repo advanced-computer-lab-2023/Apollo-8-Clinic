@@ -39,25 +39,24 @@ function AppointmentWalletPayment() {
       // Handle error or set state accordingly
     }
   };
+  const patientName = "test";
 
   useEffect(() => {
+    const apiUrl = `http://localhost:8000/patient/getWallet/${patientName}`;
+
     axios
-      .get("http://localhost:8000/patient/")
+      .get(apiUrl)
       .then((response) => {
-        const patientIdFromHeader = "6523ba9cd72b2eb0e39cb137"; // CHANGED WITH TOKEN
-        const patientWithId = response.data.find(
-          (patient) => patient._id === patientIdFromHeader
-        ); //CHANGED WITH TOKEN
-        setWallet(patientWithId.wallet);
-        setSubscription(patientWithId.healthPackageSub);
-        console.log(patientWithId);
-        console.log(patientWithId.healthPackageSub);
-        getPackageDiscount();
+        console.log("API Response:", response.data);
+        setWallet(response.data); // Assuming response.data.wallet is a number
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError(error.message || "An error occurred");
+        setLoading(false);
       });
-  }, [getPackageDiscount]);
+  }, [patientName]);
 
   const handlePayment = async () => {
     const patientIdFromHeader = "6523ba9cd72b2eb0e39cb137"; // Replace with your actual logic to get patient ID

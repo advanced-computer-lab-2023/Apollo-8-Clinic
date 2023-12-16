@@ -217,7 +217,7 @@ const AvailableAppointments = () => {
                     <TableCell>
                       <List>
                         {slotsByDate[date].map((slot) => (
-                          <ListItem key={slot._id}>
+                          <ListItem key={slot?._id}>
                             <ListItemText primary={formatTime(slot)} />
                             <Button
                               variant="contained"

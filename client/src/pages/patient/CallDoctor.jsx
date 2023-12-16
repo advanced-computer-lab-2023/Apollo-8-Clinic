@@ -196,6 +196,7 @@ function Call() {
   return (
     <>
       <h1 style={{ textAlign: "center", color: "royalblue" }}>Calling Room</h1>
+      <div>
       <div className="container" style={containerStyles}>
         <div className="video-container">
           <div className="video">
@@ -219,6 +220,7 @@ function Call() {
               />
             ) : null}
           </div>
+        </div>
         </div>
         <div className="myId">
           {/* <TextField

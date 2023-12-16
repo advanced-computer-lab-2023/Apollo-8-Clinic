@@ -32,7 +32,7 @@ import ChangePassAdm from "./pages/admin/changePassAdm";
 import PatientAppointments from "./pages/doctor/PatientAppointments";
 import AppPatient from "./pages/patient/patientFamApp";
 import MyPatientsList from "./pages/doctor/MyPatientsList";
-import UpcomingAppointments from "./pages/doctor/UpcomingAppointments";
+
 import AddAdmin from "./pages/admin/AddAdmin";
 import RemoveUser from "./pages/admin/RemoveUser";
 import PendingDoctors from "./pages/admin/PendingDoctors";
@@ -44,7 +44,7 @@ import PatientHealthRecords from "./pages/patient/PatientHealthRecords";
 import MainDoctor from "./pages/doctor/DoctorAppointments";
 import App1 from "./pages/admin/adminHealthP";
 import PrescriptionsDetails from "./pages/patient/PrescriptionDetails";
-
+import AddhealthPackage from "./pages/admin/AddHealthP";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/patient/DoctorsWithDiscount";
 import AppointmentWalletPayment from "./pages/patient/AppointmentWalletPayment";
@@ -292,7 +292,7 @@ function App() {
           <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
           <Route path="/HomePageDoc" element={<HomePageDoc />} />
           <Route path="/viewMyPatients" element={<MyPatientsList />} />
-          <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
+         
           <Route path="/contract" element={<DoctorContract />} />
           <Route path="/ChatDoctor" element={<ChatDoctor />} />{" "}
           <Route
@@ -320,9 +320,9 @@ function App() {
         <Route path="/pendingDoctors" element={<PendingDoctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/adminHealthPackage" element={<App1 />} />
+        <Route path="/adminaddHealthPackage" element={<AddhealthPackage />} />
         <Route path="/ForgetPassword" element={<Forget />} />
         <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
-
         <Route path="/changePassAdm" element={<ChangePassAdm />} />
       </Routes>
     );

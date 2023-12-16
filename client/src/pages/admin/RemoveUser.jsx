@@ -97,7 +97,7 @@ function RemoveUser() {
                         <td>{user.type}</td>
                         <td>
                           <button
-                            className="btn btn-success"
+                            className="btn btn-primary"
                             onClick={() => handleDeleteUser(user.username)}
                           >
                             Delete

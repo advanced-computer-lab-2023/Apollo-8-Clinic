@@ -18,7 +18,7 @@ router.get("/getNotfication", Middle.requireAuthPatient, controllers.getNotficat
 
 router.get("/sawNotfication", Middle.requireAuthPatient, controllers.sawNotfication);
 router.get("/byId", Middle.requireAuth, controllers.getPatientById);
-router.get("/getPatientHealthPackage/:id", Middle.requireAuthPatient, controllers.getPatientHealthPackage);
+router.get("/getPatientHealthPackage", Middle.requireAuthPatient, controllers.getPatientHealthPackage);
 
 router.get("/getPerscriptions", Middle.requireAuthPatient, controllers.getPrescriptions)
 router.post("/filterPerscriptions", Middle.requireAuthPatient, controllers.filterPres)

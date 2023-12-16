@@ -25,19 +25,22 @@ function MyPatientsList() {
         setLoading(false);
       });
   }, []);
-  function handleFilter() {
-    navigate(`/viewUpcomingApp`);
+  function handleFilter(id) {
+    // Navigate to another route and pass the ID as a prop
+    navigate(`/PatientUpcomingAppointments/:id`);
   }
 
   function handleView(id) {
-   
+    // Navigate to another route and pass the ID as a prop
     navigate(`/viewHealth/${id}`);
   }
 
   function handleAddHealthRecord(id) {
+    // Navigate to another route and pass the ID as a prop
     navigate(`/AddHealthRecords/${id}`);
   }
   function handlePatientAppointmentDetails() {
+    // Navigate to another route and pass the ID as a prop
     navigate('/PatientAppointments');
   }
 
@@ -100,9 +103,9 @@ function MyPatientsList() {
                         <td>
                           <button
                             className="btn btn-primary rounded-2"
-                            onClick={() => handlePatientAppointmentDetails()}
+                            onClick={() => handlePatientAppointmentDetails(item._id)}
                           >
-                            view PatientAp
+                            view PatientDetails
                           </button>
                         </td>
                         <td>
@@ -113,7 +116,12 @@ function MyPatientsList() {
                             view Health Records
                           </button>
                         </td>
-                        <td></td>
+                        <td> <button
+                           className="btn btn-primary rounded-2"
+                            onClick={() => handle(item._id)}
+                          >
+                            view patientDetails
+                          </button></td>
                         <td>
                           <button
                             className="btn btn-primary rounded-2"

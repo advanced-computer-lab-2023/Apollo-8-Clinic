@@ -397,19 +397,28 @@ const addAvailableTimeSlots = async (req, res) => {
       return res.status(403).json({ error: 'Doctor is not accepted yet' });
     }
     console.log('Doctor status:', doctor.status);
-    console.log('Request Body:', req.body);
+    
     const { availableSlots } = req.body;
     console.log('Date:', availableSlots);
     if (!doctor.availableSlots) {
       doctor.availableSlots = [];
     }
 
-
-
     // Ensure availableSlots is an array
     const slotsArray = Array.isArray(availableSlots) ? availableSlots : [availableSlots];
+    for (const slot of slotsArray) {
+      const date1 = new Date(slot);
+      console.log("date1"+date1)
+      for (const drSlot of doctor.availableSlots) {
+        const date2 = new Date(drSlot);
+        console.log("date2"+date2)
+        if (date1.getTime() === date2.getTime()) {
+          return res.status(500).json({ error: 'Date already exists in available slots' });
+        }
+      }
+    }
     doctor.availableSlots.push(...slotsArray);
-
+console.log("slotsArray"+slotsArray);
     await doctor.save();
     res.status(200).json(doctor);
     console.log('Doctor after saving:', doctor);

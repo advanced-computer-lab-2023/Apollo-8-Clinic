@@ -39,6 +39,9 @@ function ResponsiveAppBar() {
   const handlePackages = () => {
     navigate("/adminHealthPackage");
   };
+  const AddhandlePackages = () => {
+    navigate("/adminaddHealthPackage");
+  };
   const handlePass = () => {
     navigate("/changePassAdm");
   };
@@ -196,6 +199,19 @@ function ResponsiveAppBar() {
             >
               {" "}
               Health Packages{" "}
+            </Button>
+            <Button
+              onClick={AddhandlePackages}
+              sx={{
+                my: 2,
+                color: "white",
+                display: "block",
+                marginRight: "0.5%",
+                marginLeft: "0.5%",
+              }}
+            >
+              {" "}
+              Add Health Packages{" "}
             </Button>
             <Button
               onClick={handlePass}
