@@ -30,15 +30,17 @@ function MyPatientsList() {
   }
 
   function handleView(id) {
-   
     navigate(`/viewHealth/${id}`);
   }
 
   function handleAddHealthRecord(id) {
     navigate(`/AddHealthRecords/${id}`);
   }
+  function handleAddPrescription(id) {
+    navigate(`/doctor/prescriptions/${id}`);
+  }
   function handlePatientAppointmentDetails() {
-    navigate('/PatientAppointments');
+    navigate("/PatientAppointments");
   }
 
   return (
@@ -57,7 +59,10 @@ function MyPatientsList() {
         >
           <div className="card-header">
             <h2>Your patients' list</h2>
-           <button className="btn btn-primary rounded-2" onClick={() => handleFilter()}>
+            <button
+              className="btn btn-primary rounded-2"
+              onClick={() => handleFilter()}
+            >
               filter to future appointments
             </button>
           </div>
@@ -73,6 +78,7 @@ function MyPatientsList() {
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th>
                       <input
                         type="text"
@@ -82,7 +88,6 @@ function MyPatientsList() {
                         className="form-control rounded-0"
                         onChange={(e) => setSearch(e.target.value)}
                       />
-                    
                     </th>
                   </tr>
                 </thead>
@@ -107,7 +112,7 @@ function MyPatientsList() {
                         </td>
                         <td>
                           <button
-                           className="btn btn-primary rounded-2"
+                            className="btn btn-primary rounded-2"
                             onClick={() => handleView(item._id)}
                           >
                             view Health Records
@@ -122,21 +127,31 @@ function MyPatientsList() {
                             add health record
                           </button>
                         </td>
+                        <td>
+                          <button
+                            className="btn btn-primary rounded-2"
+                            onClick={() => handleAddPrescription(item._id)}
+                          >
+                            Prescriptions
+                          </button>
+                        </td>
                       </tr>
                     ))}
                 </tbody>
-          
-                {data.filter((item) => item.name.toLowerCase().includes(search)).length === 0 &&
+
+                {data.filter((item) => item.name.toLowerCase().includes(search))
+                  .length === 0 &&
                   search.length > 0 && (
                     <tr>
-                      <td colSpan="6" style={{ color: "red", textAlign: "center" }}>
+                      <td
+                        colSpan="6"
+                        style={{ color: "red", textAlign: "center" }}
+                      >
                         No patients found with this name
                       </td>
                     </tr>
-                  )} 
-                 
+                  )}
               </table>
-              
             )}
           </div>
         </div>

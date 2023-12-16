@@ -72,6 +72,9 @@ import ChatDoctor from "./pages/doctor/Chat";
 import io from "socket.io-client";
 //const socket = io.connect("http://localhost:8000");
 import Peer from "simple-peer";
+import AddPrescription from "./pages/doctor/AddPrescription";
+import DoctorPrescriptionsList from "./pages/doctor/DoctorPresriptionsList";
+import UpdatePrescription from "./pages/doctor/UpdatePrescription";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
@@ -283,6 +286,15 @@ function App() {
           <Route path="/editDoctor" element={<EditDoctor />} />
           <Route path="/" element={<Home />} />
           <Route path="/AddHealthRecords/:id" element={<AddHealthRecords />} />
+          <Route path="/AddPrescription/:id" element={<AddPrescription />} />
+          <Route
+            path="/doctor/prescriptions/:id"
+            element={<DoctorPrescriptionsList />}
+          />
+          <Route
+            path="/prescriptionDetails/:id/:prescriptionId"
+            element={<UpdatePrescription />}
+          />
           <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
           <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
           <Route
