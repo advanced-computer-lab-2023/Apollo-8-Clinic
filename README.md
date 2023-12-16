@@ -481,6 +481,13 @@ http://localhost:5173/
 * *Response:* insurance message  or error message
 
 </details>
+<details> <summary>Admin APIs</summary>
+ //here put the admin apis
+</details>
+
+<details> <summary>Doctor APIs</summary>
+//here put the doctor APIs
+</details>
 
 ## Testing with Postman
 Before testing the API using Postman, make sure **Postman Installed**. Download and install [Postman](https://www.postman.com/downloads/).
