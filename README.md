@@ -609,7 +609,7 @@ http://localhost:5173/
 
 <details> <summary>Doctor APIs</summary>
  
-#### GET /getNotfication
+#### GET doctor/getNotfication
 - **Purpose:** Retrieve notifications for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -618,7 +618,7 @@ http://localhost:5173/
     - Status 200: Array of notification objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET /sawNotfication
+#### GET doctor/sawNotfication
 - **Purpose:** Mark notifications as read for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -627,7 +627,7 @@ http://localhost:5173/
     - Status 200: Array of notification objects after marking as read.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### PUT /acceptContract
+#### PUT doctor/acceptContract
 - **Purpose:** Accept the contract for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** PUT
@@ -637,7 +637,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 500: Internal Server Error.
 
-#### GET /contract
+#### GET doctor/contract
 - **Purpose:** Retrieve contract information for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -647,7 +647,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 400: Error message if there's an issue.
 
-#### GET /getFollowUpRequest
+#### GET doctor/getFollowUpRequest
 - **Purpose:** Retrieve follow-up appointment requests for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -656,7 +656,7 @@ http://localhost:5173/
     - Status 200: Array of follow-up appointment objects.
     - Status 500: Internal server error.
 
-#### GET /
+#### GET doctor/
 - **Purpose:** Retrieve a list of all doctors.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** GET
@@ -665,7 +665,7 @@ http://localhost:5173/
     - Status 200: Array of doctor objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET /getAcceptedDoctors
+#### GET doctor/getAcceptedDoctors
 - **Purpose:** Retrieve a list of all accepted doctors.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** GET
@@ -674,7 +674,7 @@ http://localhost:5173/
     - Status 200: Array of accepted doctor objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET /:id
+#### GET doctor/:id
 - **Purpose:** Retrieve information about a specific doctor by their ID.
 - **Authentication:** User authentication is required.
 - **HTTP Method:** GET
@@ -685,7 +685,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 400: Error message if there's an issue.
 
-#### GET /get/byId
+#### GET doctor/get/byId
 - **Purpose:** Retrieve information about the authenticated doctor for chat purposes.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -695,7 +695,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 400: Error message if there's an issue.
 
-#### PUT /accept/:id
+#### PUT doctor/accept/:id
 - **Purpose:** Accept a doctor's registration request.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** PUT
@@ -706,7 +706,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 500: Internal Server Error.
 
-#### PUT /reject/:id
+#### PUT doctor/reject/:id
 - **Purpose:** Reject a doctor's registration request.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** PUT
@@ -717,7 +717,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 500: Internal Server Error.
 
-#### GET /viewPatients/:id
+#### GET doctor/viewPatients/:id
 - **Purpose:** Retrieve patients associated with the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -728,6 +728,150 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 400: Error message if there's an issue.
 
+</details>
+
+<details> <summary>chat messages APIs</summary>
+
+ #### GET message/:senderId/:receiverId
+- **Purpose:** Retrieve messages between two users.
+- **HTTP Method:** GET
+- **Parameters:**
+    - `senderId` (Path Parameter): ID of the sender user.
+    - `receiverId` (Path Parameter): ID of the receiver user.
+- **Response:**
+    - Status 200: Array of messages between the two users.
+    - Status 500: Internal server error.
+
+#### POST message/createMessage
+- **Purpose:** Create a new message.
+- **HTTP Method:** POST
+- **Parameters:** None
+- **Request Body:**
+    - `senderId`: ID of the sender.
+    - `receiverId`: ID of the receiver.
+    - `content`: Content of the message.
+- **Response:**
+    - Status 200: The created message object.
+    - Status 500: Internal server error.
+
+</details>
+
+<details> <summary>appointment APIs</summary>
+
+ #### POST appointment/
+- **Purpose:** Create a new appointment.
+- **Authentication:** Patient authentication is required.
+- **HTTP Method:** POST
+- **Parameters:** None
+- **Request Body:**
+    - `doctorId`: ID of the doctor.
+    - `date`: Date of the appointment.
+    - `status`: Status of the appointment.
+    - `type`: Type of the appointment.
+- **Response:**
+    - Status 200: The created appointment object.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### GET appointment/
+- **Purpose:** Retrieve a list of all appointments.
+- **Authentication:** None required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of appointment objects.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### GET appointment/getAppCall
+- **Purpose:** Retrieve appointments for the authenticated user (patient or doctor).
+- **Authentication:** User authentication is required.
+- **HTTP Method:** GET
+- **Parameters:** None
+- **Response:**
+    - Status 200: Array of appointment objects for the authenticated user.
+    - Status 401: JSON object with an error message if the user is not authorized.
+    - Status 500: Internal server error.
+
+#### GET appointment/:doctorName
+- **Purpose:** Retrieve appointments for the authenticated doctor based on the doctor's name.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:**
+    - `doctorName` (Path Parameter): Name of the doctor.
+- **Response:**
+    - Status 200: Array of appointment objects for the authenticated doctor.
+    - Status 404: If the doctor is not found.
+    - Status 500: Internal server error.
+
+#### GET appointment/getupcomingAppointments/:id
+- **Purpose:** Retrieve upcoming appointments for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** GET
+- **Parameters:**
+    - `id` (Path Parameter): ID of the doctor.
+- **Response:**
+    - Status 200: Array of upcoming appointment objects for the authenticated doctor.
+    - Status 500: Internal server error.
+
+#### GET appointment/getPatientAppointments/:id
+- **Purpose:** Retrieve appointments for the authenticated patient based on patient ID.
+- **Authentication:** Patient authentication is required.
+- **HTTP Method:** GET
+- **Parameters:**
+    - `id` (Path Parameter): ID of the patient.
+- **Response:**
+    - Status 200: Array of appointment objects for the authenticated patient.
+    - Status 500: Internal server error.
+
+#### POST appointment/rescheduleAppointment/:id
+- **Purpose:** Reschedule an appointment for the authenticated patient.
+- **Authentication:** Patient authentication is required.
+- **HTTP Method:** POST
+- **Parameters:**
+    - `id` (Path Parameter): ID of the appointment.
+- **Request Body:**
+    - `_id`: ID of the appointment to be rescheduled.
+    - `date`: New date for the appointment.
+- **Response:**
+    - Status 200: The updated appointment object after rescheduling.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### POST appointment/docRescheduleAppointment/:id
+- **Purpose:** Reschedule an appointment for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** POST
+- **Parameters:**
+    - `id` (Path Parameter): ID of the appointment.
+- **Request Body:**
+    - `_id`: ID of the appointment to be rescheduled.
+    - `date`: New date for the appointment.
+- **Response:**
+    - Status 200: The updated appointment object after rescheduling.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### POST appointment/cancelAppointment/:id
+- **Purpose:** Cancel an appointment for the authenticated patient.
+- **Authentication:** Patient authentication is required.
+- **HTTP Method:** POST
+- **Parameters:**
+    - `id` (Path Parameter): ID of the appointment.
+- **Request Body:**
+    - `_id`: ID of the appointment to be canceled.
+- **Response:**
+    - Status 200: The updated appointment object after cancellation.
+    - Status 400: JSON object with an error message if there's an issue.
+
+#### POST appointment/docCancelAppointment/:id
+- **Purpose:** Cancel an appointment for the authenticated doctor.
+- **Authentication:** Doctor authentication is required.
+- **HTTP Method:** POST
+- **Parameters:**
+    - `id` (Path Parameter): ID of the appointment.
+- **Request Body:**
+    - `_id`: ID of the appointment to be canceled.
+- **Response:**
+    - Status 200: The updated appointment object after cancellation.
+    - Status 400: JSON object with an error message if there's an issue.
+  
 </details>
 
 ## Testing with Postman
