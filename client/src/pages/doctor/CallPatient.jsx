@@ -1,7 +1,9 @@
 import "../init";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import { Modal } from "@mui/material";
 import axios from "axios";
+import ResponsiveAppBar from "../../components/TopBarHome";
 //import AssignmentIcon from "@mui/icons/Assignment"
 //import PhoneIcon from "@mui/icons/Phone"
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -30,7 +32,9 @@ function Call() {
   const [callAccepted, setCallAccepted] = useState(false);
   const [idToCall, setIdToCall] = useState("");
   const [callEnded, setCallEnded] = useState(false);
+  const [calling, setCalling] = useState(false);
   const [name, setName] = useState("");
+  const [videoAsp, setAsp] = useState(300);
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
@@ -50,6 +54,7 @@ function Call() {
   useEffect(() => {
     if (location.state != null) {
       setCallAccepted(true);
+      setAsp(150);
       console.log(location.state.back);
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
@@ -116,6 +121,11 @@ function Call() {
       setName(data.name);
       setCallerSignal(data.signal);
     });
+
+
+    socket.on("callEnded", () => {
+      setCalling(false);
+    });
   }, []);
 
   const callUser = (id) => {
@@ -126,6 +136,8 @@ function Call() {
       id = id.doctorId.user;
       console.log(id);
     }
+    console.log("calling");
+    setCalling(true);
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -146,6 +158,9 @@ function Call() {
       userVideo.current.srcObject = stream;
     });
     socket.on("callAccepted", (signal) => {
+      console.log("hnaaa")
+      setCalling(false);
+      setAsp(150);
       setCallAccepted(true);
       peer.signal(signal);
     });
@@ -154,6 +169,7 @@ function Call() {
   };
 
   const answerCall = () => {
+    setAsp(150);
     setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
@@ -175,10 +191,14 @@ function Call() {
   const leaveCall = () => {
     console.log("destroooo");
     setCallEnded(true);
+    socket.emit("left");
+    window.location.pathname = "/HomePageDoc";
+    
     connectionRef.current.destroy();
+    
 
     console.log(location.state);
-    window.location.pathname = "/HomePageDoc";
+    
     /*	if(location.state){
 			console.log(location.state);
 			window.location.pathname = location.state.back;
@@ -191,12 +211,26 @@ function Call() {
 
     //window.location.reload();
   };
+  const closeCallingPopup = () => {
+    socket.emit("left");
+    // Close the calling popup
+    setCalling(false);
+
+    // ... (existing code)
+  };
+  const handleBack= () => {
+    window.location.pathname = "/HomePageDoc";
+  };
 
   return (
-    <>
-      <h1 style={{ textAlign: "center", color: "royalblue" }}>Zoomish</h1>
+    
+    <div>
+    
+    
+      <h1 style={{ textAlign: "center", color: "royalblue" }}>Calling Room</h1>
+      <div>
       <div className="container" style={containerStyles}>
-        <div className="video-container">
+        <div className="video-container" style={{display:"inline-flex"}}>
           <div className="video">
             {stream && (
               <video
@@ -204,7 +238,7 @@ function Call() {
                 muted
                 ref={myVideo}
                 autoPlay
-                style={{ width: "300px" }}
+                style={{ width: `${videoAsp}px` }}
               />
             )}
           </div>
@@ -214,11 +248,28 @@ function Call() {
                 playsInline
                 ref={userVideo}
                 autoPlay
-                style={{ width: "300px" }}
+                style={{ width: "600px",height:"600px" }}
               />
             ) : null}
           </div>
         </div>
+        <div className="call-button">
+            {callAccepted && !callEnded ? (
+              <Button variant="contained" color="secondary" onClick={leaveCall}>
+                End Call
+              </Button>
+            ) : null}
+          </div>
+        </div>
+        {/* Calling Popup */}
+        <Modal open={calling} >
+          <div style={{ textAlign: "center", padding: "20px" }}>
+            <h2>Calling...</h2>
+            <Button variant="contained" color="secondary" onClick={closeCallingPopup}>
+              End Call
+            </Button>
+          </div>
+        </Modal>
         <div className="myId">
           {/* <TextField
 				id="filled-basic"
@@ -278,13 +329,7 @@ function Call() {
               </tbody>
             </table>
           )}
-          <div className="call-button">
-            {callAccepted && !callEnded ? (
-              <Button variant="contained" color="secondary" onClick={leaveCall}>
-                End Call
-              </Button>
-            ) : null}
-          </div>
+         
         </div>
         <div>
           {receivingCall && !callAccepted ? (
@@ -296,8 +341,22 @@ function Call() {
             </div>
           ) : null}
         </div>
+        <button className="btn btn-primary rounded-2"
+              style={{
+                position: 'fixed',
+                bottom: '5%',
+                right: '3%',
+                width: '5%',
+                height: '40px',
+              }}
+              
+              onClick={handleBack}
+            >
+              Home
+            </button>
       </div>
-    </>
+    </div>
+    
   );
 }
 

@@ -64,7 +64,7 @@ function ResponsiveAppBar() {
           }
         }
         setunseenNotifications(num);
-        setData(response.data);
+        setData(response.data.reverse());
         setDataFetched(true);
       })
       .catch((error) => {
