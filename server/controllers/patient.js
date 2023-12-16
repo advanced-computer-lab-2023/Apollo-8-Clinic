@@ -321,24 +321,26 @@ const filterPres = async (req, res) => {
   }
 };
 
-// const PayAppointmentByWallet = async (req, res) => {
-//   try {
-//     const patientID = req.body.id;
-//     const discount = await getSessDiscount(patientID);
-//     const sessionPrice = 200;
-//     const discountedAmount = (discount / 100) * sessionPrice;
-//     const patient = await PatientModel.findById(patientID);
-//     if (!patient) {
-//       throw new Error('Patient not found');
-//     }
-//     patient.wallet -= discountedAmount;
-//     await patient.save();
+const payAppointmentByWallet = async (req, res) => {
+  try {
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const patientID = patient._id;
+    const doctorId = req.body;
+    const discount = await getSessDiscount(patientID);
+    const doctor = await DoctorModel.findById(doctorId);
+    const sessionPrice= doctor.hourlyRate;
+    const discountedAmount = (discount / 100) * sessionPrice;
+    if (!patient) {
+      throw new Error('Patient not found');
+    }
+    patient.wallet -= discountedAmount;
+    await patient.save();
 
-//     res.status(200).send({ "discount": discount, "deductedAmount": discountedAmount });
-//   } catch (e) {
-//     res.status(400).send(e);
-//   }
-// }
+    res.status(200).send({ "discount": discount, "deductedAmount": discountedAmount });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+}
 
 const getPres = async (req, res) => {
   try {
@@ -808,6 +810,7 @@ export default {
   filterPres,
   getPres,
   updateWallet,
+  payAppointmentByWallet,
   getSessDiscount,
   linkPatient,
   patientDetails,

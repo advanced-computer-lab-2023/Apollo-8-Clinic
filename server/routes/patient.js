@@ -65,6 +65,7 @@ router.post("/linkPatient/:patientID", Middle.requireAuthPatient, patient.linkPa
 
 //apply sessDiscount on dr's session price
 router.post('/getsessDiscount/', Middle.requireAuthPatient, controllers.getSessDiscount);
+router.post('/payAppByWallet', Middle.requireAuthPatient, controllers.payAppointmentByWallet);
 router.put('/updateWallet', Middle.requireAuthPatient, controllers.updateWallet);
 
 
