@@ -133,7 +133,7 @@ function ResponsiveAppBar() {
   };
 
   const handleChatNavigate = () => {
-    navigate("/Chat");
+    navigate("/ChatChoice");
   };
 
   const handleLogout = (e) => {

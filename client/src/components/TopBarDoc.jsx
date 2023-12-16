@@ -126,7 +126,7 @@ function ResponsiveAppBar() {
   };
 
   const handleChatNavigate = () => {
-    navigate("/ChatDoctor");
+    navigate("/ChatChoiceDR");
   };
 
   const handleCloseUserMenu = () => {

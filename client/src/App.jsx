@@ -65,9 +65,18 @@ import FollowUPPending from "./pages/doctor/FollowUPPending";
 import * as React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
-// import chat
-import Chat from "./pages/patient/Chat";
-import ChatDoctor from "./pages/doctor/Chat";
+// chat patient
+// Chat patient 
+import ChatPharmacist from "./pages/patient/ChatPharmacist";
+import ChatChoice from "./pages/patient/ChatChoice";
+import ChatDoctor from "./pages/patient/ChatDoctor";
+
+
+// chat doctor 
+import ChatChoiceDR from "./pages/doctor/ChatChoiceDR";
+import ChatPharmacistDR from "./pages/doctor/ChatPharmacistDR";
+import ChatPatientDR from "./pages/doctor/ChatPatientDR";
+
 
 import io from "socket.io-client";
 //const socket = io.connect("http://localhost:8000");
@@ -239,7 +248,9 @@ function App() {
             <Route path="/viewDoctor/:id" element={<ViewDoctor />} />
             <Route path="/filter" element={<FilterDoctor />} />
             <Route path="/doctors/:id" element={<DoctorDetails />} />
-            <Route path="/Chat" element={<Chat />} />
+            <Route path="/ChatChoice" element={<ChatChoice />} />
+            <Route path="/ChatDoctor" element={<ChatDoctor />} />
+            <Route path="/Chatpharmacist" element={<ChatPharmacist />} />
             {/* this doctor details is in admin */}
             <Route path="/patientFamilyAppointments" element={<AppPatient />} />
             <Route
@@ -294,7 +305,9 @@ function App() {
           <Route path="/viewMyPatients" element={<MyPatientsList />} />
           <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
           <Route path="/contract" element={<DoctorContract />} />
-          <Route path="/ChatDoctor" element={<ChatDoctor />} />{" "}
+          <Route path="/ChatChoiceDR" element={<ChatChoiceDR />} />{" "}
+          <Route path="/ChatPharmacistDR" element={<ChatPharmacistDR />} />{" "}
+          <Route path="/ChatPatientDR" element={<ChatPatientDR />} />{" "}
           <Route
             path="/PatientAppointments"
             element={<PatientAppointments />}
