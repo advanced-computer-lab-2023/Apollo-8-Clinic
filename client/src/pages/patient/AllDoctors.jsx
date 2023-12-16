@@ -56,9 +56,11 @@ function AllDoctors() {
   }
 
   function getSessionPrice(hourlyRate) {
-    if (hp)
+    if (hp && hp.length > 0) {
       return hourlyRate + hourlyRate * 0.1 - hourlyRate * hp[0].sessDiscount;
-    else return hourlyRate + hourlyRate * 0.1;
+    } else {
+      return hourlyRate + hourlyRate * 0.1;
+    }
   }
 
   const filteredData = data.filter((item) => {

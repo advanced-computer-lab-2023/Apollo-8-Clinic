@@ -36,6 +36,7 @@ router.get("/futureAppointmentPatients/:id", Middle.requireAuthDoctor, patient.u
 router.post("/UpdateDoctor", Middle.requireAuthDoctor, controllers.updateDoctor);
 router.post("/getHealthRecord", Middle.requireAuthDoctor, controllers.getHealthRecord);
 router.post('/add-available-time-slot', Middle.requireAuthDoctor, controllers.addAvailableTimeSlots);
+
 router.post('/addHealthRecords', Middle.requireAuthDoctor, uploadMiddleware, controllers.addHealthRecords);
 router.get("/getWallet/:doctorName", Middle.requireAuthDoctor, controllers.getWallet);
 router.put("/updateAppointment/:doctorName", Middle.requireAuthDoctor, controllers.updateAppointment)

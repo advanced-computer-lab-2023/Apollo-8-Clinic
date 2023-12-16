@@ -28,6 +28,10 @@ const getHealthPackageDetails = async (req, res) => {
 const createHealthPackage = async (req, res) => {
   try {
     const { name, price, sessDiscount, medDiscount, subDiscount } = req.body;
+    const priceRegex = /^\d+(\.\d{1,2})?$/;
+    if (!priceRegex.test(price)) {
+      throw new Error("Invalid price format. Please enter a valid number.");
+    }
     const newHealthPackage = new HealthPackageModel({ name, price, sessDiscount, medDiscount, subDiscount });
     await newHealthPackage.save();
     res.status(200).json(newHealthPackage);

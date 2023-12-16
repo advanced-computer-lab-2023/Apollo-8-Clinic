@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import "../../App.css";
@@ -73,7 +73,7 @@ function PendingDoctors() {
         <ResponsiveAppBar />
         <div
           style={{
-            backgroundColor: " rgb(65, 105, 225)",
+            backgroundColor: "rgb(65, 105, 225)",
             borderRadius: "50px",
             margin: "10px",
             width: "40%",
@@ -96,54 +96,65 @@ function PendingDoctors() {
           style={{ width: "80%", borderRadius: "20px", left: "8%" }}
         >
           <div className="card-body">
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <table className="table table-striped">
-                <thead className="table-dark">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+              
+                  <table className="table table-striped">
+                    <thead className="table-dark">
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>status</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.name}</td>
+                          <td>{item.email}</td>
+                          <td>{item.status}</td>
+                          <td>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleView(item._id)}
+                            >
+                              view
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleAccept(item._id)}
+                            >
+                              Accept
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleReject(item._id)}
+                            >
+                              Reject
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                        {data.length === 0 && (
                   <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>status</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <td colSpan="6" style={{ textAlign: "center" }}>
+                      <p style={{ color: "red" }}>No pending doctors found.</p>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {data.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.name}</td>
-                      <td>{item.email}</td>
-                      <td>{item.status}</td>
-                      <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={() => handleView(item._id)}
-                        >
-                          view
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={() => handleAccept(item._id)}
-                        >
-                          Accept
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={() => handleReject(item._id)}
-                        >
-                          Reject
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                )}
+              </tbody>
+            </table>
+
+                
+            
             )}
           </div>
         </div>
@@ -152,5 +163,7 @@ function PendingDoctors() {
     </div>
   );
 }
+
+
 
 export default PendingDoctors;

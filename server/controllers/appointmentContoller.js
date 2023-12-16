@@ -107,9 +107,10 @@ const getPatientAppointments = async (req, res) => {
   try {
     const patient1 = await PatientModel.findOne({ user: res.locals.userId });
     const patientID = patient1._id;
-    const appointments1 = await AppointmentModel.find({ "patientId": patientID });
-
-    res.status(200).json(appointments1);
+    const appointments = await AppointmentModel.find({ patientId: patientID})
+    .populate('patientId')  // Populate the patientId field with actual patient information
+    .exec();
+    res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -149,17 +150,7 @@ const getMyAppointmers = async (req, res) => {
 const getAppointmentWithFilter = async (req, res) => {
   try {
     const { startDate, endDate, status } = req.body; // Destructure status and dates from query parameters
-    let query = {};
-
-    const patient = await PatientModel.findOne({ user: res.locals.userId });
-    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
-    if (patient) {
-      query.patientId = patient._id;
-    }
-
-    if (doctor) {
-      query.doctorId = doctor._id;
-    }
+    const query = { patientId }; // Initialize the query with patientId
 
     if (status) {
       query.status = status;
@@ -177,12 +168,13 @@ const getAppointmentWithFilter = async (req, res) => {
         end.setDate(end.getDate() + 1);
         query.date = {
           $gte: start,
-          $lt: end
+          $lt: end,
         };
       } else {
         return res.status(400).json({ error: "Please enter a valid date range" });
       }
     }
+
     const appointment = await appointments.find(query);
     res.status(200).json(appointment);
   } catch (error) {
@@ -208,18 +200,39 @@ const getAppointments = async (req, res) => {
   }
 };
 
+
 const getupcomingAppointments = async (req, res) => {
-  console.log("dcdcdc")
   try {
-    const patient1 = await PatientModel.findOne({ user: res.locals.userId });
-    const patientID = patient1._id;
-    const appointments1 = await AppointmentModel.find({
-      patientId: patientID,
+    const { patientId } = req.params; // Extract patientId from request parameters
+    console.log('Requested Patient ID:', patientId);
+    console.log('Doctor ID:', res.locals.userId);
+
+    // Check if the doctor ID is valid
+    if (!res.locals.userId) {
+      return res.status(400).json({ error: 'Invalid Doctor ID' });
+    }
+
+    // Attempt to find the doctor by user ID
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
+
+    if (!doctor) {
+      // Doctor not found, handle this case (e.g., send an appropriate response)
+      return res.status(404).json({ error: 'Doctor not found' });
+    }
+
+    const doctorID = doctor._id;
+    const appointments = await AppointmentModel.find({
+      doctorId: doctorID,
       status: 'upcoming',
+    })
+    .populate({
+      path: 'patientId',
+      select: 'name email', // Select the fields you want to retrieve
     });
 
-    res.status(200).json(appointments1);
+    res.status(200).json(appointments);
   } catch (error) {
+    console.error('Error in getupcomingAppointments:', error);
     res.status(500).json({ error: error.message });
   }
 };

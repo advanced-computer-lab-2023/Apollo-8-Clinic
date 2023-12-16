@@ -65,7 +65,9 @@ function Health() {
       </div>
     </div>
   ));
-
+  const handleBack = () => {
+    navigate("/viewMyPatients");
+  };
   return (
 
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
@@ -112,7 +114,7 @@ function Health() {
                 width: '5%',
                 height: '40px',
               }}
-              
+              onClick={handleBack}
              
             >
               Back
