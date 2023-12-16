@@ -4,10 +4,16 @@ import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBar";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
+import { IconButton, Tooltip } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
 function PrescriptionsList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(true);
   const [filterMessage, setFilterMessage] = useState("");
   const navigate = useNavigate();
   const name = useRef(null);
@@ -30,12 +36,12 @@ function PrescriptionsList() {
           setFilterMessage("");
         }
       })
-      
+
       .catch((error) => {
         console.error("Error fetching data:", error);
         setLoading(false);
       });
-  }, []);
+  }, [refresh]);
 
   function handleClick() {
     let body = { patientId: "6523ba9cd72b2eb0e39cb137" };
@@ -66,6 +72,48 @@ function PrescriptionsList() {
       .catch((err) => console.log(err));
   }
 
+  const handleDownload = async (prescriptionId) => {
+    try {
+      // Make a request to the backend endpoint
+      const response = await axios.get(
+        `http://localhost:8000/patient/prescriptionPDF/${prescriptionId}`,
+        {
+          responseType: "arraybuffer", // Ensure the response type is set to arraybuffer for binary data
+        }
+      );
+
+      // Create a Blob from the response data
+      const blob = new Blob([response.data], { type: "application/pdf" });
+
+      // Create a download link and trigger the download
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "prescription.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      // Handle error as needed
+    }
+  };
+
+  const handleBuy = async (prescriptionId) => {
+    await axios
+      .post(
+        `http://localhost:8000/patient/payForPrescription/${prescriptionId}`,
+        {}
+      )
+      .then((response) => {
+        console.log(response);
+        setRefresh(!refresh);
+        window.open("http://localhost:3000/cart", "_blank");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   function handleView(id) {
     // Navigate to another route and pass the ID as a prop
     navigate(`/prescriptions/${id}`);
@@ -78,15 +126,33 @@ function PrescriptionsList() {
         <div className="card">
           <div className="card-body">
             <h5 className="card-title">Prescription number {i}</h5>
-            <p className="card-text">Doctor Name is :{user.doctorId.name}</p>
-            <p className="card-text">Date is :{user.date}</p>
-            <button
-              onClick={() => handleView(user._id)}
-              type="button"
-              className="btn btn-primary"
-            >
-              See Prescription details
-            </button>
+            <p className="card-text">Doctor: {user.doctorId.name}</p>
+            <p className="card-text">
+              Date: {new Date(user.date).toLocaleDateString("en-GB", {})}
+            </p>
+            <p className="card-text">Status: {user.status}</p>
+            <div>
+              <Tooltip title="View Details" placement="bottom">
+                <IconButton onClick={() => handleView(user._id)}>
+                  <VisibilityIcon></VisibilityIcon>
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="download" placement="bottom">
+                <IconButton
+                  onClick={() => handleDownload(user._id)}
+                  type="submit"
+                >
+                  <FileDownloadIcon></FileDownloadIcon>
+                </IconButton>
+              </Tooltip>
+              {user.status != "filled" && (
+                <Tooltip title="buy" placement="bottom">
+                  <IconButton onClick={() => handleBuy(user._id)} type="submit">
+                    <ShoppingCartIcon></ShoppingCartIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -208,7 +274,13 @@ function PrescriptionsList() {
               ) : (
                 <>
                   {data.length === 0 && filterMessage && (
-                    <div style={{ textAlign: "center", marginTop: "20px", color: "red" }}>
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "red",
+                      }}
+                    >
                       <p>{filterMessage}</p>
                     </div>
                   )}
