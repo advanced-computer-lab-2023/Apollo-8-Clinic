@@ -103,6 +103,10 @@ mongoose
         socket.on("disconnect", () => {
           socket.broadcast.emit("callEnded")
         })
+        socket.on("left", () => {
+          console.log("5errr");
+          socket.broadcast.emit("callEnded")
+        })
 
         socket.on("callUser", async (data) => {
           //     const fofa= await doctor.find();

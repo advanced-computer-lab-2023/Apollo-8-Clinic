@@ -19,6 +19,7 @@ import { useLocation } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
+import CardContent from '@mui/material/CardContent';
 //import Peer from "simple-peer"
 //youhanna milestone 2222
 import PatientUpcomingAppointments from "./pages/doctor/PatientUpcomingAppointments";
@@ -88,14 +89,15 @@ function App() {
   const [callerSignal, setCallerSignal] = useState();
   const [name, setName] = useState("");
   const location = useLocation();
-
-  useEffect(() => {
-    const socket = io.connect("http://localhost:8000", {
+  const socket = io.connect("http://localhost:8000", {
       query: {
         username: "john_doe",
         room: token,
       },
     });
+
+  useEffect(() => {
+    
 
     socket.on("callUser", (data) => {
       setDataFetched(false);
@@ -106,6 +108,10 @@ function App() {
       setName(data.name);
       setCallerSignal(data.signal);
       setDataFetched(true);
+    });
+    socket.on("callEnded", () => {
+      setReceivingCall(false);
+      setCalling(false);
     });
 
     const fetchData = async () => {
@@ -138,6 +144,7 @@ function App() {
   };
   const endCall = () => {
     console.log("hhhh");
+    socket.emit("left");
     setReceivingCall(false);
   };
 
