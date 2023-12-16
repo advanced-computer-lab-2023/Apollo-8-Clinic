@@ -227,56 +227,56 @@ here are some code examples for developers to have an overview about our impleme
 
 #### register for a new user:
 ```
-//create a new user and save it in our database
+// Create a new user instance and save it in the database
 
  const user = new UserModel({ username, password, type });
  await user.save();
 ```
 #### login:
 ```
-  //get user's information and compare it with the given
+// Extract user information from the request body
+const { name, password } = req.body;
 
-  const { name,  password } = req.body;
-  const user=await UserModel.findOne({username:name});
-  const passwordMatch=await bcrypt.compare(password,user.password);
+// Find the user in the database
+const user = await UserModel.findOne({ username: name });
 
-  //create a token for the user and send t to his browser page 
+// Compare the provided password with the user's stored password
+const passwordMatch = await bcrypt.compare(password, user.password);
 
-  const token = createToken(user.username);
-  res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-  return res.status(201).json({token:token})
+// Create a token for the user and send it to the browser
+const token = createToken(user.username);
+res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+return res.status(201).json({ token: token });
+
 ```
 
 #### book an appointment:
 ```
-  //create a new appointment
+ // Create a new appointment
+const appointment = new AppointmentModel({ doctorId, patientId, date, status, type });
 
-  const appointment = new AppointmentModel({doctorId,patientId,date,status,type});
+// Update and save the doctor's schedule by removing the booked slot
+const updatedDoctor = await DoctorModel.findOneAndUpdate(
+  { "_id": doctorId },
+  { $pull: { availableSlots: date } },
+  { new: true }
+);
 
-  //update and save the doctor's schedule
+// Save the appointment
+await appointment.save();
 
-    const updatedDoctor = await DoctorModel.findOneAndUpdate(
-      { "_id": doctorId },
-      { $pull: { availableSlots: date } },
-      { new: true } 
-    );
-
-  //save the appointment
-
-  await appointment.save();
 
 ```
 #### view health records:
 ```
-  //get patient's information for thet database 
+// Retrieve patient information from the database using user ID
+const patientId = req.params.patientId;
+const patient = await PatientModel.findOne({ user: res.locals.userId });
 
-  const patientId = req.params.patientId;
-  const patient = await PatientModel.findOne({ user: res.locals.userId });
+// Send back the health records associated with the patient
+const patientRecords = patient.health_records;
+res.status(200).json(patientRecords);
 
-  //send back the health_records
-
-  const patientRecords = patient.health_records;
-  res.status(200).json(patientRecords);
 ```
 
 ## Configuration
@@ -474,10 +474,147 @@ http://localhost:5173/
 * *Parameters:* family member ID (path parameter) none (reuest body)
 * *Response:* insurance message  or error message
 
+### GET /patient/patientdetails/
+* *Purpose:* Retrieve patient logged in data
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* patient Model or error message
+
+### GET /patient/getWallet/
+* *Purpose:* Retrieve wallet of patient logged in
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* number for user balance or error message
+
+### GET /patient/NotlinkedFamily/
+* *Purpose:* retrieve all Family Members NOT LINKED
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* List of family model  or error message
+
+
+### GET /patient/LinkedFamily/
+* *Purpose:* retrieve all Family Members LINKED
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* List of family model or error message
+
+### POST /patient/AddFamilyMember
+* *Purpose:* add new family member 
+* *Authentication:* Required  (patient)
+* *HTTP Method:* POST
+* *Parameters:* none(parameter) name, nationalID, age, gender, relation(body)
+* *Response:* Successfully message or error message
+
+### POST /patient/linkPatient
+* *Purpose:* link patient to another
+* *Authentication:* Required (patient)
+* *HTTP Method:* POST
+* *Parameters:* none (parameter)mail or number(body)
+* *Response:* Successfully message or error message
+
+### POST /patient/getsessDiscount
+* *Purpose:* get discount of health package you subscribed
+* *Authentication:* Required (patient)
+* *HTTP Method:* POST
+* *Parameters:* none
+* *Response:* discount number or error message
+
+### PUT /patient/updateWallet
+* *Purpose:* update wallet amount in satabase
+* *Authentication:* Required (patient)
+* *HTTP Method:* PUT
+* *Parameters:* none (parameter) amount add(body)
+* *Response:* updated wallet amount or error message
+
+### GET /patient/health-records
+* *Purpose:* Retrieve health record of patient
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none (parameter) 
+* *Response:* list of health record or error message
+
+### PUT /patient/health-records
+* *Purpose:* add health record 
+* *Authentication:* Required (patient)
+* *HTTP Method:* PUT
+* *Parameters:* none (parameters) date description (body)
+* *Response:* Patient after saving health records or error message
+
+### PUT /patient/remove-health-record
+* *Purpose:* remove a health record
+* *Authentication:* Required (patient)
+* *HTTP Method:* PUT
+* *Parameters:* none (parameter) package_id(body)
+* *Response*Patient after saving health records or error message
+
+### POST /patient/appointmentWithFilter
+* *Purpose:* Retrieve all patients 
+* *Authentication:* Required 
+* *HTTP Method:* POST
+* *Parameters:* none (parameters) startDate, endDate, status(body)
+* *Response:* List of appointments or error message
+
+### GET /patient/mydiscount
+* *Purpose:* Retrieve discount linked to certain page
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* discount quantity or error message
+
+### GET /patient/allDoctors
+* *Purpose:* Retrieve all doctor
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET 
+* *Parameters:* none
+* *Response:* List of doctors or error message
+
+### GET /patient/docInfo/:id
+* *Purpose:* Retrieve certain doctors details
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* doctor_id(parameter)
+* *Response:* doctor model or error message
+
+
+### GET /patient/docSearch
+* *Purpose:* Retrieve all doctors with name or speciality search
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* List of doctors or error message
+
+### GET /patient/docFilter
+* *Purpose:* Retrieve all doctors with speciality and slot time filter
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* List of patients or error message
+
+### GET /patient/prescriptions
+* *Purpose:* Retrieve all prescriptions of patient logged in
+* *Authentication:* Required (patient)
+* *HTTP Method:* GET
+* *Parameters:* none
+* *Response:* List of prescriptions or error message
+
+
+### POST /patient/myApp
+* *Purpose:* Retrieve all appointment of certain patient
+* *Authentication:* Required (patient)
+* *HTTP Method:* POST
+* *Parameters:* none(parameters) patient_ID(body)
+* *Response:* List of appointments or error message
+
+
 </details>
 <details> <summary>Admin APIs</summary>
  
- #### POST admin/forget
+ #### POST /admin/forget
 - **Purpose:** Forget password and send verification code via email.
 - **Authentication:** None
 - **HTTP Method:** POST
@@ -488,7 +625,7 @@ http://localhost:5173/
     - Status 400: JSON object with an error message if the provided username is incorrect.
     - Status 500: JSON object with an error message if there's a server error.
 
-#### POST admin/compare
+#### POST /admin/compare
 - **Purpose:** Compare the provided username and PIN to authenticate the user and generate a JWT token.
 - **Authentication:** None
 - **HTTP Method:** POST
@@ -500,7 +637,7 @@ http://localhost:5173/
     - Status 400: JSON object with an error message if the provided username or PIN is incorrect.
     - Status 500: JSON object with an error message if there's a server error.
 
-#### POST admin/chanePass
+#### POST /admin/chanePass
 - **Purpose:** Change the password for the authenticated user.
 - **Authentication:** User authentication is required. The user must provide a valid JWT token in the Authorization header.
 - **HTTP Method:** POST
@@ -510,7 +647,7 @@ http://localhost:5173/
     - Status 200: JSON object with a success message.
     - Status 401: JSON object with an error message if the user is not logged in or the token is invalid.
 
-#### GET admin/getType
+#### GET /admin/getType
 - **Purpose:** Get the type of the authenticated user.
 - **Authentication:** User authentication is required.
 - **HTTP Method:** GET
@@ -519,7 +656,7 @@ http://localhost:5173/
     - Status 200: JSON object with the user type.
     - Status 401: JSON object with an error message if the user is not logged in or the token is invalid.
 
-#### POST admin/createUser
+#### POST /admin/createUser
 - **Purpose:** Create a new user.
 - **Authentication:** None
 - **HTTP Method:** POST
@@ -531,7 +668,7 @@ http://localhost:5173/
     - Status 200: The newly created user object.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET admin/getUsers
+#### GET /admin/getUsers
 - **Purpose:** Retrieve a list of all users.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** GET
@@ -540,7 +677,7 @@ http://localhost:5173/
     - Status 200: Array of user objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### POST admin/addAdministrator
+#### POST /admin/addAdministrator
 - **Purpose:** Add a new administrator.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** POST
@@ -551,7 +688,7 @@ http://localhost:5173/
     - Status 200: The newly created administrator object.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### DELETE admin/removeUser
+#### DELETE /admin/removeUser
 - **Purpose:** Remove a user.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** DELETE
@@ -561,7 +698,7 @@ http://localhost:5173/
     - Status 200: JSON object with a success message.
     - Status 404: JSON object with an error message if the user is not found.
 
-#### GET admin/healthPackage
+#### GET /admin/healthPackage
 - **Purpose:** Retrieve all health packages.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** GET
@@ -570,7 +707,7 @@ http://localhost:5173/
     - Status 200: Array of health packages.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### POST admin/healthPackage
+#### POST /admin/healthPackage
 - **Purpose:** Create a new health package.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** POST
@@ -584,7 +721,7 @@ http://localhost:5173/
     - Status 200: The newly created health package object.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### PUT admin/healthPackage/:id
+#### PUT /admin/healthPackage/:id
 - **Purpose:** Update an existing health package.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** PUT
@@ -595,7 +732,7 @@ http://localhost:5173/
     - Status 200: The updated health package object.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### DELETE admin/healthPackage/:id
+#### DELETE /admin/healthPackage/:id
 - **Purpose:** Delete a health package.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** DELETE
@@ -609,7 +746,7 @@ http://localhost:5173/
 
 <details> <summary>Doctor APIs</summary>
  
-#### GET doctor/getNotfication
+#### GET /doctor/getNotfication
 - **Purpose:** Retrieve notifications for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -618,7 +755,7 @@ http://localhost:5173/
     - Status 200: Array of notification objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET doctor/sawNotfication
+#### GET /doctor/sawNotfication
 - **Purpose:** Mark notifications as read for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -627,7 +764,7 @@ http://localhost:5173/
     - Status 200: Array of notification objects after marking as read.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### PUT doctor/acceptContract
+#### PUT /doctor/acceptContract
 - **Purpose:** Accept the contract for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** PUT
@@ -637,7 +774,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 500: Internal Server Error.
 
-#### GET doctor/contract
+#### GET /doctor/contract
 - **Purpose:** Retrieve contract information for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -647,7 +784,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 400: Error message if there's an issue.
 
-#### GET doctor/getFollowUpRequest
+#### GET /doctor/getFollowUpRequest
 - **Purpose:** Retrieve follow-up appointment requests for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -656,7 +793,7 @@ http://localhost:5173/
     - Status 200: Array of follow-up appointment objects.
     - Status 500: Internal server error.
 
-#### GET doctor/
+#### GET /doctor/
 - **Purpose:** Retrieve a list of all doctors.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** GET
@@ -665,7 +802,7 @@ http://localhost:5173/
     - Status 200: Array of doctor objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET doctor/getAcceptedDoctors
+#### GET /doctor/getAcceptedDoctors
 - **Purpose:** Retrieve a list of all accepted doctors.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** GET
@@ -674,7 +811,7 @@ http://localhost:5173/
     - Status 200: Array of accepted doctor objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET doctor/:id
+#### GET /doctor/:id
 - **Purpose:** Retrieve information about a specific doctor by their ID.
 - **Authentication:** User authentication is required.
 - **HTTP Method:** GET
@@ -685,7 +822,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 400: Error message if there's an issue.
 
-#### GET doctor/get/byId
+#### GET /doctor/get/byId
 - **Purpose:** Retrieve information about the authenticated doctor for chat purposes.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -695,7 +832,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 400: Error message if there's an issue.
 
-#### PUT doctor/accept/:id
+#### PUT /doctor/accept/:id
 - **Purpose:** Accept a doctor's registration request.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** PUT
@@ -706,7 +843,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 500: Internal Server Error.
 
-#### PUT doctor/reject/:id
+#### PUT /doctor/reject/:id
 - **Purpose:** Reject a doctor's registration request.
 - **Authentication:** Admin authentication is required.
 - **HTTP Method:** PUT
@@ -717,7 +854,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 500: Internal Server Error.
 
-#### GET doctor/viewPatients/:id
+#### GET /doctor/viewPatients/:id
 - **Purpose:** Retrieve patients associated with the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -732,7 +869,7 @@ http://localhost:5173/
 
 <details> <summary>chat messages APIs</summary>
 
- #### GET message/:senderId/:receiverId
+ #### GET /message/:senderId/:receiverId
 - **Purpose:** Retrieve messages between two users.
 - **HTTP Method:** GET
 - **Parameters:**
@@ -742,7 +879,7 @@ http://localhost:5173/
     - Status 200: Array of messages between the two users.
     - Status 500: Internal server error.
 
-#### POST message/createMessage
+#### POST /message/createMessage
 - **Purpose:** Create a new message.
 - **HTTP Method:** POST
 - **Parameters:** None
@@ -758,7 +895,7 @@ http://localhost:5173/
 
 <details> <summary>appointment APIs</summary>
 
- #### POST appointment/
+ #### POST /appointment/
 - **Purpose:** Create a new appointment.
 - **Authentication:** Patient authentication is required.
 - **HTTP Method:** POST
@@ -772,7 +909,7 @@ http://localhost:5173/
     - Status 200: The created appointment object.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET appointment/
+#### GET /appointment/
 - **Purpose:** Retrieve a list of all appointments.
 - **Authentication:** None required.
 - **HTTP Method:** GET
@@ -781,7 +918,7 @@ http://localhost:5173/
     - Status 200: Array of appointment objects.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### GET appointment/getAppCall
+#### GET /appointment/getAppCall
 - **Purpose:** Retrieve appointments for the authenticated user (patient or doctor).
 - **Authentication:** User authentication is required.
 - **HTTP Method:** GET
@@ -791,7 +928,7 @@ http://localhost:5173/
     - Status 401: JSON object with an error message if the user is not authorized.
     - Status 500: Internal server error.
 
-#### GET appointment/:doctorName
+#### GET /appointment/:doctorName
 - **Purpose:** Retrieve appointments for the authenticated doctor based on the doctor's name.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -802,7 +939,7 @@ http://localhost:5173/
     - Status 404: If the doctor is not found.
     - Status 500: Internal server error.
 
-#### GET appointment/getupcomingAppointments/:id
+#### GET /appointment/getupcomingAppointments/:id
 - **Purpose:** Retrieve upcoming appointments for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** GET
@@ -812,7 +949,7 @@ http://localhost:5173/
     - Status 200: Array of upcoming appointment objects for the authenticated doctor.
     - Status 500: Internal server error.
 
-#### GET appointment/getPatientAppointments/:id
+#### GET /appointment/getPatientAppointments/:id
 - **Purpose:** Retrieve appointments for the authenticated patient based on patient ID.
 - **Authentication:** Patient authentication is required.
 - **HTTP Method:** GET
@@ -822,7 +959,7 @@ http://localhost:5173/
     - Status 200: Array of appointment objects for the authenticated patient.
     - Status 500: Internal server error.
 
-#### POST appointment/rescheduleAppointment/:id
+#### POST /appointment/rescheduleAppointment/:id
 - **Purpose:** Reschedule an appointment for the authenticated patient.
 - **Authentication:** Patient authentication is required.
 - **HTTP Method:** POST
@@ -835,7 +972,7 @@ http://localhost:5173/
     - Status 200: The updated appointment object after rescheduling.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### POST appointment/docRescheduleAppointment/:id
+#### POST /appointment/docRescheduleAppointment/:id
 - **Purpose:** Reschedule an appointment for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** POST
@@ -848,7 +985,7 @@ http://localhost:5173/
     - Status 200: The updated appointment object after rescheduling.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### POST appointment/cancelAppointment/:id
+#### POST /appointment/cancelAppointment/:id
 - **Purpose:** Cancel an appointment for the authenticated patient.
 - **Authentication:** Patient authentication is required.
 - **HTTP Method:** POST
@@ -860,7 +997,7 @@ http://localhost:5173/
     - Status 200: The updated appointment object after cancellation.
     - Status 400: JSON object with an error message if there's an issue.
 
-#### POST appointment/docCancelAppointment/:id
+#### POST /appointment/docCancelAppointment/:id
 - **Purpose:** Cancel an appointment for the authenticated doctor.
 - **Authentication:** Doctor authentication is required.
 - **HTTP Method:** POST
