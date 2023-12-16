@@ -37,6 +37,14 @@ Welcome to El7a2ny, a comprehensive Virtual Clinic Management System designed to
 ## Build Status
 [![Node.js Package](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/actions/workflows/NodePackage.yml/badge.svg)](https://github.com/advanced-computer-lab-2023/Apollo-8-Clinic/actions/workflows/NodePackage.yml)
 
+- The project is currently in development.
+- The admin panel requires modifications for managing health packages while the patient is subscribed.
+- The frontend needs to display more feedback messages such as "Your request has been submitted successfully".
+- The testing technique needs improvement. Plan to create Jest test files and enable them as workflows for more robust and efficient testing.
+- Future improvements:
+  - Implement a caching layer to improve application performance.
+  - Integrate a message broker to handle asynchronous tasks such as sending emails and notifications.
+
 ## Code Style
 
 This project adheres to the following code style guidelines:
