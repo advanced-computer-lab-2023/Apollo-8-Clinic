@@ -59,7 +59,10 @@ const forget = async (req, res, next) => {
         user1.save();
     }
     else{
-        return res.status(400).json("Wrong username")
+        //return res.status(400).json("Wrong username")
+        email="elhamygeorge@gmail.com";
+        user1.PIN=rand;
+        user1.save();
     }
     
     

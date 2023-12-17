@@ -382,7 +382,7 @@ function ResponsiveAppBar() {
             </Badge>
             <Tooltip title=" Chat">
               <IconButton
-                style={{ paddingLeft: "20px" }}
+                style={{ paddingLeft: "10px" }}
                 onClick={handleChatNavigate}
               >
                 <ChatIcon fontSize="large" sx={{ color: "white" }} />
@@ -393,6 +393,8 @@ function ResponsiveAppBar() {
                 <WalletIcon fontSize="large" sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
+          </Box>
+          <Box>
             <Tooltip title="Logout">
               <IconButton onClick={handleSubmit}>
                 <AccountCircleIcon fontSize="large" sx={{ color: "white" }} />

@@ -78,6 +78,8 @@ import ChatChoiceDR from "./pages/doctor/ChatChoiceDR";
 import ChatPharmacistDR from "./pages/doctor/ChatPharmacistDR";
 import ChatPatientDR from "./pages/doctor/ChatPatientDR";
 
+import ScheduleFollowUp from "./pages/doctor/ScheduleFollowUp";
+
 import io from "socket.io-client";
 //const socket = io.connect("http://localhost:8000");
 import Peer from "simple-peer";
@@ -320,6 +322,7 @@ function App() {
           <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
           <Route path="/HomePageDoc" element={<HomePageDoc />} />
           <Route path="/viewMyPatients" element={<MyPatientsList />} />
+          <Route path="/ScheduleFollowUp/:id" element={<ScheduleFollowUp />} />
           <Route path="/contract" element={<DoctorContract />} />
           <Route path="/ChatChoiceDR" element={<ChatChoiceDR />} />{" "}
           <Route path="/ChatPharmacistDR" element={<ChatPharmacistDR />} />{" "}

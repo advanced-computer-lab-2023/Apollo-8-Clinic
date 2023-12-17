@@ -179,7 +179,7 @@ const Container = styled.div`
       justify-content: flex-end;
 
       .content {
-        background-color: #008cff;
+        background-color: #3366CC;
       }
     }
 
