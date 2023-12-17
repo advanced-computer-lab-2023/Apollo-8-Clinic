@@ -136,6 +136,7 @@ const getDoctorByIdForChat = async (req, res) => {
 };
 const getDoctorById = async (req, res) => {
 
+  console.log(req.params.id)
   try {
     const doctor = await DoctorModel.findById(
       new mongoose.Types.ObjectId(req.params.id)

@@ -57,7 +57,7 @@ router.put("/updatePresAdd/:id", Middle.requireAuthDoctor, controllers.updatePre
 router.put("/updatePresDelete/:id", Middle.requireAuthDoctor, controllers.updatePrescription_DeleteMed)
 router.put("/updatePresDose/:id", Middle.requireAuthDoctor, controllers.updatePrescription_Dosage)
 //router.delete("/DeletePres/:id",Middle.requireAuthDoctor,controllers.deletePrescription)
-
 router.get("/:id", Middle.requireAuth, controllers.getDoctorById);
+
 
 export default router;

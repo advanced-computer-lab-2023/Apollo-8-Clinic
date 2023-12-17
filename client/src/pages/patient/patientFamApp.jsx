@@ -241,7 +241,7 @@ const PatientFamApp = () => {
                                       onClick={() => {
                                         handleRescheduleApp(
                                           appointment1._id,
-                                          appointment1.doctorId
+                                          appointment1.doctorId._id
                                         );
                                       }}
                                     >
