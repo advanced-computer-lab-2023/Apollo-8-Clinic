@@ -303,8 +303,12 @@ const filterBySpecOrAv = async (req, res) => {
     console.log(req.body)
     const { searchTime, searchSpec } = req.body;
 
+    const searchTimeDate = new Date(searchTime)
+    searchTimeDate.setHours(searchTimeDate.getHours() + 3);
+    console.log(searchTimeDate)
+
     if (searchTime && searchSpec) {
-      const filtered = await DoctorModel.find({ speciality: searchSpec, availableSlots: searchTime });
+      const filtered = await DoctorModel.find({ speciality: searchSpec, availableSlots: { $in: [searchTimeDate] } });
       res.status(200).json(filtered);
     }
     else if (searchSpec) {
@@ -314,11 +318,12 @@ const filterBySpecOrAv = async (req, res) => {
     }
     else if (searchTime) {
       console.log("soso----" + searchTime)
-      const filtered = await DoctorModel.find({ availableSlots: searchTime });
+      const filtered = await DoctorModel.find({ availableSlots: { $in: [searchTimeDate] } });
+      console.log(filtered)
       res.status(200).json(filtered);
     }
     else {
-      const filtered = await DoctorModel.find();
+      const filtered = await DoctorModel.find({ status: "Accepted" });
       res.status(200).json(filtered);
     }
   } catch (error) {
@@ -397,7 +402,7 @@ const addAvailableTimeSlots = async (req, res) => {
       return res.status(403).json({ error: 'Doctor is not accepted yet' });
     }
     console.log('Doctor status:', doctor.status);
-    
+
     const { availableSlots } = req.body;
     console.log('Date:', availableSlots);
     if (!doctor.availableSlots) {
@@ -408,17 +413,17 @@ const addAvailableTimeSlots = async (req, res) => {
     const slotsArray = Array.isArray(availableSlots) ? availableSlots : [availableSlots];
     for (const slot of slotsArray) {
       const date1 = new Date(slot);
-      console.log("date1"+date1)
+      console.log("date1" + date1)
       for (const drSlot of doctor.availableSlots) {
         const date2 = new Date(drSlot);
-        console.log("date2"+date2)
+        console.log("date2" + date2)
         if (date1.getTime() === date2.getTime()) {
           return res.status(500).json({ error: 'Date already exists in available slots' });
         }
       }
     }
     doctor.availableSlots.push(...slotsArray);
-console.log("slotsArray"+slotsArray);
+    console.log("slotsArray" + slotsArray);
     await doctor.save();
     res.status(200).json(doctor);
     console.log('Doctor after saving:', doctor);

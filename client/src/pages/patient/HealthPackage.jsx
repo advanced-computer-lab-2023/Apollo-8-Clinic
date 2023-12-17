@@ -13,14 +13,12 @@ import "../../App.css";
 import Button from "@mui/material/Button";
 import ResponsiveAppBar from "../../components/TopBar";
 
-const PatientHP_FM = () => {
+const PatientHP = () => {
   //assuming that patient id is in window.location named patientID
   const params = new URLSearchParams(window.location.search);
   let patientID = params.get("patientId");
   /////////////////////REMOVE THAT
-  patientID = "6529c70a6be1d55abc0d0114";
-  const [mainshow, setmainshow] = useState(true);
-  const [familyshow, setfamilyshow] = useState(false);
+  //patientID = "6529c70a6be1d55abc0d0114";
   const [addFamilyMemForm, setaddFamilyMemForm] = useState(false);
   const [linkFamilyMemForm, setlinkFamilyMemForm] = useState(false);
   const [healthPackageshow, sethealthPackageshow] = useState(false);
@@ -37,34 +35,7 @@ const PatientHP_FM = () => {
   const [mydiscount, setmydiscount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [familyMembers, setFamilyMembers] = useState([]);
-  const fn1 = () => {
-    setmainshow(false);
-    setfamilyshow(true);
-    axios
-      .get(`http://localhost:8000/patient/NotlinkedFamily/${patientID}`)
-      .then((res) => {
-        setnonlinkedfamily(res.data);
-        
-     
-      })
-      .catch((error) => {
-        res.status(400).send(error);
-        console.error("Error fetching data:", error);
-      });
-
-    axios
-      .get(`http://localhost:8000/patient/LinkedFamily/${patientID}`)
-      .then((res) => {
-        setlinkedfamily(res.data);
-       
-   
-      })
-      .catch((error) => {
-        res.status(400).send(error);
-        console.error("Error fetching data:", error);
-      });
-  };
-
+  
   //add a new family member
   const [name, setName] = useState("");
   const [nationalID, setNationalID] = useState("");
@@ -72,89 +43,8 @@ const PatientHP_FM = () => {
   const [gender, setGender] = useState("");
   const [relation, setRelation] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-  
-  
-    if (!name || !nationalID || !age || !gender || !relation) {
-      setErrorMessage("Please fill in all fields.");
-      return;
-    }
-    const numberFormat = /^\d+$/;
-    const nameFormat = /^[a-zA-Z\s]+$/;
-    if (!numberFormat.test(nationalID)) {
-      setErrorMessage("invalid nationalID format");
-      return;
-    }
-  
-    if (!nameFormat.test(name)) {
-      setErrorMessage("Invalid text format");
-      return;
-    }
-  
-    try {
-      const familyMember= { name, nationalID, age, gender, relation };
-console.log(familyMember)
-      const response = await axios.post(
-        `http://localhost:8000/patient/AddFamilyMember/${patientID}`,
-        familyMember
-      );
- 
-      setErrorMessage(response.data);
-      
-    
-  if (!response.data.errorMessage) {
-    // Update the nonlinkedfamily state with the new member
-    setnonlinkedfamily((prevNonLinkedFamily) => [
-      ...prevNonLinkedFamily,
-      response.data.familyMember,
-    ]);
-  }
-    console.log("After adding family member:", nonlinkedfamily);
-  
-      setName("");
-      setAge("");
-      setGender("");
-      setNationalID("");
-      setRelation("");
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  const linkPatient = (event) => {
-    event.preventDefault();
-    if (!name || !relation) {
-      alert("Please fill in all fields.");
-      return;
-    }
-    //the name var here is the input (mail or number)
-    const numberFormat = /^\d+$/;
-    const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (!numberFormat.test(name) && !mailFormat.test(name)) {
-      alert("invalid input format");
-      return;
-    }
-    try {
-      //console.log({"input":name,"relation":relation})
-      const body = { input: name, relation: relation };
-      axios
-        .post("http://localhost:8000/patient/linkPatient/" + patientID, body)
-        .then((res) => alert(res.data));
-    } catch (error) {
-      console.error(error);
-    }
 
-    setName("");
-    setRelation("");
-    setlinkFamilyMemForm(false);
-  };
-
-  const fn2 = () => {
-    sethealthPackageshow(true);
-    setmainshow(false);
-    setfamilyshow(false);
-    setaddFamilyMemForm(false);
-
+  useState(() => {
     axios
       .get(`http://localhost:8000/patient/NotlinkedFamily/${patientID}`)
       .then((res) => {
@@ -188,8 +78,6 @@ console.log(familyMember)
         console.error("There was an error!", error);
       });
 
-    //get my discount
-    //if i am a linked patient for a patient, get him , get his subscription , get discount , setmydisocunt()
     axios
       .get(`http://localhost:8000/patient/mydiscount/${patientID}`)
       .then((res) => {
@@ -200,8 +88,7 @@ console.log(familyMember)
         res.status(400).send(error);
         console.error("Error fetching data:", error);
       });
-  };
-
+    },[]);
   const subscribeforMe = (packageid) => {
     setSelectedPackageId(packageid);
     setWhom(1);
@@ -253,6 +140,7 @@ console.log(familyMember)
   const handleWalletPayment = async (price, packageName) => {
     //subscription , for me
     if (whom === 1) {
+        
       axios
         .post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, {
           HPname: packageName,
@@ -262,6 +150,7 @@ console.log(familyMember)
           setSelectedPackageId("");
           setWhom(0);
           //payment
+          console.log("i am paying for myself  by wallet")
           try {
             // Make a request to your backend to update the wallet
             const response = axios.put(
@@ -391,308 +280,12 @@ console.log(familyMember)
         }}
       >
         <ResponsiveAppBar />
-        <div
-          style={{
-            backgroundColor: " rgb(65, 105, 225)",
-            borderRadius: "50px",
-            margin: "10px",
-            width: "40%",
-            marginLeft: "30%",
-          }}
-        >
-          <h1
-            style={{
-              font: "Arial",
-              fontWeight: "bold",
-              color: "white",
-              margin: "10px",
-            }}
-          >
-            Health Packages
-          </h1>
-        </div>
-        <div
-          className="card m-3 col-12"
-          style={{ width: "80%", left: "8%", borderRadius: "20px" }}
-        >
-          {mainshow ? (
-            <div style={{ display: "flex" }}>
-              <Card1 style={{ width: "18rem" }}>
-                <Card1.Img variant="top" src={hpImg} alt="health package.png" />
-                <Card1.Body>
-                  <Card1.Title>Health packages</Card1.Title>
-                  <Card1.Text>
-                    subscribe now on a health package and get exclusive offers
-                  </Card1.Text>
-                  <Button1
-                    variant="primary"
-                    onClick={() => {
-                      fn2();
-                    }}
-                  >
-                    view
-                  </Button1>
-                </Card1.Body>
-              </Card1>
-              <Card1 style={{ width: "18rem" }}>
-                <Card1.Img variant="top" src={famImg} alt="family.png" />
-                <Card1.Body>
-                  <Card1.Title>My family</Card1.Title>
-                  <Card1.Text>
-                    add your family and link to other patient's account
-                  </Card1.Text>
-                  <Button1
-                    variant="primary"
-                    onClick={() => {
-                      fn1();
-                    }}
-                  >
-                    view
-                  </Button1>
-                </Card1.Body>
-              </Card1>
-            </div>
-          ) : null}
-          {familyshow ? (
-            <div style={{ "text-align": "left" }}>
-              <div>
-                <h2>Family members</h2>
-              </div>
-              {nonlinkedfamily.map((member) => (
-                <div
-                  key={member?.id}
-                  style={{
-                    border: "1px solid black",
-                    "text-align": "center",
-                    "margin-bottom": "10px",
-                    width: 500,
-                    borderRadius: 5,
-                  }}
-                >
-                  <p>
-                    <strong>Name:</strong> {member?.name}
-                  </p>
-                  <p>
-                    <strong>National ID:</strong> {member?.nationalID}
-                  </p>
-                  <p>
-                    <strong>Age:</strong> {member?.age}
-                  </p>
-                  <p>
-                    <strong>Gender:</strong> {member?.gender}
-                  </p>
-                  <p>
-                    <strong>Relation:</strong> {member?.relation}
-                  </p>
-                  <p>
-                    <strong>health package subscription:</strong>{" "}
-                    {member?.healthPackageSub}
-                  </p>
-                  <p>
-                    <strong>subscription due date:</strong>{" "}
-                    {member?.DateOfSubscribtion}
-                  </p>
-                  <p>
-                    <strong>subscription status:</strong>{" "}
-                    {member?.subscriptionStatus}
-                  </p>
-                </div>
-              ))}
-              <Button1
-                style={{ "margin-bottom": "10px" }}
-                onClick={() => {
-                  setaddFamilyMemForm(true);
-                }}
-              >
-                Add a new Family member
-              </Button1>
-              {addFamilyMemForm ? (
-                <div id="add_familyMemebr_form">
-                  <Form>
-                    <Form.Group
-                      className="mb-3"
-                      controlId="exampleForm.ControlInput1"
-                    >
-                      <Form.Floating
-                        className="mb-3"
-                        style={{ width: 500, borderRadius: 5 }}
-                      >
-                        <Form.Control
-                          id="floatingInputCustom"
-                          type="text"
-                          placeholder="Full name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                        <label htmlFor="floatingInputCustom">Full name</label>
-                      </Form.Floating>
-                    </Form.Group>
-                    <Form.Floating
-                      className="mb-3"
-                      style={{ width: 500, borderRadius: 5 }}
-                    >
-                      <Form.Control
-                        id="floatingInputCustom"
-                        type="text"
-                        placeholder="national ID"
-                        value={nationalID}
-                        onChange={(e) => setNationalID(e.target.value)}
-                      />
-                      <label htmlFor="floatingInputCustom">national ID</label>
-                    </Form.Floating>
-
-                    <Form.Floating
-                      className="mb-3"
-                      style={{ width: 500, borderRadius: 5 }}
-                    >
-                      <Form.Control
-                        id="floatingInputCustom"
-                        type="text"
-                        placeholder="age"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                      />
-                      <label htmlFor="floatingInputCustom">age</label>
-                    </Form.Floating>
-
-                    <Form.Select
-                      aria-label="Default select example"
-                      style={{
-                        width: 500,
-                        borderRadius: 5,
-                        "margin-bottom": "10px",
-                      }}
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                    >
-                      <option>Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </Form.Select>
-
-                    <Form.Select
-                      aria-label="Default select example"
-                      style={{
-                        width: 500,
-                        borderRadius: 5,
-                        "margin-bottom": "10px",
-                      }}
-                      value={relation}
-                      onChange={(e) => setRelation(e.target.value)}
-                    >
-                      <option>Relation</option>
-                      <option value="child">child</option>
-                      <option value="wife">wife</option>
-                      <option value="husband">husband</option>
-                    </Form.Select>
-                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-                    <Button1 type="submit" onClick={handleSubmit}>
-                      Submit
-                    </Button1>
-                  </Form>
-                </div>
-              ) : null}
-
-              <div style={{ height: 30 }}></div>
-
-              <div style={{ width: 500, borderRadius: 5 }}>
-                <h2>linked family accounts</h2>
-              </div>
-              {linkedfamily.map((member) => (
-                <div
-                  key={member.id}
-                  style={{
-                    border: "1px solid black",
-                    "text-align": "center",
-                    "margin-bottom": "10px",
-                    width: 500,
-                    borderRadius: 5,
-                  }}
-                >
-                  <p>
-                    <strong>Name:</strong> {member.name}
-                  </p>
-                  <p>
-                    <strong>Age:</strong> {member.age}
-                  </p>
-                  <p>
-                    <strong>Gender:</strong> {member.gender}
-                  </p>
-                  <p>
-                    <strong>Relation:</strong> {member.relation}
-                  </p>
-                  <p>check!!! sheel al part dah</p>
-                  <p>
-                    <strong>health package subscription:</strong>{" "}
-                    {member.healthPackageSub}
-                  </p>
-                  <p>
-                    <strong>subscription due date:</strong>{" "}
-                    {member.DateOfSubscribtion}
-                  </p>
-                  <p>
-                    <strong>subscription status:</strong>{" "}
-                    {member.subscriptionStatus}
-                  </p>
-                </div>
-              ))}
-              <Button1
-                style={{ "margin-bottom": "10px" }}
-                onClick={() => {
-                  setlinkFamilyMemForm(true);
-                }}
-              >
-                link with patient's account
-              </Button1>
-              {linkFamilyMemForm ? (
-                <div>
-                  <Form>
-                    <Form.Floating
-                      className="mb-3"
-                      style={{ width: 500, borderRadius: 5 }}
-                    >
-                      <Form.Control
-                        id="floatingInputCustom"
-                        type="text"
-                        placeholder="email address or phone number"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                      <label htmlFor="floatingInputCustom">
-                        email address or phone number
-                      </label>
-                    </Form.Floating>
-
-                    <Form.Select
-                      aria-label="Default select example"
-                      style={{
-                        width: 500,
-                        borderRadius: 5,
-                        "margin-bottom": "10px",
-                      }}
-                      value={relation}
-                      onChange={(e) => setRelation(e.target.value)}
-                    >
-                      <option>Relation</option>
-                      <option value="child">child</option>
-                      <option value="wife">wife</option>
-                      <option value="husband">husband</option>
-                    </Form.Select>
-                    <Button type="submit" onClick={linkPatient}>
-                      Submit
-                    </Button>
-                  </Form>
-                </div>
-              ) : null}
-            </div>
-          ) : null}
-
-          {healthPackageshow ? (
+              
             <div>
-              <div style={{ "text-align": "left" }}>
+              <div style={{ "text-align": "left", "color":"#000000"}}>
                 <h2>Health Packages</h2>
               </div>
-              <div style={{ "text-align": "left", overflow: "auto" }}>
+              <div style={{ "text-align": "left", overflow: "auto", "color":"#000000" }}>
                 {healthPackages.map((package1) => (
                   <div
                     key={package1._id}
@@ -796,7 +389,7 @@ console.log(familyMember)
                 ))}
               </div>
 
-              <h2 style={{ "text-align": "left" }}>subscriptions</h2>
+              <h2 style={{ "text-align": "left" ,"color":"#000000" }}>subscriptions</h2>
 
               <Table striped bordered hover>
                 <tbody>
@@ -836,7 +429,7 @@ console.log(familyMember)
                 </tbody>
               </Table>
 
-              <div style={{ justifyContent: "left" }}>
+              <div style={{ justifyContent: "left", "color":"#000000"}}>
                 <a>Family Subscriptions </a>{" "}
               </div>
               <Table striped bordered hover size="sm">
@@ -884,12 +477,10 @@ console.log(familyMember)
                 </tbody>
               </Table>
             </div>
-          ) : null}
-        </div>
       </AppBar>
     </div>
   );
 };
 
 //.filter(member => member.healthPackageSub !== '') in line 433
-export default PatientHP_FM;
+export default PatientHP;

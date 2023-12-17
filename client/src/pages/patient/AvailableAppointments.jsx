@@ -137,7 +137,7 @@ const AvailableAppointments = () => {
       patientId: patientID,
       date: selectedSlot,
       status: "upcoming",
-      type: value === "male" ? "follow up" : "regular",
+      type: value === "regular" ? "regular" : "follow up",
     };
     const newApp = await axios.post(
       "http://localhost:8000/appointment/",
@@ -160,28 +160,6 @@ const AvailableAppointments = () => {
     setDialogOpen(false);
     setSelectedSlot(null);
     setSelectedOption("");
-  };
-
-  const UpdateFollowUp = async (appID) => {
-    try {
-      if (!appID) {
-        console.error("Appointment or its ID is undefined.");
-        return;
-      }
-
-      const response = await axios.put(
-        "http://localhost:9000/updateAppointment/:doctorName",
-        {
-          appointmentId: appID,
-          newType: "follow up",
-        }
-      );
-
-      if (response.data) {
-      }
-    } catch (error) {
-      console.error("Error Updating Appointment Type ", error);
-    }
   };
 
   return (
