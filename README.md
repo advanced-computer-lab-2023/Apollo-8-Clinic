@@ -77,11 +77,9 @@ Please ensure your code adheres to these guidelines before submitting a pull req
 
 ### Main Registeration page
 
-First landing page for users; dual signup for doctors and patients, with sign-in options for doctors, patients, and admins.
+First landing page for users; dual signup for doctors and patients, with sign-in option for doctors, patients, and admins.
 
-![Registeration page](./ReadmeImages/registration1.png)
-![Registeration page](./ReadmeImages/registration2.png)
-
+![Registeration page](./ReadmeImages/registration.png)
 
 
 ### Admin HomePage
@@ -90,7 +88,6 @@ The admin homepage provides a centralized dashboard for convenient access to key
 
 
 ![admin homepage](./ReadmeImages/adminHomepage.png)
-
 
 
 
@@ -122,6 +119,12 @@ Display the patient's appointment history, with options to filter by appointment
 
 ![Appointment History](./ReadmeImages/appointments.png)
 
+
+### Notification System for doctor
+
+Optimize scheduling efficiency with our specialized notification system tailored for doctors.
+
+![Notification list](./ReadmeImages/notification.png)
 
 
 ## Tech/Framework used 🧰
