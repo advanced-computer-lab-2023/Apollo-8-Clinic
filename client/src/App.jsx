@@ -54,8 +54,9 @@ import DoctorWallet from "./pages/doctor/DoctorWallet";
 import FollowUP from "./pages/doctor/FollowUP";
 import HomePage from "./pages/patient/HomePage";
 import HomePageDoc from "./pages/doctor/HomePageDoc";
-import PatientHP_FM from "./pages/patient/PatientFamilyHP";
-
+import PatientHP_FM from "./pages/patient/PatientFamily";
+//////////////here
+import HealthPackageNEW from "./pages/patient/HealthPackage";
 import AvailableAppointments from "./pages/patient/AvailableAppointments";
 import RescheduleApp from "./pages/patient/RescheduleApp";
 import HomePageAdmin from "./pages/admin/HomePageAdmin";
