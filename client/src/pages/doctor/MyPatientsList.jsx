@@ -6,18 +6,30 @@ import { useNavigate } from "react-router-dom";
 import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
 import { IconButton, Tooltip } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import MedicationIcon from "@mui/icons-material/Medication";
 import MoreTimeIcon from "@mui/icons-material/MoreTime";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  FormControl,
+  TextField,
+  FormLabel,
+} from "@mui/material";
 function MyPatientsList() {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [name, setName] = useState();
   const [search, setSearch] = useState("");
+  const [followupDate, setFollowupDate] = useState(null);
+  const [patientId, setPatientId] = useState("");
 
   useEffect(() => {
     axios
@@ -53,6 +65,31 @@ function MyPatientsList() {
     navigate("/PatientAppointments");
   }
 
+  function handleAddFollowUp(id) {
+    console.log(id);
+    setPatientId(id);
+    setDialogOpen(true);
+  }
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+  const confirmFollowup = () => {
+    axios
+      .post("http://localhost:8000/appointment/createFollowUp", {
+        date: followupDate,
+        patientId: patientId,
+        status: "Accepted",
+        type: "follow up",
+      })
+      .then((response) => {})
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    setDialogOpen(false);
+    setFollowupDate(null);
+  };
+
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -63,6 +100,34 @@ function MyPatientsList() {
         }}
       >
         <ResponsiveAppBar />
+        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+          <DialogTitle>Add Follow up</DialogTitle>
+          <DialogContent>
+            <FormControl fullWidth>
+              <FormLabel id="demo-controlled-radio-buttons-group">
+                date
+              </FormLabel>
+              <TextField
+                type="datetime-local"
+                variant="outlined"
+                margin="normal"
+                onChange={(e) => setFollowupDate(e.target.value)}
+              />
+            </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={confirmFollowup}
+              color="primary"
+              disabled={!followupDate}
+            >
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
         <div
           className="card m-3 col-12"
           style={{ width: "80%", borderRadius: "20px", left: "8%" }}
@@ -151,7 +216,7 @@ function MyPatientsList() {
                             </Tooltip>
                             <Tooltip title="add follow up" placement="bottom">
                               <IconButton
-                                onClick={() => handleAddPrescription(item._id)}
+                                onClick={() => handleAddFollowUp(item._id)}
                               >
                                 <MoreTimeIcon></MoreTimeIcon>
                               </IconButton>
