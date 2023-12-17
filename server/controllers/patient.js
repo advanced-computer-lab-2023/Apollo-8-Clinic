@@ -5,6 +5,7 @@ import HealthPackageModel from '../models/healthPackage.js';
 import FollowUpRequestModel from '../models/followUpRequest.js';
 import DocModel from '../models/doctor.js';
 import AppointmentModel from '../models/appointment.js';
+import MedicineModel from '../models/medicine.js';
 import bcrypt from "bcrypt";
 const saltRounds = 10;
 
@@ -77,7 +78,7 @@ const createPatient = async (req, res) => {
         res.status(400).json({ error: error.message });
       }
     } else {
-      res.status(400).json("Username already exist");
+      return res.status(400).json({message:"Username already exist"});
     }
   } catch (error) {
     console.log(error);
@@ -310,7 +311,7 @@ const filterPres = async (req, res) => {
       const arr = await PresModel.find({
         $or: [
           { date: date },
-          { state: state }
+          { status: state }
         ], patientId: patientId
       }).populate('doctorId')
       res.status(200).json(arr);
@@ -688,18 +689,38 @@ const payPrescription = async (req, res) => {
     // const patient = await PatientModel.findOne({ user: res.locals.userId })
     // const patientId = patient._id;
     const presID = req.params.id;
-    const perscription = await PresModel.findById(presID);
+    const perscription = await PrescriptionModel.findById(presID);
     //check its presence to avoid errors
     if (!perscription) {
       res.status(200).json({ error: "no prescription with this id , check the database" });
       return;
     }
-    if (perscription.state === "filled") {
+    if (perscription.status === "filled") {
       res.status(200).json({ error: "already ordered!!, can not order it twice" });
       return;
     }
-    perscription.state = "filled";
-    perscription.save();
+
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
+
+    // add medicine to cart
+    for (const medicine of perscription.medicine) {
+      const med = await MedicineModel.findOne({ medicineName: medicine.name });
+      if (med && patient.cart) {
+        const isFound = patient.cart.some(item => item.medicine.equals(med._id));
+        if (!isFound) {
+          patient.cart.push({
+            medicine: med._id,
+            quantity: 1
+          })
+        }
+      }
+    }
+    await patient.save();
+    perscription.status = "filled";
+    await perscription.save();
+
+
+
     res.status(200).json("now the prescription is 'filled'");
     // //get the total price of all the medicines in the pres from the pharmacy server
     // axios.get("http://localhost:9000/medicine/medicinesTotPrice",perscription.medicine).
@@ -712,7 +733,7 @@ const payPrescription = async (req, res) => {
 
     // res.status(200).json(TotalPrice+"  done");
 
-  } catch {
+  } catch (error) {
     res.status(400).json({ error: error.message })
   }
 }
@@ -720,6 +741,8 @@ const payPrescription = async (req, res) => {
 
 //npm install pdfkit 
 import pdfkit from 'pdfkit'
+import DoctorModel from '../models/doctor.js';
+import PrescriptionModel from '../models/prescription.js';
 const printPresPDF = async (req, res) => {
 
   const id = req.params.id;
@@ -728,6 +751,8 @@ const printPresPDF = async (req, res) => {
     console.error('pres not found ', error);
     return;
   }
+  const patient = await PatientModel.findOne({ user: res.locals.userId });
+  const doctor = await DoctorModel.findOne({ _id: data.doctorId });
   try {
     // Generate a unique filename for the PDF
     const filename = "output_prescription.pdf";
@@ -735,10 +760,15 @@ const printPresPDF = async (req, res) => {
     // Generate the PDF
     const doc = new pdfkit();
     doc.pipe(fs.createWriteStream(filename));
-    doc.text("prescription: \n \n")
-    doc.text("Date : " + data.date.toISOString() + "\n")
+    doc.text("Prescription: \n \n")
+    doc.text("Doctor: " + doctor.name + "\n")
+    doc.text("Patient: " + patient.name + "\n")
+    doc.text("Date : " + data.date.toLocaleDateString(
+      "en-GB",
+      {}
+    ) + "\n \n")
     data.medicine.forEach(function (element) {
-      doc.text("medicine: " + element.name + "  dose: " + element.dose + "\n")
+      doc.text("medicine: " + element.name + "\n" + "dose: " + element.dose + "\n" + "notes: " + element.notes + "\n \n")
     });
     doc.end();
 

@@ -2,14 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 import styled from "styled-components";
-import ChatContainer from "../../components/ChatContainer";
+import ChatContainerPH from "../../components/ChatContainerPH";
 import Contacts from "../../components/Contacts";
 import Welcome from "../../components/Welcome";
 import AppBar from "@mui/material/AppBar";
-import ResponsiveAppBar from "../../components/TopBar";
+import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
 
-export default function Chat() {
+export default function ChatPharmacistDR() {
    const socket = useRef();
    const [contacts, setContacts] = useState([]);
    const [currentChat, setCurrentChat] = useState(undefined);
@@ -19,7 +19,7 @@ export default function Chat() {
       const fetchData = async () => {
          try {
 
-            const result = await axios.get(`http://localhost:8000/patient/byId`);
+            const result = await axios.get(`http://localhost:8000/doctor/get/byId`);
             setCurrentUser(result.data);
             console.log(result.data);
          } catch (err) {
@@ -45,9 +45,7 @@ export default function Chat() {
       const fetchUsersList = async () => {
          try {
             const pharmacistResponse = await axios.get(`http://localhost:9000/pharmacist/`);
-            const doctorResponse = await axios.get(`http://localhost:8000/doctor/`);
-            const combinedContacts = [...pharmacistResponse.data, ...doctorResponse.data];
-            setContacts(combinedContacts);
+            setContacts(pharmacistResponse.data);
          } catch (error) {
             console.error(error);
          }
@@ -87,7 +85,7 @@ export default function Chat() {
                {currentChat === undefined ? (
                   <Welcome />
                ) : (
-                  <ChatContainer currentChat={currentChat} socket={socket} />
+                  <ChatContainerPH currentChat={currentChat} socket={socket} />
                )}
             </div>
          </Container>

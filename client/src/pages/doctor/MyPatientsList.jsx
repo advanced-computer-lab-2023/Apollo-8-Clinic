@@ -25,20 +25,26 @@ function MyPatientsList() {
         setLoading(false);
       });
   }, []);
-  function handleFilter() {
-    navigate(`/viewUpcomingApp`);
+  function handleFilter(id) {
+    // Navigate to another route and pass the ID as a prop
+    navigate(`/PatientUpcomingAppointments/:id`);
   }
 
   function handleView(id) {
-   
+    // Navigate to another route and pass the ID as a prop
     navigate(`/viewHealth/${id}`);
   }
 
   function handleAddHealthRecord(id) {
+    // Navigate to another route and pass the ID as a prop
     navigate(`/AddHealthRecords/${id}`);
   }
+  function handleAddPrescription(id) {
+    navigate(`/doctor/prescriptions/${id}`);
+  }
   function handlePatientAppointmentDetails() {
-    navigate('/PatientAppointments');
+    // Navigate to another route and pass the ID as a prop
+    navigate("/PatientAppointments");
   }
 
   return (
@@ -57,7 +63,10 @@ function MyPatientsList() {
         >
           <div className="card-header">
             <h2>Your patients' list</h2>
-           <button className="btn btn-primary rounded-2" onClick={() => handleFilter()}>
+            <button
+              className="btn btn-primary rounded-2"
+              onClick={() => handleFilter()}
+            >
               filter to future appointments
             </button>
           </div>
@@ -73,6 +82,7 @@ function MyPatientsList() {
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th>
                       <input
                         type="text"
@@ -82,7 +92,6 @@ function MyPatientsList() {
                         className="form-control rounded-0"
                         onChange={(e) => setSearch(e.target.value)}
                       />
-                    
                     </th>
                   </tr>
                 </thead>
@@ -100,20 +109,30 @@ function MyPatientsList() {
                         <td>
                           <button
                             className="btn btn-primary rounded-2"
-                            onClick={() => handlePatientAppointmentDetails()}
+                            onClick={() =>
+                              handlePatientAppointmentDetails(item._id)
+                            }
                           >
-                            view PatientAp
+                            view PatientDetails
                           </button>
                         </td>
                         <td>
                           <button
-                           className="btn btn-primary rounded-2"
+                            className="btn btn-primary rounded-2"
                             onClick={() => handleView(item._id)}
                           >
                             view Health Records
                           </button>
                         </td>
-                        <td></td>
+                        <td>
+                          {" "}
+                          <button
+                            className="btn btn-primary rounded-2"
+                            onClick={() => handle(item._id)}
+                          >
+                            view patientDetails
+                          </button>
+                        </td>
                         <td>
                           <button
                             className="btn btn-primary rounded-2"
@@ -122,21 +141,31 @@ function MyPatientsList() {
                             add health record
                           </button>
                         </td>
+                        <td>
+                          <button
+                            className="btn btn-primary rounded-2"
+                            onClick={() => handleAddPrescription(item._id)}
+                          >
+                            Prescriptions
+                          </button>
+                        </td>
                       </tr>
                     ))}
                 </tbody>
-          
-                {data.filter((item) => item.name.toLowerCase().includes(search)).length === 0 &&
+
+                {data.filter((item) => item.name.toLowerCase().includes(search))
+                  .length === 0 &&
                   search.length > 0 && (
                     <tr>
-                      <td colSpan="6" style={{ color: "red", textAlign: "center" }}>
+                      <td
+                        colSpan="6"
+                        style={{ color: "red", textAlign: "center" }}
+                      >
                         No patients found with this name
                       </td>
                     </tr>
-                  )} 
-                 
+                  )}
               </table>
-              
             )}
           </div>
         </div>

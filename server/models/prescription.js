@@ -11,14 +11,17 @@ const prescriptionSchema = new mongoose.Schema({
     ref: "Patient",
     required: true,
   },
-  state: {
+  status: {
     type: String,
     required: true,
+    enum: ["filled", "unfilled"],
+    default: "unfilled"
   },
   medicine: [
     {
       name: { type: String, required: true },
-      dose: { type:String, required: true }
+      dose: { type: String, required: true, default: 1 },
+      notes: { type: String }
     }
   ],
   date: {

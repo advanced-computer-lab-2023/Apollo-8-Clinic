@@ -19,6 +19,7 @@ import { useLocation } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
+import CardContent from '@mui/material/CardContent';
 //import Peer from "simple-peer"
 //youhanna milestone 2222
 import PatientUpcomingAppointments from "./pages/doctor/PatientUpcomingAppointments";
@@ -32,7 +33,7 @@ import ChangePassAdm from "./pages/admin/changePassAdm";
 import PatientAppointments from "./pages/doctor/PatientAppointments";
 import AppPatient from "./pages/patient/patientFamApp";
 import MyPatientsList from "./pages/doctor/MyPatientsList";
-import UpcomingAppointments from "./pages/doctor/UpcomingAppointments";
+
 import AddAdmin from "./pages/admin/AddAdmin";
 import RemoveUser from "./pages/admin/RemoveUser";
 import PendingDoctors from "./pages/admin/PendingDoctors";
@@ -44,7 +45,7 @@ import PatientHealthRecords from "./pages/patient/PatientHealthRecords";
 import MainDoctor from "./pages/doctor/DoctorAppointments";
 import App1 from "./pages/admin/adminHealthP";
 import PrescriptionsDetails from "./pages/patient/PrescriptionDetails";
-
+import AddhealthPackage from "./pages/admin/AddHealthP";
 //apply sessDiscount for patients
 import DoctorsWithDiscount from "./pages/patient/DoctorsWithDiscount";
 import AppointmentWalletPayment from "./pages/patient/AppointmentWalletPayment";
@@ -65,13 +66,25 @@ import FollowUPPending from "./pages/doctor/FollowUPPending";
 import * as React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
-// import chat
-import Chat from "./pages/patient/Chat";
-import ChatDoctor from "./pages/doctor/Chat";
+// chat patient
+// Chat patient 
+import ChatPharmacist from "./pages/patient/ChatPharmacist";
+import ChatChoice from "./pages/patient/ChatChoice";
+import ChatDoctor from "./pages/patient/ChatDoctor";
+
+
+// chat doctor 
+import ChatChoiceDR from "./pages/doctor/ChatChoiceDR";
+import ChatPharmacistDR from "./pages/doctor/ChatPharmacistDR";
+import ChatPatientDR from "./pages/doctor/ChatPatientDR";
+
 
 import io from "socket.io-client";
 //const socket = io.connect("http://localhost:8000");
 import Peer from "simple-peer";
+import AddPrescription from "./pages/doctor/AddPrescription";
+import DoctorPrescriptionsList from "./pages/doctor/DoctorPresriptionsList";
+import UpdatePrescription from "./pages/doctor/UpdatePrescription";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${JSON.parse(
   sessionStorage.getItem("token")
@@ -88,14 +101,15 @@ function App() {
   const [callerSignal, setCallerSignal] = useState();
   const [name, setName] = useState("");
   const location = useLocation();
-
-  useEffect(() => {
-    const socket = io.connect("http://localhost:8000", {
+  const socket = io.connect("http://localhost:8000", {
       query: {
         username: "john_doe",
         room: token,
       },
     });
+
+  useEffect(() => {
+    
 
     socket.on("callUser", (data) => {
       setDataFetched(false);
@@ -106,6 +120,10 @@ function App() {
       setName(data.name);
       setCallerSignal(data.signal);
       setDataFetched(true);
+    });
+    socket.on("callEnded", () => {
+      setReceivingCall(false);
+      setCalling(false);
     });
 
     const fetchData = async () => {
@@ -138,6 +156,7 @@ function App() {
   };
   const endCall = () => {
     console.log("hhhh");
+    socket.emit("left");
     setReceivingCall(false);
   };
 
@@ -239,7 +258,9 @@ function App() {
             <Route path="/viewDoctor/:id" element={<ViewDoctor />} />
             <Route path="/filter" element={<FilterDoctor />} />
             <Route path="/doctors/:id" element={<DoctorDetails />} />
-            <Route path="/Chat" element={<Chat />} />
+            <Route path="/ChatChoice" element={<ChatChoice />} />
+            <Route path="/ChatDoctor" element={<ChatDoctor />} />
+            <Route path="/Chatpharmacist" element={<ChatPharmacist />} />
             {/* this doctor details is in admin */}
             <Route path="/patientFamilyAppointments" element={<AppPatient />} />
             <Route
@@ -283,6 +304,15 @@ function App() {
           <Route path="/editDoctor" element={<EditDoctor />} />
           <Route path="/" element={<Home />} />
           <Route path="/AddHealthRecords/:id" element={<AddHealthRecords />} />
+          <Route path="/AddPrescription/:id" element={<AddPrescription />} />
+          <Route
+            path="/doctor/prescriptions/:id"
+            element={<DoctorPrescriptionsList />}
+          />
+          <Route
+            path="/prescriptionDetails/:id/:prescriptionId"
+            element={<UpdatePrescription />}
+          />
           <Route path="/DoctorWallet/:doctorName" element={<DoctorWallet />} />
           <Route path="/FollowUP/:doctorName" element={<FollowUP />} />
           <Route
@@ -292,9 +322,11 @@ function App() {
           <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
           <Route path="/HomePageDoc" element={<HomePageDoc />} />
           <Route path="/viewMyPatients" element={<MyPatientsList />} />
-          <Route path="/viewUpcomingApp" element={<UpcomingAppointments />} />
+         
           <Route path="/contract" element={<DoctorContract />} />
-          <Route path="/ChatDoctor" element={<ChatDoctor />} />{" "}
+          <Route path="/ChatChoiceDR" element={<ChatChoiceDR />} />{" "}
+          <Route path="/ChatPharmacistDR" element={<ChatPharmacistDR />} />{" "}
+          <Route path="/ChatPatientDR" element={<ChatPatientDR />} />{" "}
           <Route
             path="/PatientAppointments"
             element={<PatientAppointments />}
@@ -320,9 +352,9 @@ function App() {
         <Route path="/pendingDoctors" element={<PendingDoctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/adminHealthPackage" element={<App1 />} />
+        <Route path="/adminaddHealthPackage" element={<AddhealthPackage />} />
         <Route path="/ForgetPassword" element={<Forget />} />
         <Route path="/HomePageAdmin" element={<HomePageAdmin />} />
-
         <Route path="/changePassAdm" element={<ChangePassAdm />} />
       </Routes>
     );

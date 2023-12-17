@@ -397,19 +397,28 @@ const addAvailableTimeSlots = async (req, res) => {
       return res.status(403).json({ error: 'Doctor is not accepted yet' });
     }
     console.log('Doctor status:', doctor.status);
-    console.log('Request Body:', req.body);
+    
     const { availableSlots } = req.body;
     console.log('Date:', availableSlots);
     if (!doctor.availableSlots) {
       doctor.availableSlots = [];
     }
 
-
-
     // Ensure availableSlots is an array
     const slotsArray = Array.isArray(availableSlots) ? availableSlots : [availableSlots];
+    for (const slot of slotsArray) {
+      const date1 = new Date(slot);
+      console.log("date1"+date1)
+      for (const drSlot of doctor.availableSlots) {
+        const date2 = new Date(drSlot);
+        console.log("date2"+date2)
+        if (date1.getTime() === date2.getTime()) {
+          return res.status(500).json({ error: 'Date already exists in available slots' });
+        }
+      }
+    }
     doctor.availableSlots.push(...slotsArray);
-
+console.log("slotsArray"+slotsArray);
     await doctor.save();
     res.status(200).json(doctor);
     console.log('Doctor after saving:', doctor);
@@ -618,16 +627,15 @@ const addPrescription = async (req, res) => {
 
 const myPrescriptions = async (req, res) => {
   try {
-    const doctorId = res.locals.userId;
+    const userId = res.locals.userId;
 
-    const doctor = await DoctorModel.findById(doctorId);
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
     if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
     }
+    const prescriptions = await PrescriptionModel.find({ doctorId: doctor._id });
 
-    const prescriptions = await PresModel.find({ doctorId: doctorId });
-
-    return res.status(200).json({ prescriptions });
+    return res.status(200).json(prescriptions);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
@@ -687,9 +695,30 @@ const getFollowUpRequest = async (req, res) => {
   }
 };
 
+const allMedicines = async (req, res) => {
+  try {
+    const medicines = await MedicineModel.find();
+    res.status(200).json(medicines);
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+const prescriptionDetails = async (req, res) => {
+  try {
+    const prescription = await PrescriptionModel.find({ _id: req.body.prescriptionId });
+    res.status(200).json(prescription);
+  }
+  catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 //npm install pdfkit 
 import pdfkit from 'pdfkit'
 import fs from 'fs'
+import MedicineModel from '../models/medicine.js';
 const printPresPDF = async (req, res) => {
 
   const id = req.params.id;
@@ -698,6 +727,8 @@ const printPresPDF = async (req, res) => {
     console.error('pres not found ', error);
     return;
   }
+  const patient = await PatientModel.findOne({ _id: data.patientId });
+  const doctor = await DoctorModel.findOne({ user: res.locals.userId });
   try {
     // Generate a unique filename for the PDF
     const filename = "output_prescription.pdf";
@@ -705,10 +736,15 @@ const printPresPDF = async (req, res) => {
     // Generate the PDF
     const doc = new pdfkit();
     doc.pipe(fs.createWriteStream(filename));
-    doc.text("prescription: \n \n")
-    doc.text("Date : " + data.date.toISOString() + "\n")
+    doc.text("Prescription: \n \n")
+    doc.text("Doctor: " + doctor.name + "\n")
+    doc.text("Patient: " + patient.name + "\n")
+    doc.text("Date : " + data.date.toLocaleDateString(
+      "en-GB",
+      {}
+    ) + "\n \n")
     data.medicine.forEach(function (element) {
-      doc.text("medicine: " + element.name + "  dose: " + element.dose + "\n")
+      doc.text("medicine: " + element.name + "\n" + "dose: " + element.dose + "\n" + "notes: " + element.notes + "\n \n")
     });
     doc.end();
 
@@ -746,36 +782,50 @@ const addPrescription2 = async (req, res) => {
     const state = "unfilled"
     const date = (new Date());
     const doctorId = doctor._id;
-    //const doctorId = "6573a8306be1610a354e196b"
     const newPres = new PrescriptionModel({ doctorId, patientId, state, medicine, date });
     await newPres.save();
 
     // add medicines to the patient's cart in the pharmacy
-    for (var element of medicine) {
-      try {
-        const result = await axios.request({
-          method: 'get',
-          url: "http://localhost:9000/medicine/searchMedForClinic",
-          data: { name: element.name }
-        });
-        if (result) {
-          console.log("medicine " + element.name + " id from the pharmacy " + result.data[0]._id);
-          await axios.request({
-            method: 'post',
-            url: "http://localhost:9000/patient/addToCartFromClinic",
-            data: { medicineId: result.data[0]._id, quantity: 1 }
-          });
-        }
-      } catch (error) {
-        console.error('Error while connecting to the pharmacy', error);
-        res.status(500).send('Internal Server Error');
-        return; // Stop the execution of the function
-      }
-    }
+    // for (var element of medicine) {
+    //   try {
+    //     const result = await axios.request({
+    //       method: 'get',
+    //       url: "http://localhost:9000/medicine/searchMedForClinic",
+    //       data: { name: element.name }
+    //     });
+    //     if (result) {
+    //       console.log("medicine " + element.name + " id from the pharmacy " + result.data[0]._id);
+    //       await axios.request({
+    //         method: 'post',
+    //         url: "http://localhost:9000/patient/addToCartFromClinic",
+    //         data: { medicineId: result.data[0]._id, quantity: 1 }
+    //       });
+    //     }
+    //   } catch (error) {
+    //     console.error('Error while connecting to the pharmacy', error);
+    //     res.status(500).send('Internal Server Error');
+    //     return; // Stop the execution of the function
+    //   }
+    // }
     res.status(200).json(newPres);
   }
   catch (error) {
     console.error('Error adding a prescription', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+const updatePrescription = async (req, res) => {
+  try {
+    const predId = req.params.id;
+    const prescription = await PrescriptionModel.findById(predId);
+    const { medicine } = req.body;
+    prescription.medicine = medicine;
+    await prescription.save();
+    res.status(200).json("updated successfully");
+  }
+  catch (error) {
+    console.error('Error updating prescription', error);
     res.status(500).send('Internal Server Error');
   }
 }
@@ -920,9 +970,11 @@ export default {
   updatecancelledAppointment,
   getNotfication,
   sawNotfication,
-
+  allMedicines,
   printPresPDF,
+  prescriptionDetails,
   addPrescription2,
+  updatePrescription,
   updatePrescription_AddMed,
   updatePrescription_DeleteMed,
   updatePrescription_Dosage

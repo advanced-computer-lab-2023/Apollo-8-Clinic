@@ -78,8 +78,8 @@ function UpcomingAppointmentDetails() {
                 width: '5%',
                 height: '40px',
               }}
-              
               onClick={handleBack}
+             
             >
               Back
             </button>

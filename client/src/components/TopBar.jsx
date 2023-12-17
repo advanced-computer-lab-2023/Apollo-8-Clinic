@@ -64,7 +64,7 @@ function ResponsiveAppBar() {
           }
         }
         setunseenNotifications(num);
-        setData(response.data);
+        setData(response.data.reverse());
         setDataFetched(true);
       })
       .catch((error) => {
@@ -133,7 +133,7 @@ function ResponsiveAppBar() {
   };
 
   const handleChatNavigate = () => {
-    navigate("/Chat");
+    navigate("/ChatChoice");
   };
 
   const handleLogout = (e) => {
