@@ -7,8 +7,9 @@ import BottomBar from "../../components/BottomBar.jsx";
 import axios from "axios";
 import config from "../../config/config.js";
 import img1 from "../../images/photo.png";
-import * as React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
+import * as React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import moment from "moment";
 
 function PatientHealthRecords() {
   console.log("Component rendered");
@@ -54,7 +55,7 @@ function PatientHealthRecords() {
       // Display a message or perform any other action to inform the user about the missing fields
       return;
     }
-  
+
     try {
       const response = await axios.put(
         "http://localhost:8000/patient/health-records",
@@ -69,7 +70,7 @@ function PatientHealthRecords() {
           },
         }
       );
-  
+
       setHealthRecords(response.data.health_records.records);
       setLoading(false);
       // Reset the form fields
@@ -95,7 +96,9 @@ function PatientHealthRecords() {
         id,
       })
       .then(() => {
-        setHealthRecords((prevRecords) => prevRecords.filter(record => record._id !== id));
+        setHealthRecords((prevRecords) =>
+          prevRecords.filter((record) => record._id !== id)
+        );
       })
       .catch((err) => console.log(err));
   };
@@ -119,7 +122,9 @@ function PatientHealthRecords() {
       />
       <div className="card-body">
         <p className="card-text">Description: {record.description}</p>
-        <p className="card-text">Date: {record.date}</p>
+        <p className="card-text">
+          Date: {moment(record.date).format("YYYY-MM-DD HH:mm:ss")}{" "}
+        </p>
       </div>
       <button
         onClick={() => handleRemoveMedicalHistory(record._id)}
@@ -171,7 +176,10 @@ function PatientHealthRecords() {
               {alertMessage}
             </Alert>
           )}
-          <div className="card m-3 col-12" style={{ width: "80%", borderRadius: "20px", left: "8%" }}>
+          <div
+            className="card m-3 col-12"
+            style={{ width: "80%", borderRadius: "20px", left: "8%" }}
+          >
             <form onSubmit={handleAddMedicalHistory}>
               <div>
                 <div className="mb-3">
@@ -215,7 +223,7 @@ function PatientHealthRecords() {
               </div>
             </form>
           </div>
-  
+
           <div className="card-body">
             <div className="image">
               {loading ? (
@@ -223,17 +231,18 @@ function PatientHealthRecords() {
               ) : records.length === 0 ? (
                 <p style={{ color: "red" }}>No health records available.</p>
               ) : (
-                <div className="image" style={{ display: "inline-flex", flexWrap: "wrap" }}>
+                <div
+                  className="image"
+                  style={{ display: "inline-flex", flexWrap: "wrap" }}
+                >
                   {list}
                 </div>
               )}
             </div>
           </div>
-  
-          <BottomBar />
         </div>
       </AppBar>
     </div>
   );
-              }
+}
 export default PatientHealthRecords;

@@ -5,6 +5,9 @@ import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBar";
 import BottomBar from "../../components/BottomBar";
 import axios from "axios";
+import { IconButton, Tooltip } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 function FilterDoctors() {
   const [data, setData] = useState([]);
@@ -42,6 +45,12 @@ function FilterDoctors() {
     // Navigate to another route and pass the ID as a prop
     console.log(id);
     navigate(`/viewDoctor/${id}`);
+    console.log(id);
+  }
+  function handleViewAvailableSlots(id) {
+    // Navigate to another route and pass the ID as a prop
+    console.log(id);
+    navigate(`/AvailableAppointments/${id}`);
     console.log(id);
   }
   function handleFilter() {
@@ -101,7 +110,7 @@ function FilterDoctors() {
                     <th>Session Price</th>
                     <th>
                       <input
-                        type="text"
+                        type="datetime-local"
                         placeholder="filter by available slots"
                         autoComplete="off"
                         name="time"
@@ -139,13 +148,21 @@ function FilterDoctors() {
                       <td></td>
                       <td></td>
                       <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={() => handleView(item._id)}
-                          style={{ backgroundColor: " rgb(65, 105, 225)" }}
+                        <Tooltip title="View Details" placement="bottom">
+                          <IconButton onClick={() => handleView(item._id)}>
+                            <VisibilityIcon></VisibilityIcon>
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip
+                          title="view Available slots"
+                          placement="bottom"
                         >
-                          view
-                        </button>
+                          <IconButton
+                            onClick={() => handleViewAvailableSlots(item._id)}
+                          >
+                            <CalendarMonthIcon></CalendarMonthIcon>
+                          </IconButton>
+                        </Tooltip>
                       </td>
                     </tr>
                   ))}

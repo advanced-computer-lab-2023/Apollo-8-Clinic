@@ -78,7 +78,7 @@ const createPatient = async (req, res) => {
         res.status(400).json({ error: error.message });
       }
     } else {
-      return res.status(400).json({message:"Username already exist"});
+      return res.status(400).json({ message: "Username already exist" });
     }
   } catch (error) {
     console.log(error);
@@ -371,7 +371,7 @@ const getSessDiscount = async (req, res) => {
 
 const updateWallet = async (req, res) => {
   try {
-    const { patientId, paymentAmount } = req.body;
+    const { paymentAmount } = req.body;
     const patient = await PatientModel.findOne({ user: res.locals.userId });
     console.log(patient);
     patient.wallet += paymentAmount;
