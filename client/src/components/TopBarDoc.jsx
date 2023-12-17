@@ -231,18 +231,6 @@ function ResponsiveAppBar() {
               Pending Follow Up{" "}
             </Button>
             <Button
-              onClick={handleFollowUp}
-              sx={{
-                color: "white",
-                display: "block",
-                fontSize: "10px",
-                fontWeight: 500,
-              }}
-            >
-              {" "}
-              Follow Up{" "}
-            </Button>
-            <Button
               onClick={handleEditDoc}
               sx={{
                 color: "white",

@@ -5,7 +5,13 @@ import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
-
+import { IconButton, Tooltip } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import FolderSharedIcon from "@mui/icons-material/FolderShared";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import MedicationIcon from "@mui/icons-material/Medication";
+import MoreTimeIcon from "@mui/icons-material/MoreTime";
 function MyPatientsList() {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
@@ -79,10 +85,7 @@ function MyPatientsList() {
                   <tr>
                     <th>Name</th>
                     <th>Email</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>gender</th>
                     <th>
                       <input
                         type="text"
@@ -107,48 +110,52 @@ function MyPatientsList() {
                         <tr key={index}>
                           <td>{item.name}</td>
                           <td>{item.email}</td>
+                          <td>{item.gender}</td>
                           <td>
-                            <button
-                              className="btn btn-primary rounded-2"
-                              onClick={() =>
-                                handlePatientAppointmentDetails(item._id)
-                              }
+                            <Tooltip
+                              title="view Appointments"
+                              placement="bottom"
                             >
-                              view PatientDetails
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-primary rounded-2"
-                              onClick={() => handleView(item._id)}
+                              <IconButton
+                                onClick={() =>
+                                  handlePatientAppointmentDetails(item._id)
+                                }
+                              >
+                                <PendingActionsIcon></PendingActionsIcon>
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip
+                              title="view Health Records"
+                              placement="bottom"
                             >
-                              view Health Records
-                            </button>
-                          </td>
-                          <td>
-                            {" "}
-                            <button
-                              className="btn btn-primary rounded-2"
-                              onClick={() => handle(item._id)}
+                              <IconButton onClick={() => handleView(item._id)}>
+                                <FolderSharedIcon></FolderSharedIcon>
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip
+                              title="add health record"
+                              placement="bottom"
                             >
-                              view patientDetails
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-primary rounded-2"
-                              onClick={() => handleAddHealthRecord(item._id)}
-                            >
-                              add health record
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-primary rounded-2"
-                              onClick={() => handleAddPrescription(item._id)}
-                            >
-                              Prescriptions
-                            </button>
+                              <IconButton
+                                onClick={() => handleAddHealthRecord(item._id)}
+                              >
+                                <AddBoxIcon></AddBoxIcon>
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Prescriptions" placement="bottom">
+                              <IconButton
+                                onClick={() => handleAddPrescription(item._id)}
+                              >
+                                <MedicationIcon></MedicationIcon>
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="add follow up" placement="bottom">
+                              <IconButton
+                                onClick={() => handleAddPrescription(item._id)}
+                              >
+                                <MoreTimeIcon></MoreTimeIcon>
+                              </IconButton>
+                            </Tooltip>
                           </td>
                         </tr>
                       ))}
