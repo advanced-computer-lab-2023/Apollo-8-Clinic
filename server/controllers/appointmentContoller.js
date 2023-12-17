@@ -273,7 +273,7 @@ const getAppointmentWithFilter = async (req, res) => {
       }
     }
 
-    const appointment = await appointments.find(query).populate('doctorId');
+    const appointment = await appointments.find(query).populate('doctorId').populate('patientId');
     res.status(200).json(appointment);
   } catch (error) {
     res.status(500).json({ error: error.message });

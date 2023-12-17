@@ -122,13 +122,16 @@ const Appointments = () => {
               <strong>Doctor ID:</strong> {member.doctorId.name}
             </p>
             <p>
-              <strong>patient ID:</strong> {member.patientId}
+              <strong>patient ID:</strong> {member.patientId.name}
             </p>
             <p>
               <strong>Date:</strong> {formatDate(member.date)}
             </p>
             <p>
               <strong>status:</strong> {member.status}
+            </p>
+            <p>
+              <strong>type:</strong> {member.type}
             </p>
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
@@ -278,13 +281,16 @@ const AppointmentFilterPage = ({ appointments }) => {
               <strong>Doctor ID:</strong> {member.doctorId.name}
             </p>
             <p>
-              <strong>patient ID:</strong> {member.patientId}
+              <strong>patient ID:</strong> {member.patientId.name}
             </p>
             <p>
               <strong>Date:</strong> {formatDate(member.date)}
             </p>
             <p>
               <strong>status:</strong> {member.status}
+            </p>
+            <p>
+              <strong>type:</strong> {member.type}
             </p>
           </div>
           <div style={{ display: "flex", gap: "10px" }}>

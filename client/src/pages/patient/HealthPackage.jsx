@@ -35,14 +35,13 @@ const PatientHP = () => {
   const [mydiscount, setmydiscount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [familyMembers, setFamilyMembers] = useState([]);
-  
+
   //add a new family member
   const [name, setName] = useState("");
   const [nationalID, setNationalID] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [relation, setRelation] = useState("");
-
 
   useState(() => {
     axios
@@ -88,7 +87,7 @@ const PatientHP = () => {
         res.status(400).send(error);
         console.error("Error fetching data:", error);
       });
-    },[]);
+  }, []);
   const subscribeforMe = (packageid) => {
     setSelectedPackageId(packageid);
     setWhom(1);
@@ -140,7 +139,6 @@ const PatientHP = () => {
   const handleWalletPayment = async (price, packageName) => {
     //subscription , for me
     if (whom === 1) {
-        
       axios
         .post(`http://localhost:8000/patient/subscribeForMe/${patientID}`, {
           HPname: packageName,
@@ -150,7 +148,7 @@ const PatientHP = () => {
           setSelectedPackageId("");
           setWhom(0);
           //payment
-          console.log("i am paying for myself  by wallet")
+          console.log("i am paying for myself  by wallet");
           try {
             // Make a request to your backend to update the wallet
             const response = axios.put(
@@ -280,203 +278,215 @@ const PatientHP = () => {
         }}
       >
         <ResponsiveAppBar />
-              
-            <div>
-              <div style={{ "text-align": "left", "color":"#000000"}}>
-                <h2>Health Packages</h2>
-              </div>
-              <div style={{ "text-align": "left", overflow: "auto", "color":"#000000" }}>
-                {healthPackages.map((package1) => (
-                  <div
-                    key={package1._id}
-                    style={{
-                      border: "1px solid black",
-                      "text-align": "center",
-                      "margin-bottom": "10px",
-                      width: 500,
-                      borderRadius: 5,
+        <div
+          className="card col-12 mt-3 mb-3"
+          style={{ maxWidth: "80%", marginLeft: "10%" }}
+        >
+          <div>
+            <div style={{ "text-align": "left", color: "#000000" }}>
+              <h2>Health Packages</h2>
+            </div>
+            <div
+              style={{
+                "text-align": "left",
+                overflow: "auto",
+                color: "#000000",
+              }}
+            >
+              {healthPackages.map((package1) => (
+                <div
+                  key={package1._id}
+                  style={{
+                    border: "1px solid black",
+                    "text-align": "center",
+                    "margin-bottom": "10px",
+                    width: 500,
+                    borderRadius: 5,
+                  }}
+                >
+                  <p>
+                    <strong>Name:</strong> {package1.name}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {package1.price + " L.E."}
+                  </p>
+                  <p>
+                    <strong>doctor's session price discount:</strong>{" "}
+                    {package1.sessDiscount * 100 + "%"}
+                  </p>
+                  <p>
+                    <strong>medicin discount:</strong>{" "}
+                    {package1.medDiscount * 100 + "%"}
+                  </p>
+                  <p>
+                    <strong>family subscribtion discount:</strong>{" "}
+                    {package1.subDiscount * 100 + "%"}
+                  </p>
+                  <Button1
+                    href="#id"
+                    style={{ "margin-right": 15, "margin-bottom": 5 }}
+                    onClick={() => {
+                      subscribeforMe(package1._id);
                     }}
                   >
-                    <p>
-                      <strong>Name:</strong> {package1.name}
-                    </p>
-                    <p>
-                      <strong>Price:</strong> {package1.price + " L.E."}
-                    </p>
-                    <p>
-                      <strong>doctor's session price discount:</strong>{" "}
-                      {package1.sessDiscount * 100 + "%"}
-                    </p>
-                    <p>
-                      <strong>medicin discount:</strong>{" "}
-                      {package1.medDiscount * 100 + "%"}
-                    </p>
-                    <p>
-                      <strong>family subscribtion discount:</strong>{" "}
-                      {package1.subDiscount * 100 + "%"}
-                    </p>
-                    <Button1
-                      href="#id"
-                      style={{ "margin-right": 15, "margin-bottom": 5 }}
-                      onClick={() => {
-                        subscribeforMe(package1._id);
-                      }}
-                    >
-                      subscribe for myself
-                    </Button1>
-                    <Button1
-                      style={{ "margin-bottom": 5 }}
-                      onClick={() => {
-                        handleFMSubsc(package1._id);
-                      }}
-                    >
-                      subscribe for a family member
-                    </Button1>
+                    subscribe for myself
+                  </Button1>
+                  <Button1
+                    style={{ "margin-bottom": 5 }}
+                    onClick={() => {
+                      handleFMSubsc(package1._id);
+                    }}
+                  >
+                    subscribe for a family member
+                  </Button1>
+                  <div>
+                    <Badge bg="secondary">
+                      {mydiscount * 100} % Offer for you{" "}
+                    </Badge>{" "}
+                    <Badge bg="secondary">
+                      {discount * 100} % Offer for any member
+                    </Badge>
+                  </div>
+                  {selectedPackageId === package1._id ? (
                     <div>
-                      <Badge bg="secondary">
-                        {mydiscount * 100} % Offer for you{" "}
-                      </Badge>{" "}
-                      <Badge bg="secondary">
-                        {discount * 100} % Offer for any member
-                      </Badge>
+                      {" "}
+                      <Button1
+                        variant="outline-primary"
+                        onClick={() => {
+                          handleWalletPayment(package1.price, package1.name);
+                        }}
+                      >
+                        Pay using wallet
+                      </Button1>{" "}
+                      <Button1
+                        variant="outline-primary"
+                        onClick={() => {
+                          handleCreditCardPayment(package1.name);
+                        }}
+                      >
+                        Pay using credit card
+                      </Button1>{" "}
                     </div>
-                    {selectedPackageId === package1._id ? (
-                      <div>
+                  ) : null}
+                  {selectedPackageId === package1._id && dropdownFam ? (
+                    <div>
+                      <h3 style={{ "margin-up": 10 }}>Choose a member</h3>
+                      <ListGroup defaultActiveKey="#link1">
+                        {nonlinkedfamily.map((member) => (
+                          <ListGroup.Item
+                            variant="primary"
+                            action
+                            key={member.id}
+                            onClick={() => {
+                              setFammember(member._id);
+                            }}
+                          >
+                            <p>
+                              <strong>Name:</strong> {member.name}
+                            </p>
+                            <p>
+                              <strong>Relation:</strong> {member.relation}
+                            </p>
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+
+            <h2 style={{ "text-align": "left", color: "#000000" }}>
+              subscriptions
+            </h2>
+
+            <Table striped bordered hover>
+              <tbody>
+                <tr>
+                  <td>My Health Package:</td>
+                  <td>{MyPatient.healthPackageSub}</td>
+                </tr>
+                <tr>
+                  <td>Due date:</td>
+                  <td>{MyPatient.DateOfSubscribtion}</td>
+                </tr>
+                <tr>
+                  <td>subscription status:</td>
+                  <td>{MyPatient.subscriptionStatus}</td>
+                </tr>
+
+                <tr>
+                  <td style={{ justifyContent: "right" }} colSpan={2}>
+                    <Button1
+                      variant="outline-danger"
+                      onClick={() => {
+                        cancelMYsubsc();
+                      }}
+                    >
+                      cancel Subscription
+                    </Button1>
+                    <Button1
+                      variant="outline-danger"
+                      onClick={() => {
+                        unsubscribeForMe();
+                      }}
+                    >
+                      Unsubscribe
+                    </Button1>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+
+            <div style={{ justifyContent: "left", color: "#000000" }}>
+              <a>Family Subscriptions </a>{" "}
+            </div>
+            <Table striped bordered hover size="sm">
+              <thead>
+                <tr>
+                  <th>Member's name</th>
+                  <th>relation</th>
+                  <th>health package subscription</th>
+                  <th>due date</th>
+                  <th>subscription status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {nonlinkedfamily
+                  .filter((member) => member.healthPackageSub !== "")
+                  .map((member) => (
+                    <tr>
+                      <td>{member.name}</td>
+                      <td>{member.relation}</td>
+                      <td>{member.healthPackageSub}</td>
+                      <td>{member.DateOfSubscribtion}</td>
+                      <td>{member.subscriptionStatus}</td>
+                      <td>
                         {" "}
                         <Button1
-                          variant="outline-primary"
+                          type="button"
+                          variant="outline-danger"
                           onClick={() => {
-                            handleWalletPayment(package1.price, package1.name);
+                            cancelsubscFam(member._id);
                           }}
                         >
-                          Pay using wallet
+                          cancel
                         </Button1>{" "}
                         <Button1
-                          variant="outline-primary"
+                          variant="outline-danger"
                           onClick={() => {
-                            handleCreditCardPayment(package1.name);
+                            unsubscribeFam(member._id);
                           }}
                         >
-                          Pay using credit card
-                        </Button1>{" "}
-                      </div>
-                    ) : null}
-                    {selectedPackageId === package1._id && dropdownFam ? (
-                      <div>
-                        <h3 style={{ "margin-up": 10 }}>Choose a member</h3>
-                        <ListGroup defaultActiveKey="#link1">
-                          {nonlinkedfamily.map((member) => (
-                            <ListGroup.Item
-                              variant="primary"
-                              action
-                              key={member.id}
-                              onClick={() => {
-                                setFammember(member._id);
-                              }}
-                            >
-                              <p>
-                                <strong>Name:</strong> {member.name}
-                              </p>
-                              <p>
-                                <strong>Relation:</strong> {member.relation}
-                              </p>
-                            </ListGroup.Item>
-                          ))}
-                        </ListGroup>
-                      </div>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-
-              <h2 style={{ "text-align": "left" ,"color":"#000000" }}>subscriptions</h2>
-
-              <Table striped bordered hover>
-                <tbody>
-                  <tr>
-                    <td>My Health Package:</td>
-                    <td>{MyPatient.healthPackageSub}</td>
-                  </tr>
-                  <tr>
-                    <td>Due date:</td>
-                    <td>{MyPatient.DateOfSubscribtion}</td>
-                  </tr>
-                  <tr>
-                    <td>subscription status:</td>
-                    <td>{MyPatient.subscriptionStatus}</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ justifyContent: "right" }} colSpan={2}>
-                      <Button1
-                        variant="outline-danger"
-                        onClick={() => {
-                          cancelMYsubsc();
-                        }}
-                      >
-                        cancel Subscription
-                      </Button1>
-                      <Button1
-                        variant="outline-danger"
-                        onClick={() => {
-                          unsubscribeForMe();
-                        }}
-                      >
-                        Unsubscribe
-                      </Button1>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
-
-              <div style={{ justifyContent: "left", "color":"#000000"}}>
-                <a>Family Subscriptions </a>{" "}
-              </div>
-              <Table striped bordered hover size="sm">
-                <thead>
-                  <tr>
-                    <th>Member's name</th>
-                    <th>relation</th>
-                    <th>health package subscription</th>
-                    <th>due date</th>
-                    <th>subscription status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {nonlinkedfamily
-                    .filter((member) => member.healthPackageSub !== "")
-                    .map((member) => (
-                      <tr>
-                        <td>{member.name}</td>
-                        <td>{member.relation}</td>
-                        <td>{member.healthPackageSub}</td>
-                        <td>{member.DateOfSubscribtion}</td>
-                        <td>{member.subscriptionStatus}</td>
-                        <td>
-                          {" "}
-                          <Button1
-                            type="button"
-                            variant="outline-danger"
-                            onClick={() => {
-                              cancelsubscFam(member._id);
-                            }}
-                          >
-                            cancel
-                          </Button1>{" "}
-                          <Button1
-                            variant="outline-danger"
-                            onClick={() => {
-                              unsubscribeFam(member._id);
-                            }}
-                          >
-                            Unsubscribe
-                          </Button1>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </Table>
-            </div>
+                          Unsubscribe
+                        </Button1>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+          </div>
+        </div>
       </AppBar>
     </div>
   );
