@@ -6,6 +6,7 @@ const router = express.Router();
 
 // to test this send a post request to this route: http://localhost:8000/appointment
 router.post("/", Middle.requireAuthPatient, controllers.createAppointment);
+router.post("/createFollowUp", Middle.requireAuthDoctor, controllers.createFollowUp);
 router.get("/", controllers.getAllAppointments);
 router.get("/getMyAppointments", Middle.requireAuthPatient, controllers.getPatientAppointments);
 router.get("/getAppCall", Middle.requireAuth, controllers.getMyAppointmers);

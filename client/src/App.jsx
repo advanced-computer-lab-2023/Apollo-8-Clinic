@@ -19,7 +19,7 @@ import { useLocation } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import CardContent from '@mui/material/CardContent';
+import CardContent from "@mui/material/CardContent";
 //import Peer from "simple-peer"
 //youhanna milestone 2222
 import PatientUpcomingAppointments from "./pages/doctor/PatientUpcomingAppointments";
@@ -68,17 +68,17 @@ import * as React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
 // chat patient
-// Chat patient 
+// Chat patient
 import ChatPharmacist from "./pages/patient/ChatPharmacist";
 import ChatChoice from "./pages/patient/ChatChoice";
 import ChatDoctor from "./pages/patient/ChatDoctor";
 
-
-// chat doctor 
+// chat doctor
 import ChatChoiceDR from "./pages/doctor/ChatChoiceDR";
 import ChatPharmacistDR from "./pages/doctor/ChatPharmacistDR";
 import ChatPatientDR from "./pages/doctor/ChatPatientDR";
 
+import ScheduleFollowUp from "./pages/doctor/ScheduleFollowUp";
 
 import io from "socket.io-client";
 //const socket = io.connect("http://localhost:8000");
@@ -103,15 +103,13 @@ function App() {
   const [name, setName] = useState("");
   const location = useLocation();
   const socket = io.connect("http://localhost:8000", {
-      query: {
-        username: "john_doe",
-        room: token,
-      },
-    });
+    query: {
+      username: "john_doe",
+      room: token,
+    },
+  });
 
   useEffect(() => {
-    
-
     socket.on("callUser", (data) => {
       setDataFetched(false);
       console.log("calluser fy chat");
@@ -282,6 +280,7 @@ function App() {
             />
             <Route path="/HomePage" element={<HomePage />} />
             <Route path="/PatientHP_FM" element={<PatientHP_FM />} />
+            <Route path="/healthPackage" element={<HealthPackageNEW />} />
             {/* <Route path="/PatientAppointments" element={<PatientAppointments />} /> MYRIAM*/}
             <Route
               path="/AvailableAppointments/:id"
@@ -323,7 +322,7 @@ function App() {
           <Route path="/AddTimeSlots" element={<AddTimeSlots />} />
           <Route path="/HomePageDoc" element={<HomePageDoc />} />
           <Route path="/viewMyPatients" element={<MyPatientsList />} />
-         
+          <Route path="/ScheduleFollowUp/:id" element={<ScheduleFollowUp />} />
           <Route path="/contract" element={<DoctorContract />} />
           <Route path="/ChatChoiceDR" element={<ChatChoiceDR />} />{" "}
           <Route path="/ChatPharmacistDR" element={<ChatPharmacistDR />} />{" "}

@@ -107,7 +107,7 @@ function ResponsiveAppBar() {
     navigate("/PatientHP_FM");
   };
   const handlePack = () => {
-    navigate("/PatientHP_FM");
+    navigate("/healthPackage");
   };
   const handleCall = () => {
     navigate("/Call");

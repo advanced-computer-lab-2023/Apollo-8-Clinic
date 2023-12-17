@@ -96,65 +96,68 @@ function MyPatientsList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data
-                    .filter((item) => {
-                      return search.toLowerCase() === ""
-                        ? item
-                        : item.name.toLowerCase().includes(search);
-                    })
-                    .map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.name}</td>
-                        <td>{item.email}</td>
-                        <td>
-                          <button
-                            className="btn btn-primary rounded-2"
-                            onClick={() =>
-                              handlePatientAppointmentDetails(item._id)
-                            }
-                          >
-                            view PatientDetails
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            className="btn btn-primary rounded-2"
-                            onClick={() => handleView(item._id)}
-                          >
-                            view Health Records
-                          </button>
-                        </td>
-                        <td>
-                          {" "}
-                          <button
-                            className="btn btn-primary rounded-2"
-                            onClick={() => handle(item._id)}
-                          >
-                            view patientDetails
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            className="btn btn-primary rounded-2"
-                            onClick={() => handleAddHealthRecord(item._id)}
-                          >
-                            add health record
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            className="btn btn-primary rounded-2"
-                            onClick={() => handleAddPrescription(item._id)}
-                          >
-                            Prescriptions
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                  {data &&
+                    data
+                      .filter((item) => {
+                        return search.toLowerCase() === ""
+                          ? item
+                          : item.name.toLowerCase().includes(search);
+                      })
+                      .map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.name}</td>
+                          <td>{item.email}</td>
+                          <td>
+                            <button
+                              className="btn btn-primary rounded-2"
+                              onClick={() =>
+                                handlePatientAppointmentDetails(item._id)
+                              }
+                            >
+                              view PatientDetails
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-primary rounded-2"
+                              onClick={() => handleView(item._id)}
+                            >
+                              view Health Records
+                            </button>
+                          </td>
+                          <td>
+                            {" "}
+                            <button
+                              className="btn btn-primary rounded-2"
+                              onClick={() => handle(item._id)}
+                            >
+                              view patientDetails
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-primary rounded-2"
+                              onClick={() => handleAddHealthRecord(item._id)}
+                            >
+                              add health record
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-primary rounded-2"
+                              onClick={() => handleAddPrescription(item._id)}
+                            >
+                              Prescriptions
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
 
-                {data.filter((item) => item.name.toLowerCase().includes(search))
-                  .length === 0 &&
+                {data &&
+                  data.filter((item) =>
+                    item.name.toLowerCase().includes(search)
+                  ).length === 0 &&
                   search.length > 0 && (
                     <tr>
                       <td
