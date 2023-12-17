@@ -47,6 +47,18 @@ const createPatient = async (req, res) => {
 
     const existingUser = await UserModel.findOne({ username });
     if (!existingUser) {
+      if (!name ||
+        !email ||
+        !birthDate ||
+        !gender ||
+        !phone ||
+        !emergencyName ||
+        !emergencyNo ||
+        !emergencyRel ||
+        !adresses 
+       ) {
+          return res.status(400).json({ error: "Complete all fields" });
+        }
       try {
         const user = new UserModel({ username, password, type });
         user.password = hashedPassword;
