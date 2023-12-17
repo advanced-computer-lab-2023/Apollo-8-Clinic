@@ -28,10 +28,7 @@ function PatientSignup() {
   const [errorMessage, setErrorMessage] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-
-   
-
-   
+    
     axios
       .post("http://localhost:8000/patient", {
         name,
@@ -59,19 +56,22 @@ function PatientSignup() {
         console.log(err);
         setRegistrationSuccess(false);
         if (err.response && err.response.data && err.response.data.message) {
-          setErrorMessage(err.response.data.message);
-          setError(err.response.data.message); // Set form-level error
-               console.log('err.response.data.message',err.response.data.message)
-            if (err.response.data.message.toLowerCase().trim()==="Username already exist") {
-              setUsernameError(err.response.data.message);
-              setShowUsernameError(true);
-            }
-              else{
-                setShowUsernameError(false);
-              }
-            }
-          })
-        
+          alert(err.response.data.message);
+          // setErrorMessage(err.response.data.message);
+          // setError(err.response.data.message); // Set form-level error
+          // console.log('err.response.data.message',err.response.data.message)
+          // if (err.response.data.message.toLowerCase().trim()==="username already exist") {
+          //   setUsernameError(err.response.data.message);
+          //   setShowUsernameError(true);
+          // } else{
+          //   setShowUsernameError(false);
+          // }
+        } else if (err.response && err.response.data) {
+          alert(err.response.data);
+          // setError(err.response.data);
+        }
+      })
+      
     };
   
   const inputStyle = (fieldName) => ({
@@ -122,6 +122,7 @@ function PatientSignup() {
                 placeholder="Enter Username"
                 autoComplete="off"
                 name="username"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("username")}
                 onChange={(e) => {
@@ -143,6 +144,7 @@ function PatientSignup() {
                 placeholder="Enter Name"
                 autoComplete="off"
                 name="name"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("name")}
                   onChange={(e) => {
@@ -163,6 +165,7 @@ function PatientSignup() {
                 placeholder="Enter Email"
                 autoComplete="off"
                 name="email"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("email")}
                 onChange={(e) => {
@@ -183,6 +186,9 @@ function PatientSignup() {
                 type="password"
                 placeholder="Enter Password"
                 name="password"
+                pattern="(?=.*[A-Z])(?=.*\d).{8,}" 
+                title="Password must contain at least one uppercase letter, one digit, and be at least 8 characters long."
+                required
                 className="form-control rounded-0"
                 style={inputStyle("password")}
                 onChange={(e) => {
@@ -190,7 +196,9 @@ function PatientSignup() {
                   handleInputChange(); 
                 }}
               />
-              {error && <div style={{ color: "red" }}>{error}</div>}
+              {error && !password && (
+              <div style={{ color: "red" }}>Please fill in the password.</div>
+              )}
             </div>
             <div className="mb-3">
               <label htmlFor="email">
@@ -201,6 +209,7 @@ function PatientSignup() {
                 placeholder="Enter Birth Date"
                 autoComplete="off"
                 name="birthDate"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("birthDate")}
                   onChange={(e) => {
@@ -222,6 +231,7 @@ function PatientSignup() {
                 placeholder="Enter Gender"
                 autoComplete="off"
                 name="gender"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("gender")}
                 onChange={(e) => {
@@ -243,6 +253,7 @@ function PatientSignup() {
                 placeholder="Enter Phone Number"
                 autoComplete="off"
                 name="phone"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("phone")}
                 onChange={(e) => {
@@ -263,6 +274,7 @@ function PatientSignup() {
                 placeholder="Enter Emergency Name"
                 autoComplete="off"
                 name="emergencyName"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("emergencyName")}
                 onChange={(e) => {
@@ -284,6 +296,7 @@ function PatientSignup() {
                 placeholder="Enter Emergency Phone Number"
                 autoComplete="off"
                 name="emergencyNo"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("emergencyNo")}
                   onChange={(e) => {
@@ -305,6 +318,7 @@ function PatientSignup() {
                 placeholder="EnterEmergency Relation"
                 autoComplete="off"
                 name="emergencyRel"
+                required
                 className="form-control rounded-0"
                 style={inputStyle("emergencyRel")}
                   onChange={(e) => {
@@ -326,6 +340,7 @@ function PatientSignup() {
                 placeholder="Enter Address"
                 autoComplete="off"
                 name="address"
+                required
                 className="form-control rounded-0"
                 style={inputStyle(adresses)}
             onChange={(e) => setAdresses(e.target.value)}
@@ -350,7 +365,7 @@ function PatientSignup() {
               </button>
               </div>
               <div>
-         
+              {error && <div style={{ color: "red" }}>{error}</div>}
           </div>
           
           </form>
