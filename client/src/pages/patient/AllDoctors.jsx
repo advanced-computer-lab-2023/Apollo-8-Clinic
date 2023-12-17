@@ -3,8 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import ResponsiveAppBar from "../../components/TopBar";
-import * as React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
+import * as React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import { IconButton, Tooltip } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 function AllDoctors() {
   const [data, setData] = useState([]);
@@ -64,11 +67,17 @@ function AllDoctors() {
   }
 
   const filteredData = data.filter((item) => {
-    const nameMatch = searchName.toLowerCase() === "" || item.name.toLowerCase().includes(searchName);
-    const specMatch = searchSpec.toLowerCase() === "" || item.speciality.toLowerCase().includes(searchSpec);
-  
-    console.log(`Name: ${item.name}, Spec: ${item.speciality}, Name Match: ${nameMatch}, Spec Match: ${specMatch}`);
-  
+    const nameMatch =
+      searchName.toLowerCase() === "" ||
+      item.name.toLowerCase().includes(searchName);
+    const specMatch =
+      searchSpec.toLowerCase() === "" ||
+      item.speciality.toLowerCase().includes(searchSpec);
+
+    console.log(
+      `Name: ${item.name}, Spec: ${item.speciality}, Name Match: ${nameMatch}, Spec Match: ${specMatch}`
+    );
+
     return nameMatch && specMatch;
   });
   return (
@@ -102,91 +111,94 @@ function AllDoctors() {
           </h1>
         </div>
         <div className="card m-3 col-12" style={{ width: "80%", left: "8%" }}>
-        <div className="card-body">
-          {loading ? (
-            <CircularProgress color="success" />
-          ) : (
-            <>
-              
-              <table className="table table-striped">
-                <thead className="table-dark">
-                  <tr>
-                    <th>Name</th>
-                    <th>speciality</th>
-                    <th>Session Price</th>
-                    <th>
-                      <input
-                        type="text"
-                        placeholder="search by a name"
-                        autoComplete="off"
-                        name="name"
-                        className="form-control rounded-0"
-                        onChange={(e) => setSearchName(e.target.value)}
-                      />
-                    </th>
-                    <th>
-                      <input
-                        type="text"
-                        placeholder="search by a speciality"
-                        autoComplete="off"
-                        name="spec"
-                        className="form-control rounded-0"
-                        onChange={(e) => setSearchSpec(e.target.value)}
-                      />
-                    </th>
-                    <th>
-                      <button
-                        style={{ backgroundColor: "rgb(65, 105, 225)" }}
-                        className="btn btn-success"
-                        onClick={() => handleFilter()}
-                      >
-                        or filter with speciality and available slots
-                      </button>
-                    </th>{" "}
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.name}</td>
-                      <td>{item.speciality}</td>
-                      <td>{getSessionPrice(item.hourlyRate)}</td>
-                      <td></td>
-                      <td></td>
-                      <td>
+          <div className="card-body">
+            {loading ? (
+              <CircularProgress color="success" />
+            ) : (
+              <>
+                <table className="table table-striped">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>speciality</th>
+                      <th>Session Price</th>
+                      <th>
+                        <input
+                          type="text"
+                          placeholder="search by a name"
+                          autoComplete="off"
+                          name="name"
+                          className="form-control rounded-0"
+                          onChange={(e) => setSearchName(e.target.value)}
+                        />
+                      </th>
+                      <th>
+                        <input
+                          type="text"
+                          placeholder="search by a speciality"
+                          autoComplete="off"
+                          name="spec"
+                          className="form-control rounded-0"
+                          onChange={(e) => setSearchSpec(e.target.value)}
+                        />
+                      </th>
+                      <th>
                         <button
                           style={{ backgroundColor: "rgb(65, 105, 225)" }}
                           className="btn btn-success"
-                          onClick={() => handleView(item._id)}
+                          onClick={() => handleFilter()}
                         >
-                          view
+                          or filter with speciality and available slots
                         </button>
-                      </td>
-                      <td>
-                        <button
-                          style={{ backgroundColor: "rgb(65, 105, 225)" }}
-                          className="btn btn-success"
-                          onClick={() => handleViewAvailableSlots(item._id)}
-                        >
-                          view Available slots
-                        </button>
-                      </td>
+                      </th>{" "}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div style={{ textAlign: "center", marginTop: "20px", color: "red"  }}>
-                {!loading && filteredData.length === 0 && (
-                  <p>No doctors found with the specified criteria.</p>
-                )}
-              </div>
-            </>
-          )}
+                  </thead>
+                  <tbody>
+                    {filteredData.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.name}</td>
+                        <td>{item.speciality}</td>
+                        <td>{getSessionPrice(item.hourlyRate)}</td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <Tooltip title="View Details" placement="bottom">
+                            <IconButton onClick={() => handleView(item._id)}>
+                              <VisibilityIcon></VisibilityIcon>
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip
+                            title="view Available slots"
+                            placement="bottom"
+                          >
+                            <IconButton
+                              onClick={() => handleViewAvailableSlots(item._id)}
+                            >
+                              <CalendarMonthIcon></CalendarMonthIcon>
+                            </IconButton>
+                          </Tooltip>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div
+                  style={{
+                    textAlign: "center",
+                    marginTop: "20px",
+                    color: "red",
+                  }}
+                >
+                  {!loading && filteredData.length === 0 && (
+                    <p>No doctors found with the specified criteria.</p>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </AppBar>
-  </div>
-)
-                  }
+      </AppBar>
+    </div>
+  );
+}
 export default AllDoctors;

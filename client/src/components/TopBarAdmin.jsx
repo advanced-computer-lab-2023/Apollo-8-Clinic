@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AdbIcon from "@mui/icons-material/Adb";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 const pages = ["Home", "Medicine", "My Cart", "My Orders"];
 
@@ -61,101 +62,40 @@ function ResponsiveAppBar() {
   return (
     <AppBar
       style={{
-        height: "100px",
         backgroundColor: " rgb(65, 105, 225)",
       }}
       position="static"
     >
-      <Container style={{ marginTop: "10px" }} maxWidth="xl">
+      <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <MedicalServicesIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/HomePageAdmin"
             sx={{
-              mr: 2,
+              mr: 1,
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
-              fontWeight: 700,
+              fontWeight: 1000,
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
             }}
           >
-            Elha2ony Clinic
+            El7a2ny
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            ></Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
-              onClick={handleHome}
-              sx={{
-                my: 2,
-                color: "white",
-                display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
-              }}
-            >
-              {" "}
-              Home{" "}
-            </Button>
             <Button
               onClick={handleAdd}
               sx={{
-                my: 2,
                 color: "white",
                 display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
+                fontSize: "13px",
+                fontWeight: 500,
               }}
             >
               {" "}
@@ -164,11 +104,10 @@ function ResponsiveAppBar() {
             <Button
               onClick={handleRemove}
               sx={{
-                my: 2,
                 color: "white",
                 display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
+                fontSize: "13px",
+                fontWeight: 500,
               }}
             >
               {" "}
@@ -177,11 +116,10 @@ function ResponsiveAppBar() {
             <Button
               onClick={handlePending}
               sx={{
-                my: 2,
                 color: "white",
                 display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
+                fontSize: "13px",
+                fontWeight: 500,
               }}
             >
               {" "}
@@ -190,11 +128,10 @@ function ResponsiveAppBar() {
             <Button
               onClick={handlePackages}
               sx={{
-                my: 2,
                 color: "white",
                 display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
+                fontSize: "13px",
+                fontWeight: 500,
               }}
             >
               {" "}
@@ -203,11 +140,10 @@ function ResponsiveAppBar() {
             <Button
               onClick={AddhandlePackages}
               sx={{
-                my: 2,
                 color: "white",
                 display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
+                fontSize: "13px",
+                fontWeight: 500,
               }}
             >
               {" "}
@@ -216,11 +152,10 @@ function ResponsiveAppBar() {
             <Button
               onClick={handlePass}
               sx={{
-                my: 2,
                 color: "white",
                 display: "block",
-                marginRight: "0.5%",
-                marginLeft: "0.5%",
+                fontSize: "13px",
+                fontWeight: 500,
               }}
             >
               {" "}

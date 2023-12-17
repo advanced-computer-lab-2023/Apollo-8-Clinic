@@ -107,9 +107,10 @@ const getPatientAppointments = async (req, res) => {
   try {
     const patient1 = await PatientModel.findOne({ user: res.locals.userId });
     const patientID = patient1._id;
-    const appointments = await AppointmentModel.find({ patientId: patientID})
-    .populate('patientId')  // Populate the patientId field with actual patient information
-    .exec();
+    const appointments = await AppointmentModel.find({ patientId: patientID })
+      .populate('patientId')  // Populate the patientId field with actual patient information
+      .populate('doctorId')
+      .exec();
     res.status(200).json(appointments);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -149,8 +150,9 @@ const getMyAppointmers = async (req, res) => {
 
 const getAppointmentWithFilter = async (req, res) => {
   try {
+    const patient = await PatientModel.findOne({ user: res.locals.userId });
     const { startDate, endDate, status } = req.body; // Destructure status and dates from query parameters
-    const query = { patientId }; // Initialize the query with patientId
+    const query = { patientId: patient._id }; // Initialize the query with patientId
 
     if (status) {
       query.status = status;
@@ -175,7 +177,7 @@ const getAppointmentWithFilter = async (req, res) => {
       }
     }
 
-    const appointment = await appointments.find(query);
+    const appointment = await appointments.find(query).populate('doctorId');
     res.status(200).json(appointment);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -225,10 +227,10 @@ const getupcomingAppointments = async (req, res) => {
       doctorId: doctorID,
       status: 'upcoming',
     })
-    .populate({
-      path: 'patientId',
-      select: 'name email', // Select the fields you want to retrieve
-    });
+      .populate({
+        path: 'patientId',
+        select: 'name email', // Select the fields you want to retrieve
+      });
 
     res.status(200).json(appointments);
   } catch (error) {

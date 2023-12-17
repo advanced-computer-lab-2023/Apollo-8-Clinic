@@ -4,13 +4,25 @@ import AppBar from "@mui/material/AppBar";
 import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBar";
 import BottomBar from "../../components/BottomBar";
-import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Button,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
+import WalletIcon from "@mui/icons-material/Wallet";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import CancelIcon from "@mui/icons-material/Cancel";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
+import moment from "moment";
 const PatientFamApp = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedApp, setSelectedApp] = useState(null);
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
- 
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+
   //search appointments
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -19,7 +31,9 @@ const PatientFamApp = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/appointment/getMyAppointments`);
+        const response = await axios.get(
+          `http://localhost:8000/appointment/getMyAppointments`
+        );
         console.log(response.data);
         setAppointments(response.data);
         setLoading(false);
@@ -28,7 +42,7 @@ const PatientFamApp = () => {
         setLoading(false);
       }
     };
-  
+
     fetchData(); // Call the async function
   }, []);
 
@@ -36,13 +50,12 @@ const PatientFamApp = () => {
     if (event) {
       event.preventDefault();
     }
-  
+
     axios
       .post("http://localhost:8000/doctor/appointmentWithFilter", {
         startDate,
         endDate,
         status,
-        
       })
       .then((response) => {
         console.log(response.data);
@@ -51,7 +64,6 @@ const PatientFamApp = () => {
       .catch((error) => {
         console.error("There was an error!", error);
       });
-    
   };
   function handleWalletPayment() {
     window.location.href = "/appointmentWalletPayment";
@@ -69,50 +81,42 @@ const PatientFamApp = () => {
     setSelectedApp(appId);
     setCancelDialogOpen(true);
   };
-  
+
   const handleCloseCancelDialog = () => {
     setCancelDialogOpen(false);
   };
-  
+
   const handleConfirmCancel = async () => {
     try {
       // Implement your cancellation logic here
       const reqBody = {
         _id: selectedApp,
       };
-  
+
       // Make a request to update the status to 'cancelled'
       const updatedAppointment = await axios.post(
         `http://localhost:8000/appointment/cancelAppointment/${selectedApp}`,
         reqBody
       );
-  
+
       // Update the state with the updated appointment data
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>
-          appointment._id === selectedApp ? updatedAppointment.data : appointment
+          appointment._id === selectedApp
+            ? updatedAppointment.data
+            : appointment
         )
       );
     } catch (error) {
-      console.error('Error cancelling appointment:', error);
+      console.error("Error cancelling appointment:", error);
     }
-  
+
     handleCloseCancelDialog();
   };
-  const handleStartDateChange = (e) => {
-    setStartDate(e.target.value);
-    searchApp();
-  };
 
-  const handleEndDateChange = (e) => {
-    setEndDate(e.target.value);
-    searchApp();
-  };
-
-  const handleStatusChange = (e) => {
-    setStatus(e.target.value);
-    searchApp();
-  };
+  function handleRescheduleApp(id, drId) {
+    window.location.href = `/RescheduleApp/${id}/${drId}`;
+  }
   return (
     <div style={{ marginRight: "-5%", marginLeft: "-5%" }}>
       <AppBar
@@ -151,115 +155,141 @@ const PatientFamApp = () => {
             {loading ? (
               <p>Loading...</p>
             ) : (
-              <table className="table table-striped">
-                <thead className="table-dark">
-                  <tr>
-                    <th>Doctor ID</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    
-                    <th>
-                      <input
-                        type="text"
-                        placeholder="search by start date"
-                        autoComplete="off"
-                        value={startDate}
-                        onChange={handleStartDateChange}
-                      />
-                    </th>
-                    
-                    <th>
-                      <input
-                        type="text"
-                        placeholder="search by end date"
-                        autoComplete="off"
-                        value={endDate}
-                        onChange={handleEndDateChange}
-                      />
-                    </th>
-                    <th> <input
-                        type="text"
-                        placeholder="search by status"
-                        autoComplete="off"
-                        value={status}
-                        onChange={handleStatusChange}
-                        
-                      /></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {appointments.map((appointment1) => (
-                    <tr key={appointment1._id}>
-                      <td>{appointment1?.doctorId}</td>
-                      <td>{appointment1?.date}</td>
-                      <td>{appointment1?.status}</td>
-                      <td>
-                    {appointment1.status !== 'cancelled' && (
-                    <button
-                    type="submit" className="btn btn-primary"
-                    onClick={handleWalletPayment}
-                     >
-                   Pay using wallet
-                 </button>
-                    )}
-                      </td>
-                      <td>
-                      {appointment1.status !== 'cancelled' && (
-                      <form
-                      action="http://localhost:8000/AppointmentCheckout"
-                      method="POST"  >     
-                      <button
-                       type="submit" className="btn btn-primary"
-                     >
-                       Pay using credit card
-                      </button>
-                      </form> 
-                      )}
-                      </td>
-                      <td>
-                      {appointment1.status !== 'cancelled' && (
-                      <button
-                           type="submit" className="btn btn-primary"
-                          onClick={() => handleRescheduleApp(appointment1._id, appointment1.doctorId)}
-                         >
-                         Reschedule Appointment
-                           </button>
-                            )}
-                      </td>
-                     
-                      <td>
-                         {appointment1.status !== 'cancelled' && (
-                      <button
-                         type="submit" className="btn btn-primary"
-                         onClick={() => handleOpenCancelDialog(appointment1._id)}
-                       >
-                       Cancel Appointment
-                      </button>
-                       )}
-                     </td>
+              <div>
+                <input
+                  className="form-control m-2"
+                  type="datetime-local"
+                  placeholder="search by start date"
+                  autoComplete="off"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+                <input
+                  className="form-control m-2"
+                  type="datetime-local"
+                  placeholder="search by end date"
+                  autoComplete="off"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+                <input
+                  className="form-control m-2"
+                  type="text"
+                  placeholder="search by status"
+                  autoComplete="off"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                />
+                <button className="btn btn-primary m-2" onClick={searchApp}>
+                  search
+                </button>
+                <table className="table table-striped">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>Doctor</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th></th>
+                      <th></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {appointments.map((appointment1) => (
+                      <tr key={appointment1._id}>
+                        <td>{appointment1?.doctorId.name}</td>
+                        <td>
+                          {moment(appointment1?.date).format(
+                            "YYYY-MM-DD HH:mm:ss"
+                          )}
+                        </td>
+                        <td>{appointment1?.status}</td>
+                        <td>
+                          {appointment1.status !== "cancelled" && (
+                            <form
+                              action="http://localhost:8000/AppointmentCheckout"
+                              method="POST"
+                            >
+                              <Tooltip
+                                title="Pay using credit card"
+                                placement="bottom"
+                              >
+                                <IconButton type="submit">
+                                  <CreditCardIcon></CreditCardIcon>
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip
+                                title="Pay using wallet"
+                                placement="bottom"
+                              >
+                                <IconButton onClick={handleWalletPayment}>
+                                  <WalletIcon></WalletIcon>
+                                </IconButton>
+                              </Tooltip>
+                            </form>
+                          )}
+                        </td>
+                        <td>
+                          <div style={{ display: "inline" }}>
+                            <div>
+                              {appointment1.status !== "cancelled" && (
+                                <div>
+                                  <Tooltip
+                                    title="Reschedule Appointment"
+                                    placement="bottom"
+                                  >
+                                    <IconButton
+                                      onClick={() => {
+                                        handleRescheduleApp(
+                                          appointment1._id,
+                                          appointment1.doctorId
+                                        );
+                                      }}
+                                    >
+                                      <EventRepeatIcon></EventRepeatIcon>
+                                    </IconButton>
+                                  </Tooltip>
+                                  <Tooltip
+                                    title="Cancel Appointment"
+                                    placement="bottom"
+                                  >
+                                    <IconButton
+                                      onClick={() => {
+                                        handleOpenCancelDialog(
+                                          appointment1._id
+                                        );
+                                      }}
+                                    >
+                                      <CancelIcon></CancelIcon>
+                                    </IconButton>
+                                  </Tooltip>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>
-        
-  <Dialog open={cancelDialogOpen} onClose={handleCloseCancelDialog}>
-  <DialogTitle>No refunds if time left is less than 24 hours!!.. Are you sure you want to cancel this appointment? 
-  </DialogTitle>
-  <DialogActions>
-    <Button onClick={handleConfirmCancel} color="primary">
-      Yes
-    </Button>
-    <Button onClick={handleCloseCancelDialog} color="primary">
-      No
-    </Button>
-  </DialogActions>
-</Dialog>
 
-        <BottomBar />
+        <Dialog open={cancelDialogOpen} onClose={handleCloseCancelDialog}>
+          <DialogTitle>
+            No refunds if time left is less than 24 hours!!.. Are you sure you
+            want to cancel this appointment?
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleConfirmCancel} color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleCloseCancelDialog} color="primary">
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
       </AppBar>
     </div>
   );

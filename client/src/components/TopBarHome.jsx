@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 const pages = ["Home", "Medicine", "My Cart", "My Orders"];
 
@@ -53,14 +54,15 @@ function ResponsiveAppBar() {
   return (
     <AppBar
       style={{
-        height: "100px",
         backgroundColor: " rgb(65, 105, 225)",
       }}
       position="static"
     >
-      <Container style={{ marginTop: "10px" }} maxWidth="xl">
+      <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <MedicalServicesIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -76,7 +78,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            Elha2ony Clinic
+            El7a2ny Clinic
           </Typography>
         </Toolbar>
       </Container>
