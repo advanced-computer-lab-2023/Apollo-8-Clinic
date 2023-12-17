@@ -5,7 +5,7 @@ import "../../App.css";
 import ResponsiveAppBar from "../../components/TopBarDoc";
 import BottomBar from "../../components/BottomBar";
 import { useNavigate } from "react-router-dom";
-import { 
+import {
   Button,
   Dialog,
   DialogTitle,
@@ -14,25 +14,25 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel, } 
-  from "@mui/material";
+  InputLabel,
+} from "@mui/material";
 const formatDate = (dateTime) => {
-    const options = {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true, // Add this option for AM/PM format
-    };
-    return new Date(dateTime).toLocaleDateString("en-US", options);
+  const options = {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true, // Add this option for AM/PM format
   };
+  return new Date(dateTime).toLocaleDateString("en-US", options);
+};
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const [selectedApp, setSelectedApp] = useState(null);      // set after choosing to reschedule or cancel an app
+  const [selectedApp, setSelectedApp] = useState(null); // set after choosing to reschedule or cancel an app
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false); // set to open cancel dialog
-  const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);  // set to open reschedule dialog
+  const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false); // set to open reschedule dialog
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
 
@@ -40,6 +40,7 @@ const Appointments = () => {
     axios
       .post("http://localhost:8000/patient/appointmentWithFilter")
       .then((response) => {
+        console.log(response.data);
         setAppointments(response.data);
       })
       .catch((error) => {
@@ -61,13 +62,13 @@ const Appointments = () => {
     setSelectedApp(appId);
     setCancelDialogOpen(true);
   };
-  
+
   const handleCloseCancelDialog = () => {
     setCancelDialogOpen(false);
     setSelectedApp(null);
   };
-  
-  const handleConfirmCancel = async () =>  {
+
+  const handleConfirmCancel = async () => {
     // Implement your cancellation logic here
     const reqBody = {
       _id: selectedApp,
@@ -84,19 +85,19 @@ const Appointments = () => {
     setSelectedApp(appId);
     setRescheduleDialogOpen(true);
   };
-  
+
   const handleCloseRescheduleDialog = () => {
     setRescheduleDialogOpen(false);
     setSelectedApp(null);
     setSelectedOption(null);
     setSelectedOption(null);
   };
-  
-  const handleConfirmReschedule = async () =>  {
+
+  const handleConfirmReschedule = async () => {
     // Implement your cancellation logic here
     const reqBody = {
       _id: selectedApp,
-      date: selectedOption
+      date: selectedOption,
     };
     const newApp = await axios.post(
       "http://localhost:8000/appointment/docRescheduleAppointment/:id",
@@ -116,90 +117,90 @@ const Appointments = () => {
           key={member.id}
           style={{ border: "1px solid black", borderRadius: 5 }}
         >
-         <div>
-           <p>
-            <strong>Doctor ID:</strong> {member.doctorId}
-          </p>
-          <p>
-            <strong>patient ID:</strong> {member.patientId}
-          </p>
-          <p>
-            <strong>Date:</strong> {formatDate(member.date)}
-          </p>
-          <p>
-            <strong>status:</strong> {member.status}
-          </p>
+          <div>
+            <p>
+              <strong>Doctor ID:</strong> {member.doctorId.name}
+            </p>
+            <p>
+              <strong>patient ID:</strong> {member.patientId}
+            </p>
+            <p>
+              <strong>Date:</strong> {formatDate(member.date)}
+            </p>
+            <p>
+              <strong>status:</strong> {member.status}
+            </p>
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
-      {member.status !== 'cancelled' && (
-            <>
-            <button
-              className="btn btn-success m-1"
-              onClick={() => handleOpenRescheduleDialog(member._id)}
-            >
-              Reschedule Appointment
-            </button>
-            <button
-              className="btn btn-success m-1"
-              onClick={() => handleOpenCancelDialog(member._id)}
-            >
-              Cancel Appointment
-            </button>
-            </>
-          )}
-      </div>
+            {member.status !== "cancelled" && (
+              <>
+                <button
+                  className="btn btn-success m-1"
+                  onClick={() => handleOpenRescheduleDialog(member._id)}
+                >
+                  Reschedule Appointment
+                </button>
+                <button
+                  className="btn btn-success m-1"
+                  onClick={() => handleOpenCancelDialog(member._id)}
+                >
+                  Cancel Appointment
+                </button>
+              </>
+            )}
+          </div>
         </div>
       ))}
       <Dialog open={cancelDialogOpen} onClose={handleCloseCancelDialog}>
-  <DialogTitle>Are you sure you want to cancel this appointment? 
-  </DialogTitle>
-  <DialogActions>
-    <Button onClick={handleConfirmCancel} color="primary">
-      Yes
-    </Button>
-    <Button onClick={handleCloseCancelDialog} color="primary">
-      No
-    </Button>
-  </DialogActions>
-</Dialog>
-<Dialog open={rescheduleDialogOpen} onClose={handleCloseRescheduleDialog}>
-  <DialogTitle>Choose the new Slot
-  </DialogTitle>
-  <DialogContent>
-    <FormControl fullWidth>
-      <InputLabel id="option-label">my available slots..</InputLabel>
-      <Select
-        labelId="option-label"
-        id="option-select"
-        value={selectedOption}
-        onChange={handleOptionChange}
-      >
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            {formatDate(option)}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleConfirmReschedule} color="primary">
-      Confirm
-    </Button>
-    <Button onClick={handleCloseRescheduleDialog} color="primary">
-      Cancel
-    </Button>
-  </DialogActions>
-</Dialog>
+        <DialogTitle>
+          Are you sure you want to cancel this appointment?
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleConfirmCancel} color="primary">
+            Yes
+          </Button>
+          <Button onClick={handleCloseCancelDialog} color="primary">
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={rescheduleDialogOpen} onClose={handleCloseRescheduleDialog}>
+        <DialogTitle>Choose the new Slot</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <InputLabel id="option-label">my available slots..</InputLabel>
+            <Select
+              labelId="option-label"
+              id="option-select"
+              value={selectedOption}
+              onChange={handleOptionChange}
+            >
+              {options.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {formatDate(option)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmReschedule} color="primary">
+            Confirm
+          </Button>
+          <Button onClick={handleCloseRescheduleDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
 
 const AppointmentFilterPage = ({ appointments }) => {
   console.log(appointments);
-  const [selectedApp, setSelectedApp] = useState(null);      // set after choosing to reschedule or cancel an app
+  const [selectedApp, setSelectedApp] = useState(null); // set after choosing to reschedule or cancel an app
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false); // set to open cancel dialog
-  const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);  // set to open reschedule dialog
+  const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false); // set to open reschedule dialog
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
   const handleOpenCancelDialog = (appId) => {
@@ -222,8 +223,8 @@ const AppointmentFilterPage = ({ appointments }) => {
     setCancelDialogOpen(false);
     setSelectedApp(null);
   };
-  
-  const handleConfirmCancel = async () =>  {
+
+  const handleConfirmCancel = async () => {
     // Implement your cancellation logic here
     const reqBody = {
       _id: selectedApp,
@@ -240,19 +241,19 @@ const AppointmentFilterPage = ({ appointments }) => {
     setSelectedApp(appId);
     setRescheduleDialogOpen(true);
   };
-  
+
   const handleCloseRescheduleDialog = () => {
     setRescheduleDialogOpen(false);
     setSelectedApp(null);
     setSelectedOption(null);
     setSelectedOption(null);
   };
-  
-  const handleConfirmReschedule = async () =>  {
+
+  const handleConfirmReschedule = async () => {
     // Implement your cancellation logic here
     const reqBody = {
       _id: selectedApp,
-      date: selectedOption
+      date: selectedOption,
     };
     const newApp = await axios.post(
       "http://localhost:8000/appointment/docRescheduleAppointment/:id",
@@ -272,81 +273,81 @@ const AppointmentFilterPage = ({ appointments }) => {
           key={member.id}
           style={{ border: "1px solid black", borderRadius: 5 }}
         >
-         <div>
-           <p>
-            <strong>Doctor ID:</strong> {member.doctorId}
-          </p>
-          <p>
-            <strong>patient ID:</strong> {member.patientId}
-          </p>
-          <p>
-            <strong>Date:</strong> {formatDate(member.date)}
-          </p>
-          <p>
-            <strong>status:</strong> {member.status}
-          </p>
+          <div>
+            <p>
+              <strong>Doctor ID:</strong> {member.doctorId.name}
+            </p>
+            <p>
+              <strong>patient ID:</strong> {member.patientId}
+            </p>
+            <p>
+              <strong>Date:</strong> {formatDate(member.date)}
+            </p>
+            <p>
+              <strong>status:</strong> {member.status}
+            </p>
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
-      {member.status !== 'cancelled' && (
-            <>
-            <button
-              className="btn btn-success m-1"
-              onClick={() => handleOpenRescheduleDialog(member._id)}
-            >
-              Reschedule Appointment
-            </button>
-            <button
-              className="btn btn-success m-1"
-              onClick={() => handleOpenCancelDialog(member._id)}
-            >
-              Cancel Appointment
-            </button>
-            </>
-          )}
-      </div>
+            {member.status !== "cancelled" && (
+              <>
+                <button
+                  className="btn btn-success m-1"
+                  onClick={() => handleOpenRescheduleDialog(member._id)}
+                >
+                  Reschedule Appointment
+                </button>
+                <button
+                  className="btn btn-success m-1"
+                  onClick={() => handleOpenCancelDialog(member._id)}
+                >
+                  Cancel Appointment
+                </button>
+              </>
+            )}
+          </div>
         </div>
       ))}
       <Dialog open={cancelDialogOpen} onClose={handleCloseCancelDialog}>
-  <DialogTitle>Are you sure you want to cancel this appointment? 
-  </DialogTitle>
-  <DialogActions>
-    <Button onClick={handleConfirmCancel} color="primary">
-      Yes
-    </Button>
-    <Button onClick={handleCloseCancelDialog} color="primary">
-      No
-    </Button>
-  </DialogActions>
-</Dialog>
-<Dialog open={rescheduleDialogOpen} onClose={handleCloseRescheduleDialog}>
-  <DialogTitle>Choose the new Slot
-  </DialogTitle>
-  <DialogContent>
-    <FormControl fullWidth>
-      <InputLabel id="option-label">my available slots..</InputLabel>
-      <Select
-        labelId="option-label"
-        id="option-select"
-        value={selectedOption}
-        onChange={handleOptionChange}
-      >
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            {formatDate(option)}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleConfirmReschedule} color="primary">
-      Confirm
-    </Button>
-    <Button onClick={handleCloseRescheduleDialog} color="primary">
-      Cancel
-    </Button>
-  </DialogActions>
-</Dialog>
+        <DialogTitle>
+          Are you sure you want to cancel this appointment?
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleConfirmCancel} color="primary">
+            Yes
+          </Button>
+          <Button onClick={handleCloseCancelDialog} color="primary">
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={rescheduleDialogOpen} onClose={handleCloseRescheduleDialog}>
+        <DialogTitle>Choose the new Slot</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <InputLabel id="option-label">my available slots..</InputLabel>
+            <Select
+              labelId="option-label"
+              id="option-select"
+              value={selectedOption}
+              onChange={handleOptionChange}
+            >
+              {options.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {formatDate(option)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmReschedule} color="primary">
+            Confirm
+          </Button>
+          <Button onClick={handleCloseRescheduleDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

@@ -240,9 +240,16 @@ const getMyAppointmers = async (req, res) => {
 const getAppointmentWithFilter = async (req, res) => {
   try {
     const patient = await PatientModel.findOne({ user: res.locals.userId });
+    const doctor = await DoctorModel.findOne({ user: res.locals.userId });
     const { startDate, endDate, status } = req.body; // Destructure status and dates from query parameters
-    const query = { patientId: patient._id }; // Initialize the query with patientId
+    const query = {}; // Initialize the query with patientId
 
+    if (patient) {
+      query.patientId = patient._id
+    }
+    if (doctor) {
+      query.doctorId = doctor._id
+    }
     if (status) {
       query.status = status;
     }
