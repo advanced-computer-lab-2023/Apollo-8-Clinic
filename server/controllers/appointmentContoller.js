@@ -103,6 +103,95 @@ const getAllAppointments = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 };
+
+// the doctor does that 
+const createFollowUp = async (req, res) => {
+  const doctor1 = await DoctorModel.findOne({ user: res.locals.userId });
+  const doctorId = doctor1._id;
+  const {
+    patientId,
+    date,
+    status,
+    type
+  } = req.body;
+  console.log(req.body)
+  try {
+    const appointment = new AppointmentModel({
+      doctorId,
+      patientId,
+      date,
+      status,
+      type
+    });
+    const updatedDoctor = await DoctorModel.findOneAndUpdate(
+      { "_id": doctorId },
+      { $pull: { availableSlots: date } },
+      { new: true } // To return the updated document
+    );
+    const updatedPatient = await PatientModel.findOneAndUpdate(
+      { "_id": patientId },
+      { $inc: { wallet: -50 } },
+      { new: true } // To return the updated document
+    );
+    console.log(updatedDoctor);
+    console.log(updatedPatient);
+    await appointment.save();
+    console.log(appointment);
+
+
+    const message = `this message is to notify you about your appointment details:
+    doctor ${updatedDoctor.name} : patient ${updatedPatient.name} : date : ${appointment.date}  `;
+
+    const notifi = {
+      title: "Reserved",
+      data: message,
+      state: "Unread"
+    }
+    const docNotification = [...updatedDoctor.notifications, notifi];
+    const patNotification = [...updatedPatient.notifications, notifi]
+    updatedDoctor.notifications = docNotification;
+    updatedPatient.notifications = patNotification;
+    await updatedDoctor.save();
+    await updatedPatient.save();
+
+    //maillll
+    let config = {
+      service: "gmail",
+      auth: {
+        user: process.env.mail,
+        pass: process.env.appPss
+
+      },
+      tls: {
+        rejectUnauthorized: false
+      },
+    }
+
+    let transporter = mailer.createTransport(config);
+
+    let messagee = {
+      from: process.env.mail, // sender address
+      to: [updatedDoctor.email, updatedPatient.email], // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: message // plain text body
+      //html: "<b>your verification code is 5555</b>", // html body
+    }
+
+    transporter.sendMail(messagee).then((info) => {
+      console.log(info);
+      return res.status(200).json(appointment);
+    }).catch(error => {
+      console.log(error)
+      return res.status(200).json(appointment);
+
+    })
+
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+
+};
+
 const getPatientAppointments = async (req, res) => {
   try {
     const patient1 = await PatientModel.findOne({ user: res.locals.userId });
@@ -456,6 +545,7 @@ const cancelAppointment = async (req, res) => {
 };
 export default {
   createAppointment,
+  createFollowUp,
   getAllAppointments,
   getAppointmentWithFilter,
   getAppointments,

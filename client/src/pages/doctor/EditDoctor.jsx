@@ -77,7 +77,7 @@ function EditDoctor() {
             onClose={() => setShowAlert(false)}
             dismissible
           >
-            Medicine Added Successfully
+            Profile Updated Successfully
           </Alert>
         )}
         <div

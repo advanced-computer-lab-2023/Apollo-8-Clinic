@@ -63,7 +63,7 @@ function ResponsiveAppBar() {
   const handleClosePopover = () => {
     axios
       .get("http://localhost:8000/doctor/sawNotfication")
-      .then((response) => {})
+      .then((response) => { })
       .catch((error) => {
         console.log(error);
       });
@@ -372,13 +372,13 @@ function ResponsiveAppBar() {
             </Button>
           </Box>
           <Badge
-            style={{ marginRight: "40px", transform: "none" }}
+            style={{ marginRight: "10px", transform: "none" }}
             overlap="circular"
             badgeContent={unseenNotifications}
             color="secondary"
           >
             <IconButton
-              style={{ color: "yellow" }}
+              style={{ color: "white" }}
               aria-label="notifications"
               onClick={handleOpenPopover}
             >
@@ -462,7 +462,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title=" Chat">
               <IconButton
-                style={{ paddingLeft: "20px" }}
+                style={{ paddingLeft: "10px" }}
                 onClick={handleChatNavigate}
                 sx={{ p: 0 }}
               >
@@ -470,12 +470,15 @@ function ResponsiveAppBar() {
               </IconButton>
             </Tooltip>
           </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="My Wallet">
-              <IconButton style={{}} onClick={handleMyWallet} sx={{ p: 0 }}>
+              <IconButton style={{paddingLeft: "20px"}} onClick={handleMyWallet} sx={{ p: 0 }}>
                 <WalletIcon fontSize="large" sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
+          </Box>
+          <Box>
             <Tooltip title="Logout">
               <IconButton
                 style={{ paddingLeft: "20px" }}
